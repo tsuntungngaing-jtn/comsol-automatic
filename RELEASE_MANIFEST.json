@@ -1,0 +1,375 @@
+{
+  "format": 1,
+  "skill_name": "comsol-automatic",
+  "display_name": "Comsol-Automatic",
+  "author": "\u6296\u97f3 \u840c\u732a\u8fc7\u6cb3",
+  "maintainer": "tsuntungngaing-jtn",
+  "based_on": "Comsol-Automatic-wwj",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 232,
+      "sha256": "e7e5d3351401757020c1ddf2ed7fc513620aae49897a932e71fc46d41cde0d86"
+    },
+    {
+      "path": "docs/api-patterns.md",
+      "bytes": 5759,
+      "sha256": "f14a3cf02aeffad22547e07dfdce78badfba49f82a61a78bdfabe9ad46f662d8"
+    },
+    {
+      "path": "docs/case-catalog.md",
+      "bytes": 35480,
+      "sha256": "1ce224926bf0eba167275921ce1d293bc98423e31af1d8e4abeb8fc004a9390e"
+    },
+    {
+      "path": "docs/claim-validation.md",
+      "bytes": 6145,
+      "sha256": "45ea77b5de980f87a4d9e6b3b181d309462a12307d87835cd675a5cd9f6e3845"
+    },
+    {
+      "path": "docs/connectors.md",
+      "bytes": 14397,
+      "sha256": "f5344fe00e9772eb73004e7efb66b94766c51365008ce257726050a12da7d44b"
+    },
+    {
+      "path": "docs/hpc-execution.md",
+      "bytes": 4763,
+      "sha256": "70d3e60ad03a730ac93a6ffc394944ee82c92974c98b875324f5c61337956793"
+    },
+    {
+      "path": "docs/inspector.md",
+      "bytes": 8091,
+      "sha256": "711a0863b18e39c9bcad1ed69857e3a5b6c2120ae4f80482bfb9d35890907d61"
+    },
+    {
+      "path": "docs/model-consistency.md",
+      "bytes": 5631,
+      "sha256": "02e41c6ef53c83f00e10ccda550666574cbd3ba188d11e337e121a114b535ef2"
+    },
+    {
+      "path": "docs/paper-reproduction.md",
+      "bytes": 8054,
+      "sha256": "9a535315863ab0ac26a29548ea86c0f1bbfdf9e8d49fab165f81ba32c46ac581"
+    },
+    {
+      "path": "docs/publishing.md",
+      "bytes": 2416,
+      "sha256": "736cfe232e46d2ea9ae4e9c81045613aacf1dc16381ba1c605f9d78a9d6a3302"
+    },
+    {
+      "path": "docs/research-workflow.md",
+      "bytes": 8828,
+      "sha256": "88cc35b4d0c91a3ce1695cdd41795d0a174e8cda9ffd2b46bf5710946b9bcc89"
+    },
+    {
+      "path": "docs/security.md",
+      "bytes": 4166,
+      "sha256": "6c244e6dc1b7a4430c9d4f48dd24917ec9c327dcba702299f23232a1c4da3a05"
+    },
+    {
+      "path": "docs/simulation-specification.md",
+      "bytes": 7976,
+      "sha256": "971941084ff85f8fb36975bd90ef5d8f5967b5956b5ba1356b8430a57070c1c0"
+    },
+    {
+      "path": "docs/skill-discovery.md",
+      "bytes": 4665,
+      "sha256": "5df317195cb2cf974c5fc7ff1d317fef444853b500614b336babdb793e262d49"
+    },
+    {
+      "path": "docs/validation.md",
+      "bytes": 3947,
+      "sha256": "f1c9da1d179bb53f5f53447f70a3446f5c366433bee479bf18f62cd0dcb7c593"
+    },
+    {
+      "path": "examples/catalog.json",
+      "bytes": 83228,
+      "sha256": "ab4489e83a65d55dfb384e9cf043fe7a140d77b55b64cc3865380903128fc60f"
+    },
+    {
+      "path": "examples/original/heat_sink_3d.py",
+      "bytes": 12207,
+      "sha256": "44ef09d1ec20df1a57868df6a16d285cf0a8263e7607bd4e4435e198a1e02958"
+    },
+    {
+      "path": "examples/validation/heat_sink_3d.json",
+      "bytes": 3393,
+      "sha256": "8f6a0d88720281b316c1b9ffb2487fe2b8467c0138ddb922b968998dd881d070"
+    },
+    {
+      "path": "examples/validation/mcp_http.json",
+      "bytes": 487,
+      "sha256": "87f265558d80f69ff2186c57a701495d1a44f26ba11746dea11b80e09198bba7"
+    },
+    {
+      "path": "examples/validation/mcp_stdio.json",
+      "bytes": 535,
+      "sha256": "b0be65334c21f1e4afb9207d2a1735f9e6193663830050c153f03859845048e4"
+    },
+    {
+      "path": "examples/validation/mesh_convergence.csv",
+      "bytes": 746,
+      "sha256": "74058d4df494dab7183a7030d6f08097736be1e733431c01beeac8d53ed304b0"
+    },
+    {
+      "path": "examples/validation/README.md",
+      "bytes": 4347,
+      "sha256": "de1546fd1a296dae99d0bfdc5cd86008943ad161e861216b32f567c3df9dc64d"
+    },
+    {
+      "path": "examples/validation/temperature_3d.png",
+      "bytes": 214689,
+      "sha256": "4a54c6935d65891b54e34e6666c3d493ae4536db83b29f9aa1f5fbdb2d494fc3"
+    },
+    {
+      "path": "examples/validation/warmup.csv",
+      "bytes": 6783,
+      "sha256": "7788d2d3ef02f837b3fa365b5996636cfc39e70ef0c717776e97b57fb3568c64"
+    },
+    {
+      "path": "examples/validation/warmup.png",
+      "bytes": 64769,
+      "sha256": "5cd8b25fa04b131dbf2617503f3448632327a749ad82d428008d122d0b615e72"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1107,
+      "sha256": "eb6e3dbe31d2d4f86f4cfb887649b42131eaf99ecd1e9789482e41a4fec7b73b"
+    },
+    {
+      "path": "NOTICE.md",
+      "bytes": 2136,
+      "sha256": "721efd756cd77a2ad4d8cceeb9c4f107aaffa6f147fd70fec75d52153d80cb69"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 844,
+      "sha256": "3f2ad1ef9ee8d056c70ed3dc4dadd234c1856640eb6b737fd4ad503bcd876388"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6317,
+      "sha256": "d65e1e20e3ed3233067607039851f50da602f965b9c456ee23592e514b7b9ac3"
+    },
+    {
+      "path": "scripts/install.ps1",
+      "bytes": 891,
+      "sha256": "58b94f3336d1ebfb33cbb5b11010b2ca8db98e91ba16e407d8f7418dcb9932b3"
+    },
+    {
+      "path": "scripts/install_skill.py",
+      "bytes": 1974,
+      "sha256": "02449a8321920be28d47cff9fc9ef26caa82bcdea963bcc0befe54bf41d3b46d"
+    },
+    {
+      "path": "scripts/release.py",
+      "bytes": 5356,
+      "sha256": "b7f98319d2a8c7fe6deaf095ac19191790c74262d462c2e1951ca9f0d42d7aa4"
+    },
+    {
+      "path": "scripts/start-mcp.ps1",
+      "bytes": 3150,
+      "sha256": "b81806c5c65851eb0988ba6ba9f05fd64c3404dee04c82a3413e0d51508f43c6"
+    },
+    {
+      "path": "scripts/test_inspector_mcp.py",
+      "bytes": 4218,
+      "sha256": "bc42894b4a8dd43201567bbc1e5a1e2d2da89c95d88542920be4637fe5a3d946"
+    },
+    {
+      "path": "server/__init__.py",
+      "bytes": 98,
+      "sha256": "1b434d742d9ba56b23f14f9ed2b691f68b1f2b49c823c87e09fe799cddc731b3"
+    },
+    {
+      "path": "server/inspector.py",
+      "bytes": 22741,
+      "sha256": "9d901c7faa11493ce2fd3eefa74385623de6df3dc004c6116b649f1a1106cca1"
+    },
+    {
+      "path": "server/main.py",
+      "bytes": 14023,
+      "sha256": "58ab2b4cb775f6f05859b7fde5c12b3939ac90f11467ea3d1b82e0a5a6775f21"
+    },
+    {
+      "path": "server/runtime.py",
+      "bytes": 27787,
+      "sha256": "7fb793b7ecd99875ad81beb8e06a91dec7ab3563373a82cd746fb9bf1746e45d"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 16883,
+      "sha256": "f331cf6d872e904d7c265c54777782b48257c23e22c8aca2f3c16f5479686c74"
+    },
+    {
+      "path": "tests/test_inspector.py",
+      "bytes": 14360,
+      "sha256": "6d08db730d573e7faca7821c092f1a1674f7c06e75d2313bf385fa419cbbe2c0"
+    },
+    {
+      "path": "tests/test_release.py",
+      "bytes": 3121,
+      "sha256": "34ab9692aa858047c498f15ba848e6dfb9b362c8a0f5d14409abdb8c5670dc80"
+    },
+    {
+      "path": "tests/test_runtime.py",
+      "bytes": 13222,
+      "sha256": "c64fc572756a6fc0d862d110b8a8d9046dba9e9bb169bbfed7bde57d6a758a92"
+    },
+    {
+      "path": "tests/test_startup.py",
+      "bytes": 3672,
+      "sha256": "6c80421e5ee6f8cbe8ecb69434ed69f267c67ddadba894b65a0be475cb0eebc4"
+    },
+    {
+      "path": "vendor/installed-mcp/CITATION.cff",
+      "bytes": 1070,
+      "sha256": "fab761d76c2efd8136f54e8c9481e35b74d9581a50abef68cad4911e80be5b40"
+    },
+    {
+      "path": "vendor/installed-mcp/LICENSE",
+      "bytes": 1056,
+      "sha256": "06dcddbb6908a0c6dd4a9e8ec822eea41d5a460a53089fecccc8a68049e99241"
+    },
+    {
+      "path": "vendor/installed-mcp/pyproject.toml",
+      "bytes": 608,
+      "sha256": "39f21700940d3a47c87ffd3f03be41a6c8a4219f93a98f5f9306709db6f221de"
+    },
+    {
+      "path": "vendor/installed-mcp/README.md",
+      "bytes": 15994,
+      "sha256": "8f50c800598fb218a9b344b887bcd6e8e76aa6808e2a0c346e0df91cf0aac91e"
+    },
+    {
+      "path": "vendor/installed-mcp/README_CN.md",
+      "bytes": 13884,
+      "sha256": "bca3999be9d1ebc78fa0e972c101434d618d51cc8c020b46f62ed50548d99939"
+    },
+    {
+      "path": "vendor/installed-mcp/SNAPSHOT.json",
+      "bytes": 4942,
+      "sha256": "ad3af2baf4eae29918e5a8d9469a19701d704920c2d6b86f97bd535a37811609"
+    },
+    {
+      "path": "vendor/installed-mcp/src/__init__.py",
+      "bytes": 99,
+      "sha256": "4083bcc6665bd664708241eb445505ac2a4a4ba92511338136bc4999c8030f97"
+    },
+    {
+      "path": "vendor/installed-mcp/src/async_handler/__init__.py",
+      "bytes": 214,
+      "sha256": "7f5340006f31a8669644646d040adb3e17578ba31678726304dc66ae22443b63"
+    },
+    {
+      "path": "vendor/installed-mcp/src/async_handler/solver.py",
+      "bytes": 7007,
+      "sha256": "0bc47e78c15e277a02f74092fedcb91d7f0318d8c037322bc7345dc2eacaf362"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/__init__.py",
+      "bytes": 460,
+      "sha256": "39af59e2dd17420a1c5126883139877f349f97e27214bc9f9788daf385a9936d"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/embedded.py",
+      "bytes": 22351,
+      "sha256": "1ed14b593f7e2901792959e004fb66dca35ce74116911971f299af65b3db62a9"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/pdf_processor.py",
+      "bytes": 8414,
+      "sha256": "267311ab9514a69db031a6be829c56b86be86430968753e1adcceb573786a097"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/prompts/mph_api.md",
+      "bytes": 4345,
+      "sha256": "642ea1d8b2d8a20980d8d2d218b2cdb51a40ce0202cac38620659ecc7e01d536"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/prompts/physics_guide.md",
+      "bytes": 12023,
+      "sha256": "f14b07a4be1b8e628edfc72b64c64af8d591945f3d7b8a7b17db4a169cd79520"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/prompts/workflow.md",
+      "bytes": 15522,
+      "sha256": "93817b92ad47188bd5f572b9577ab8215206951faf486b042035b916760d32a3"
+    },
+    {
+      "path": "vendor/installed-mcp/src/knowledge/retriever.py",
+      "bytes": 10108,
+      "sha256": "877eab8b13a557874a8f46d1502db6797ff30f5a0ef395884a5d71a8560dcbd2"
+    },
+    {
+      "path": "vendor/installed-mcp/src/resources/__init__.py",
+      "bytes": 134,
+      "sha256": "2720e244b0ff3964c89f0ec73fa971b1ea46f7d496e79129ef77f2939d2f4a1a"
+    },
+    {
+      "path": "vendor/installed-mcp/src/resources/model_resources.py",
+      "bytes": 6318,
+      "sha256": "6f1f2f06d2d45812a111121f71a0e9aecb48d62de34d37eecf834f8c480aa629"
+    },
+    {
+      "path": "vendor/installed-mcp/src/server.py",
+      "bytes": 1492,
+      "sha256": "45c8bf1b984f0a9e4cb911c456664a03f4374c608fce25f9154e4c2687818310"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/__init__.py",
+      "bytes": 636,
+      "sha256": "91b86447ed37012c6497d1faf34fe32f540566e8d779546cae9f3412696be86c"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/geometry.py",
+      "bytes": 31962,
+      "sha256": "f15af783f00117204ffca7e532912dfb8de4e862549e8b23cba4573a8f6a915c"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/mesh.py",
+      "bytes": 10385,
+      "sha256": "248b68c62b737ee36930c52a20c473994de348ad877d4369b9ec01580af5ddf8"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/model.py",
+      "bytes": 15471,
+      "sha256": "ee79c2bd83c9b0198826a2c2a2e98680a12c9341ddba199d9ae06ea9981b6077"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/parameters.py",
+      "bytes": 8014,
+      "sha256": "60b39e07867b2f9b813094249f7b93ae15ba374838c4c22e824066b79ae6dab9"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/physics.py",
+      "bytes": 67063,
+      "sha256": "59412485ec39fe82b08b0e90e5a68104b852e2a0a8a7817a771404fb06aa96b0"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/results.py",
+      "bytes": 10730,
+      "sha256": "18198f595a392696ca63b311527c39c76e6bfc1880431f313f72390805a43a8a"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/session.py",
+      "bytes": 8630,
+      "sha256": "b603482f33bb9b52e8616fd066fb564cb186ce0818d3598f78a495d6d4175802"
+    },
+    {
+      "path": "vendor/installed-mcp/src/tools/study.py",
+      "bytes": 10635,
+      "sha256": "c813b2f282c312db4ef43626578272589a905f4f282515aca2052215284078f3"
+    },
+    {
+      "path": "vendor/installed-mcp/src/utils/__init__.py",
+      "bytes": 169,
+      "sha256": "043a4e2b59b22f4d47a046a9ebe7e945bea85b4fbc3d4a908ad6b95b30027361"
+    },
+    {
+      "path": "vendor/installed-mcp/src/utils/versioning.py",
+      "bytes": 3813,
+      "sha256": "9d69e41d98d9778a0131cb5f05650ffbb74a3e0ee90da85d56284e8a62a10126"
+    }
+  ]
+}
