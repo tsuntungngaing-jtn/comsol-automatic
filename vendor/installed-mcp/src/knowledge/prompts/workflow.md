@@ -1,3 +1,5 @@
+> Repair release: use docs/api-patterns.md as the maintained 6.4 reference. Convection requires HeatFluxType=ConvectiveHeatFlux; k-epsilon inlets require explicit intensity and length scale. Other examples below are not comprehensively validated.
+
 # COMSOL Modeling Workflow Guide
 
 This guide describes the typical workflow for creating and running COMSOL simulations using the MCP tools.
@@ -164,8 +166,8 @@ geometry_build()
 
 # 4. Physics
 physics_add_heat_transfer()
-physics_configure_boundary("Heat Transfer", "HeatFlux", [1], {"q0": "heat_flux"})
-physics_configure_boundary("Heat Transfer", "ConvectiveHeatFlux", [3,4,5], {"h": "convection_coeff"})
+physics_configure_boundary("Heat Transfer", "HeatFluxBoundary", [1], {"q0": "heat_flux"})
+physics_configure_boundary("Heat Transfer", "HeatFluxBoundary", [3,4,5], {"HeatFluxType": "ConvectiveHeatFlux", "h": "convection_coeff", "Text": "293.15[K]"})
 
 # 5. Mesh and solve
 mesh_create()
@@ -435,8 +437,8 @@ geometry_build()
 
 # 3. Add multiple physics
 physics_add_heat_transfer()
-physics_configure_boundary("Heat Transfer", "Temperature", [1], {"T0": "T_hot"})
-physics_configure_boundary("Heat Transfer", "Temperature", [2], {"T0": "T_cold"})
+physics_configure_boundary("Heat Transfer", "TemperatureBoundary", [1], {"T0": "T_hot"})
+physics_configure_boundary("Heat Transfer", "TemperatureBoundary", [2], {"T0": "T_cold"})
 
 physics_add_solid_mechanics()
 physics_configure_boundary("Solid Mechanics", "Fixed", [1])

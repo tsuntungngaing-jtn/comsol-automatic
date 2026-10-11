@@ -1,0 +1,5 @@
+include SKILL.md README.md NOTICE.md LICENSE setup.py
+recursive-include vendor *.py *.md *.json *.toml LICENSE
+recursive-include examples *.py *.json
+global-exclude *.mph *.log *.png *.csv *.pyc
+prune examples/validation

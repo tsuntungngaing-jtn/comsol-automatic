@@ -27,7 +27,7 @@ class ReleaseTests(unittest.TestCase):
             root=Path(tmp)
             self.fixture(root)
             (root/'examples'/('D'+'BC_figure.png')).write_bytes(b'not a public asset')
-            with self.assertRaisesRegex(ValueError, 'Private filename'):
+            with self.assertRaisesRegex(ValueError, 'Private filename|Forbidden file'):
                 release.public_files(root)
 
     def test_commercial_model_is_rejected(self):
@@ -51,15 +51,15 @@ class ReleaseTests(unittest.TestCase):
             release.build(output,root)
             with zipfile.ZipFile(output) as archive:
                 names=archive.namelist()
-                self.assertIn('comsol-automatic/server/main.py',names)
-                self.assertIn('comsol-automatic/vendor/installed-mcp/LICENSE',names)
-                self.assertIn('comsol-automatic/SKILL.md',names)
+                self.assertIn('comsol-automatic-6-4-en/server/main.py',names)
+                self.assertIn('comsol-automatic-6-4-en/vendor/installed-mcp/LICENSE',names)
+                self.assertIn('comsol-automatic-6-4-en/SKILL.md',names)
                 self.assertFalse(any('/runs/' in name for name in names))
                 self.assertFalse(any('.mcp-token' in name for name in names))
                 self.assertFalse(any(local_token.encode() in archive.read(name) for name in names))
-                manifest=json.loads(archive.read('comsol-automatic/RELEASE_MANIFEST.json'))
+                manifest=json.loads(archive.read('comsol-automatic-6-4-en/RELEASE_MANIFEST.json'))
                 for record in manifest['files']:
-                    data=archive.read('comsol-automatic/'+record['path'])
+                    data=archive.read('comsol-automatic-6-4-en/'+record['path'])
                     self.assertEqual(release.digest(data),record['sha256'])
 
 

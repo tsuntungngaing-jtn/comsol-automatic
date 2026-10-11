@@ -2,24 +2,34 @@
 
 from datetime import datetime
 from pathlib import Path
+from uuid import uuid4
+import re
 
 # Base directory for all COMSOL models
 MODELS_BASE_DIR = Path(__file__).parent.parent.parent / "comsol_models"
 
 
+def safe_model_name(model_name: str) -> str:
+    name = str(model_name)
+    if name.lower().endswith('.mph'):
+        name = name[:-4]
+    if (not name or name in {'.', '..'} or name != name.strip()
+            or name.endswith('.') or re.search(r'[<>:"/\\|?*\x00-\x1f]', name)
+            or re.fullmatch(r'(?i)(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?', name)):
+        raise ValueError('Model name must be a plain, non-reserved file name, not a path.')
+    return name
+
+
+def confined(path: Path) -> Path:
+    root = MODELS_BASE_DIR.resolve()
+    resolved = path.resolve()
+    if not resolved.is_relative_to(root):
+        raise ValueError('Version path escapes the configured versions directory.')
+    return resolved
+
+
 def get_model_directory(model_name: str) -> Path:
-    """
-    Get the directory path for a model.
-    
-    Args:
-        model_name: Name of the model
-        
-    Returns:
-        Path to the model directory
-    """
-    # Clean model name (remove .mph extension if present)
-    clean_name = Path(model_name).stem
-    return MODELS_BASE_DIR / clean_name
+    return confined(MODELS_BASE_DIR / safe_model_name(model_name))
 
 
 def generate_version_name(base_name: str) -> str:
@@ -40,46 +50,29 @@ def generate_version_name(base_name: str) -> str:
 
 
 def generate_version_path(model_name: str, base_path: str = None) -> str:
-    """
-    Generate a versioned file path with timestamp suffix.
-    Uses structured path: ./comsol_models/{model_name}/{model_name}_{timestamp}.mph
-    
-    Args:
-        model_name: Name of the model (used for directory)
-        base_path: Optional custom base path (ignored if None, uses structured path)
-        
-    Returns:
-        Versioned file path with timestamp
-    """
-    # Clean model name
-    clean_name = Path(model_name).stem
-    
-    # Get model directory
-    model_dir = get_model_directory(clean_name)
-    model_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Generate versioned filename
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    versioned_name = f"{clean_name}_{timestamp}.mph"
-    
-    return str(model_dir / versioned_name)
+    if base_path is not None:
+        raise ValueError('Custom version base paths are not supported.')
+    name = safe_model_name(model_name)
+    directory = get_model_directory(name)
+    directory.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    for _ in range(10):
+        path = confined(directory / f'{name}_{stamp}_{uuid4().hex}.mph')
+        try:
+            # Reserve the unique path atomically before COMSOL writes it.
+            with path.open('xb'):
+                pass
+            return str(path)
+        except FileExistsError:
+            continue
+    raise FileExistsError('Could not reserve a unique model version.')
 
 
 def generate_latest_path(model_name: str) -> str:
-    """
-    Generate path for the 'latest' version of a model.
-    Uses structured path: ./comsol_models/{model_name}/{model_name}_latest.mph
-    
-    Args:
-        model_name: Name of the model
-        
-    Returns:
-        Path for the latest version
-    """
-    clean_name = Path(model_name).stem
-    model_dir = get_model_directory(clean_name)
-    model_dir.mkdir(parents=True, exist_ok=True)
-    return str(model_dir / f"{clean_name}_latest.mph")
+    name = safe_model_name(model_name)
+    path = confined(get_model_directory(name) / f'{name}_latest.mph')
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return str(path)
 
 
 def list_model_versions(model_name: str) -> list:
@@ -120,7 +113,7 @@ def parse_version_info(name: str) -> dict | None:
     stem = path.stem
     
     import re
-    match = re.match(r"^(.+)_(\d{8}_\d{6})$", stem)
+    match = re.match(r"^(.+)_(\d{8}_\d{6})(?:_[0-9a-f]{32})?$", stem)
     if match:
         base_name = match.group(1)
         timestamp_str = match.group(2)

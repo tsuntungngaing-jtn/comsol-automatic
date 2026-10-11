@@ -1,3 +1,5 @@
+> Repair release: use docs/api-patterns.md as the maintained 6.4 reference. Convection requires HeatFluxType=ConvectiveHeatFlux; k-epsilon inlets require explicit intensity and length scale. Other examples below are not comprehensively validated.
+
 # Physics Interfaces Guide
 
 This guide covers the most commonly used physics interfaces in COMSOL Multiphysics and how to set them up using the MCP tools.
@@ -98,9 +100,9 @@ For temperature distribution and thermal analysis.
 - Transient thermal analysis
 
 **Boundary Conditions:**
-- `Temperature`: Fixed temperature (T = T0)
-- `HeatFlux`: Specified heat flux
-- `ConvectiveHeatFlux`: Convection (q = h·(T - T∞))
+- `TemperatureBoundary`: Fixed temperature (T = T0)
+- `HeatFluxBoundary`: Specified heat flux
+- `HeatFluxBoundary` with `HeatFluxType=ConvectiveHeatFlux`: Convection (q = h·(T - T∞))
 - `Radiation`: Radiation heat transfer
 - `Symmetry`: Symmetry (adiabatic)
 - `ThermalInsulation`: No heat flux
@@ -108,8 +110,8 @@ For temperature distribution and thermal analysis.
 **Example:**
 ```
 physics_add_heat_transfer()
-physics_configure_boundary("Heat Transfer", "Temperature", [1], {"T0": "300[K]"})
-physics_configure_boundary("Heat Transfer", "ConvectiveHeatFlux", [2], {"h": "10[W/(m^2*K)]", "Text": "293[K]"})
+physics_configure_boundary("Heat Transfer", "TemperatureBoundary", [1], {"T0": "300[K]"})
+physics_configure_boundary("Heat Transfer", "HeatFluxBoundary", [2], {"HeatFluxType": "ConvectiveHeatFlux", "h": "10[W/(m^2*K)]", "Text": "293[K]"})
 ```
 
 **Useful Expressions:**
@@ -140,8 +142,8 @@ For incompressible fluid flow at low Reynolds numbers.
 **Example:**
 ```
 physics_add_laminar_flow()
-physics_configure_boundary("Laminar Flow", "Inlet", [1], {"U0": "1[m/s]"})
-physics_configure_boundary("Laminar Flow", "Outlet", [2], {"p0": "0[Pa]"})
+physics_configure_boundary("Laminar Flow", "InletBoundary", [1], {"U0in": "1[m/s]"})
+physics_configure_boundary("Laminar Flow", "OutletBoundary", [2], {"p0": "0[Pa]"})
 ```
 
 **Useful Expressions:**

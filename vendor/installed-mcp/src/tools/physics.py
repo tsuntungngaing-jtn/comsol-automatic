@@ -896,7 +896,7 @@ def register_physics_tools(mcp: FastMCP) -> None:
         Common boundary conditions for Heat Transfer:
         - "Temperature": Fixed temperature
         - "HeatFlux": Heat flux boundary
-        - "ConvectiveHeatFlux": Convection cooling
+        - "HeatFluxBoundary": Set HeatFluxType=ConvectiveHeatFlux for convection
         - "ThermalInsulation": Thermal insulation (adiabatic)
 
         Common for Solid Mechanics:
@@ -1197,38 +1197,53 @@ def register_physics_tools(mcp: FastMCP) -> None:
             }
 
         try:
-            jm = model.java
-            materials = model.materials()
-            tag = material_name.replace(" ", "_").replace("-", "_")
-
-            if material_name not in materials:
-                comp = _get_component_java(jm)
-                try:
-                    mat = comp.material().create(tag, "Common")
-                    mat.label(material_name)
-                except Exception as e:
-                    return {"success": False, "error": f"Could not create material node: {str(e)}"}
-
-            physics_java = _find_physics_java(jm, physics_name)
-
-            if physics_java is None:
+            from pathlib import Path
+            import mph
+            context = _find_physics_context(model.java, physics_name)
+            if context is None:
                 return {"success": False, "error": f"Physics interface not found: {physics_name}"}
-
-            mat_node = comp.material(tag)
+            comp, physics_java = context
+            supported = {"air": "air", "water": "water,_liquid", "water, liquid": "water,_liquid",
+                         "copper": "copper", "silicon": "silicon"}
+            library_tag = supported.get(material_name.casefold())
+            if library_tag is None:
+                return {"success": False, "error": "No verified library mapping for this material. Use MCP MaterialList.insert with an inspected library tag; no empty material was created."}
+            existing = [comp.material(t) for t in comp.material().tags()
+                        if str(t) == library_tag or str(comp.material(t).label()).casefold() == material_name.casefold()]
+            source = Path(mph.discovery.backend(version=session_manager.client.version)['root']) / 'data' / 'comsol_basic_material_lib.mph'
+            if not source.is_file():
+                return {"success": False, "error": "BLOCKED: local basic Material Library is unavailable."}
+            provenance = 'existing_model_material_not_reimported'
+            if existing:
+                if len(existing) != 1:
+                    return {"success": False, "error": "Ambiguous existing material; use an explicit tag through MCP."}
+                mat_node = existing[0]
+            else:
+                inserted = comp.material().insert(str(source), [library_tag])
+                messages = [str(x) for x in inserted[0]]
+                if messages:
+                    return {"success": False, "error": "Material import returned messages; inspect before use.", "messages": messages}
+                mat_node = comp.material(library_tag)
+                provenance = 'loaded_from_local_material_library'
+            required = ['density', 'thermalconductivity', 'heatcapacity']
+            if library_tag in {'air', 'water,_liquid'}:
+                required.append('dynamicviscosity')
+            properties = {str(k): [str(v) for v in mat_node.propertyGroup('def').getStringArray(k)]
+                          for k in required if k in [str(x) for x in mat_node.propertyGroup('def').properties()]}
+            if len(properties) != len(required) or any(not v for v in properties.values()):
+                return {"success": False, "error": "Material lacks required properties; it was not reported as configured.", "properties": properties}
             if domain_selection:
                 mat_node.selection().set([int(d) for d in domain_selection])
+            else:
+                mat_node.selection().set(physics_java.selection().entities())
+            return {"success": True, "material": str(mat_node.label()), "tag": str(mat_node.tag()),
+                    "physics": physics_name, "source": str(source), "provenance": provenance,
+                    "properties": properties, "domain_selection": [int(x) for x in mat_node.selection().entities()],
+                    "validation": "properties_read_back_not_solved"}
 
-            return {
-                "success": True,
-                "material": material_name,
-                "physics": physics_name,
-                "domain_selection": list(domain_selection) if domain_selection else "all",
-                "message": f"Material '{material_name}' assigned to physics '{physics_name}'",
-                "warning": "Material node has no physical properties. Set properties manually in COMSOL GUI.",
-            }
         except Exception as e:
-            return {"success": False, "error": f"Failed to set material: {str(e)}"}
-    
+            return {"success": False, "error": f"Material Library assignment failed: {e}"}
+
     @mcp.tool()
     def multiphysics_add(
         coupling_type: str,
@@ -1467,13 +1482,13 @@ def register_physics_tools(mcp: FastMCP) -> None:
                     "step3": "Use physics_configure_boundary to set conditions",
                 },
                 "boundary_condition_types": {
-                    "InletBoundary": "Set inlet velocity (U0 parameter)",
+                    "InletBoundary": "Set inlet velocity (U0in parameter)",
                     "OutletBoundary": "Set outlet pressure (p0 parameter, default 0)",
                     "Wall": "No-slip wall (default for unspecified boundaries)",
                     "Symmetry": "Symmetry plane",
                 },
                 "example_usage": {
-                    "inlet": "physics_configure_boundary(physics_name='Laminar Flow', boundary_condition='InletBoundary', boundary_selection=[1, 2], properties={'U0': '1[mm/s]'})",
+                    "inlet": "physics_configure_boundary(physics_name='Laminar Flow', boundary_condition='InletBoundary', boundary_selection=[1, 2], properties={'U0in': '1[mm/s]'})",
                     "outlet": "physics_configure_boundary(physics_name='Laminar Flow', boundary_condition='OutletBoundary', boundary_selection=[3])",
                 },
                 "next_step": "Please tell me which boundary numbers to use for inlet(s) and outlet(s)",
@@ -1487,11 +1502,15 @@ def register_physics_tools(mcp: FastMCP) -> None:
         inlet_boundaries: Sequence[int],
         outlet_boundaries: Sequence[int],
         inlet_velocity: str = "1[mm/s]",
-        outlet_pressure: str = "0",
-        model_name: Optional[str] = None
+        outlet_pressure: str = "0[Pa]",
+        model_name: Optional[str] = None,
+        turbulence_intensity: Optional[str] = None,
+        turbulence_length_scale: Optional[str] = None
     ) -> dict:
         """
-        Setup Laminar Flow boundary conditions with specified boundaries.
+        Set 6.4 single-phase laminar or k-epsilon inlet/outlet boundaries.
+        Turbulent inlets require explicit dimensionless intensity and length scale.
+        Creation is not a solver or physical-validation result.
         
         This tool configures inlet velocity and outlet pressure boundary conditions
         for a fluid flow simulation.
@@ -1528,13 +1547,38 @@ def register_physics_tools(mcp: FastMCP) -> None:
             if physics_java is None:
                 return {"success": False, "error": f"Could not find physics interface: {physics_name}"}
 
+            # Scope this shortcut to the current single-phase-flow API.
+            import jpype
+            version = str(jpype.JClass('com.comsol.model.util.ModelUtil').getComsolVersion())
+            if not version.startswith('COMSOL Multiphysics 6.4'):
+                return {"success": False, "error": "VERSION_MISMATCH: this shortcut is validated only on 6.4; re-anchor using the installed manual."}
+            kind = str(physics_java.getType())
+            turbulence = physics_java.prop('TurbulenceModelProperty')
+            turbulent = kind.startswith('TurbulentFlow')
+            if 'TurbulenceModelType' in [str(x) for x in turbulence.properties()]:
+                turbulent = turbulent or str(turbulence.getString('TurbulenceModelType')) != 'None'
+            if turbulent:
+                if str(turbulence.getString('TurbulenceModel')) != 'keps':
+                    return {"success": False, "error": "Only the k-epsilon RANS shortcut is validated. Configure other models through version-checked MCP API calls."}
+                if turbulence_intensity is None or turbulence_length_scale is None:
+                    return {"success": False, "error": "Turbulent inlet requires explicit turbulence_intensity (dimensionless) and turbulence_length_scale (length)."}
+            elif kind != 'LaminarFlow':
+                return {"success": False, "error": "Unsupported flow interface for this shortcut."}
+            if not inlet_boundaries or not outlet_boundaries or set(inlet_boundaries) & set(outlet_boundaries):
+                return {"success": False, "error": "Provide nonempty, disjoint inlet and outlet boundary sets."}
             results = {"inlets": [], "outlets": []}
 
             for i, boundary in enumerate(inlet_boundaries):
                 inlet_tag = _make_tag("inl")
                 inlet = physics_java.create(inlet_tag, 'InletBoundary')
                 inlet.selection().set([int(boundary)])
-                inlet.set('U0', inlet_velocity)
+                inlet.set('U0in', inlet_velocity)
+                if turbulent:
+                    inlet.set('RANSVarOption', 'SpecifyTurbulentLengthScaleAndIntensity')
+                    inlet.set('IT_list', 'user_defined')
+                    inlet.set('IT', turbulence_intensity)
+                    inlet.set('LT_list', 'user_defined')
+                    inlet.set('LT', turbulence_length_scale)
                 inlet.label(f'Inlet {i+1} (Boundary {boundary})')
                 results["inlets"].append({
                     "tag": inlet_tag,
@@ -1605,14 +1649,14 @@ def register_physics_tools(mcp: FastMCP) -> None:
                 "boundary_condition_types": {
                     "TemperatureBoundary": "Fixed temperature (heat sink/source)",
                     "HeatFluxBoundary": "Prescribed heat flux (heat source)",
-                    "ConvectiveHeatFlux": "Convection cooling/heating",
+                    "HeatFluxBoundary": "Set HeatFluxType=ConvectiveHeatFlux for convection",
                     "Symmetry": "Symmetry plane (adiabatic)",
                     "ThermalInsulation": "Thermal insulation (default)"
                 },
                 "typical_setup": {
                     "heat_source": "Use HeatFluxBoundary with q0 parameter (W/m^2)",
                     "heat_sink": "Use TemperatureBoundary with T0 parameter (K or degC)",
-                    "convection": "Use ConvectiveHeatFlux with h and Text parameters"
+                    "convection": "Use HeatFluxBoundary with HeatFluxType=ConvectiveHeatFlux, h and Text"
                 },
                 "example_usage": {
                     "heat_source": "physics_setup_heat_boundaries(physics_name='Heat Transfer in Solids', heat_flux_boundaries=[1, 2], heat_flux_value='1e6[W/m^2]')",
@@ -1708,7 +1752,8 @@ def register_physics_tools(mcp: FastMCP) -> None:
             
             for i, boundary in enumerate(convection_boundaries):
                 tag = _make_tag("conv")
-                bc = physics_java.create(tag, 'ConvectiveHeatFlux')
+                bc = physics_java.create(tag, 'HeatFluxBoundary', _get_boundary_dimension(_find_physics_context(jm, physics_name)[0]))
+                bc.set('HeatFluxType', 'ConvectiveHeatFlux')
                 bc.selection().set([int(boundary)])
                 bc.set('h', convection_coeff)
                 bc.set('Text', ambient_temp)
@@ -1756,10 +1801,10 @@ def register_physics_tools(mcp: FastMCP) -> None:
         Heat Transfer (ht):
         - Temperature: Set T0 (temperature)
         - HeatFlux: Set q0 (heat flux)
-        - ConvectiveHeatFlux: Set h (coefficient), Text (ambient temp)
+        - HeatFluxBoundary: Set HeatFluxType=ConvectiveHeatFlux, h and Text
 
         Laminar Flow (spf):
-        - InletBoundary: Set U0 (velocity)
+        - InletBoundary: Set U0in (velocity); k-epsilon also requires explicit turbulence inputs
         - OutletBoundary: Set p0 (pressure)
         - Wall: No-slip wall
 

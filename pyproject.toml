@@ -1,8 +1,8 @@
 [project]
 name = "comsol-automatic"
-version = "0.1.0"
-description = "作者：抖音 萌猪过河。MCP-only COMSOL automation with classic physics cases; no screen recognition."
-authors = [{name = "抖音 萌猪过河"}]
+version = "0.1.1"
+description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; no screen recognition."
+authors = [{name = "Mengzhu Guohe (Douyin)"}]
 maintainers = [{name = "tsuntungngaing-jtn"}]
 readme = "README.md"
 requires-python = ">=3.10"

@@ -15,7 +15,7 @@ from release import ROOT, public_files
 
 
 def install(skills_dir: Path, source: Path = ROOT) -> dict:
-    destination = skills_dir.expanduser().resolve() / "comsol-automatic"
+    destination = skills_dir.expanduser().resolve() / "comsol-automatic-6-4-en"
     if destination.exists():
         raise FileExistsError(
             f"Skill directory already exists: {destination}. No files were changed. "

@@ -50,10 +50,10 @@ TOPIC_GUIDES = {
     },
     "heat_transfer": {
         "physics": "heat_transfer",
-        "boundary_conditions": ["Temperature", "HeatFlux", "ConvectiveHeatFlux", "Radiation"],
+        "boundary_conditions": ["TemperatureBoundary", "HeatFluxBoundary"],
         "common_expressions": ["T", "ht.qx", "ht.gradT", "ht.Tmax"],
         "tips": [
-            "ConvectiveHeatFlux requires convection coefficient and ambient temperature",
+            "HeatFluxBoundary with HeatFluxType=ConvectiveHeatFlux requires h and Text; verify the installed version",
             "Use Symmetry boundary for adiabatic conditions",
             "Time-dependent studies are common for transient heat transfer",
         ],
@@ -70,7 +70,7 @@ TOPIC_GUIDES = {
     },
     "fluid_flow": {
         "physics": "laminar_flow",
-        "boundary_conditions": ["Wall", "Inlet", "Outlet", "Symmetry", "Slip"],
+        "boundary_conditions": ["WallBC", "InletBoundary", "OutletBoundary", "Symmetry"],
         "common_expressions": ["u", "v", "w", "p", "spf.U"],
         "tips": [
             "Check Reynolds number to determine if laminar or turbulent flow",

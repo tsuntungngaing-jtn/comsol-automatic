@@ -2,7 +2,7 @@
 
 MCP Server for COMSOL Multiphysics simulation automation via AI agents.
 
-English | [中文](README_CN.md)
+English repair distribution; see the root README and NOTICE.
 
 ## Star History
 

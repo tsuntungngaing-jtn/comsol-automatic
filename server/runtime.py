@@ -21,7 +21,8 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 from uuid import uuid4
 
-ROOT = Path(__file__).resolve().parents[1]
+_RESOURCES = Path(__file__).resolve().parent / 'resources'
+ROOT = _RESOURCES if (_RESOURCES / 'vendor').is_dir() else Path(__file__).resolve().parents[1]
 
 
 def inside(root: Path, value: str | Path) -> Path:
@@ -53,7 +54,7 @@ def jsonable(value: Any) -> Any:
 class Runtime:
     def __init__(self, root: Path = ROOT, output_root: Path | None = None):
         self.root = root
-        self.output_root = Path(output_root or os.getenv("COMSOL_OUTPUT_ROOT", str(root / "runs"))).resolve()
+        self.output_root = Path(output_root or os.getenv("COMSOL_OUTPUT_ROOT", str(Path.home() / "comsol-automatic-output"))).resolve()
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="comsol-jvm")
         self.manager = None
         self.server = None
@@ -241,7 +242,7 @@ class Runtime:
                                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         self.desktop_endpoint = endpoint
         return {"success": True, "pid": self.desktop_process.pid, "port": self.manager.client.port,
-                "next_step": "Complete the simulation through MCP. At the end, the USER manually clicks 文件 → COMSOL Multiphysics Server → 从服务器导入 App (File > COMSOL Multiphysics Server > Import App from Server) and selects the returned model name. The agent must not use screen recognition, OCR, screenshots or UI automation."}
+                "next_step": "Complete the simulation through MCP. At the end, the USER manually clicks File > COMSOL Multiphysics Server > Import App from Server and selects the returned model name. The agent must not use screen recognition, OCR, screenshots or UI automation."}
 
     def catalog(self) -> list[dict]:
         data = json.loads((self.root / "examples" / "catalog.json").read_text(encoding="utf-8-sig"))
@@ -266,7 +267,7 @@ class Runtime:
             case["locally_available"] = bool(library and relative and inside(library, relative).is_file()) if relative else (self.root / "examples" / "original" / (case["id"] + ".py")).is_file()
             case["license_verified"] = False
             if not detail:
-                compact_keys = {"id", "title_zh", "category", "modules", "dimensions", "status", "locally_available", "license_verified"}
+                compact_keys = {"id", "title", "title_zh", "category", "modules", "dimensions", "status", "locally_available", "license_verified"}
                 case = {key: value for key, value in case.items() if key in compact_keys}
             output.append(case)
         return {"success": True, "cases": output, "count": len(output), "detail": detail,
@@ -465,6 +466,13 @@ class SerializedRegistrar:
                 if function.__name__ in {"model_save", "model_save_version"}:
                     model = self.runtime.manager.get_model(arguments.get("model_name"))
                     if model is not None:
+                        if function.__name__ == "model_save_version":
+                            from src.utils.versioning import safe_model_name
+                            try:
+                                name = safe_model_name(model.name())
+                                inside(self.runtime.output_root, self.runtime.output_root / "versions" / name)
+                            except ValueError as error:
+                                return {"success": False, "error": str(error)}
                         label = str(model.java.label())
                         try:
                             result = function(**arguments)
