@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "run_id": "boolean_channel",
+  "source": {
+    "kind": "original analytic/regression fixture",
+    "runner": "benchmarks/mcp_cases.py"
+  },
+  "version": "6.4",
+  "input_hashes": {},
+  "parameters": {},
+  "geometry": {
+    "dimension": 3,
+    "unit": "mm",
+    "requirements": [
+      {
+        "metric": "volume",
+        "reference": 30,
+        "atol": 1e-08
+      },
+      {
+        "metric": "count_3",
+        "reference": 1
+      },
+      {
+        "metric": "finite_voids",
+        "reference": 0
+      }
+    ],
+    "native_steps": [
+      {
+        "fixture": "boolean_channel"
+      }
+    ]
+  },
+  "selections": [],
+  "materials": [],
+  "physics": {
+    "interfaces": [],
+    "boundaries": [],
+    "couplings": []
+  },
+  "mesh": {},
+  "study": {},
+  "solver": {},
+  "observables": [],
+  "assumptions": [
+    "Through-bore Difference fixture; finite void count is a bounded topology check, not general flow connectivity proof."
+  ],
+  "missing_information": [],
+  "benchmark": {
+    "required_modules": [
+      "COMSOL"
+    ],
+    "expected_seconds": 40,
+    "max_solves": 1,
+    "status": "NOT_RUN",
+    "score": "Separate API, geometry, selection, physics, numerical, scientific, reopen; unknown scores remain null"
+  }
+}

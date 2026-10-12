@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "run_id": "heat_conduction",
+  "source": {
+    "kind": "original analytic/regression fixture",
+    "runner": "benchmarks/mcp_cases.py"
+  },
+  "version": "6.4",
+  "input_hashes": {},
+  "parameters": {},
+  "geometry": {
+    "dimension": 3,
+    "unit": "m",
+    "requirements": [
+      {
+        "metric": "volume",
+        "reference": 1e-06,
+        "rtol": 1e-06
+      }
+    ],
+    "native_steps": [
+      {
+        "fixture": "heat_conduction"
+      }
+    ]
+  },
+  "selections": [
+    {
+      "id": "left",
+      "tag": "left",
+      "dimension": 2,
+      "count": {
+        "reference": 1
+      },
+      "allow_empty": false,
+      "purpose": "left",
+      "rule": {
+        "type": "Box",
+        "condition": "inside",
+        "axis": "x",
+        "position": 0,
+        "tolerance": 1e-09
+      }
+    },
+    {
+      "id": "right",
+      "tag": "right",
+      "dimension": 2,
+      "count": {
+        "reference": 1
+      },
+      "allow_empty": false,
+      "purpose": "right",
+      "rule": {
+        "type": "Box",
+        "condition": "inside",
+        "axis": "x",
+        "position": 0.01,
+        "tolerance": 1e-09
+      }
+    }
+  ],
+  "materials": [
+    {
+      "source": "Local COMSOL basic material library: copper",
+      "valid_range": "Confirm library functions cover 293.15 to 393.15 K"
+    }
+  ],
+  "physics": {
+    "interfaces": [
+      "HeatTransfer"
+    ],
+    "boundaries": [
+      {
+        "id": "left",
+        "selection": "left",
+        "type": "TemperatureBoundary",
+        "T0": "293.15[K]"
+      },
+      {
+        "id": "right",
+        "selection": "right",
+        "type": "TemperatureBoundary",
+        "T0": "393.15[K]"
+      }
+    ],
+    "couplings": []
+  },
+  "mesh": {
+    "auto_size": 4
+  },
+  "study": {
+    "type": "Stationary"
+  },
+  "solver": {
+    "stationary_relative_tolerance": 0.001,
+    "repair_budget_solves": 1
+  },
+  "observables": [
+    {
+      "expression": "T",
+      "unit": "K",
+      "location": "volume average",
+      "time": "stationary",
+      "reference": 343.15,
+      "atol": 0.01,
+      "rtol": 0
+    }
+  ],
+  "assumptions": [
+    "Geometry measure tolerance 1e-6 relative: kernel measurement precision, separate from PDE error."
+  ],
+  "missing_information": [],
+  "benchmark": {
+    "required_modules": [
+      "HEATTRANSFER"
+    ],
+    "expected_seconds": 90,
+    "max_solves": 1,
+    "status": "NOT_RUN",
+    "score": "Separate API, geometry, selection, physics, numerical, scientific, reopen; unknown scores remain null",
+    "reference_derivation": "Conduction: linear T and k*A*dT/L. Convection: Q=h*A*(Tsurface-Tambient). Laminar: planar Poiseuille profile area mean Umean. Turbulent: mass conservation only; no analytic turbulence claim."
+  }
+}

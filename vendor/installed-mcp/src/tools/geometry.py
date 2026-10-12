@@ -1,9 +1,52 @@
 """Geometry tools for COMSOL MCP Server."""
 
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Union
+import math
 from mcp.server.fastmcp import FastMCP
 
 from .session import session_manager
+
+
+def _length(value):
+    """Legacy numeric inputs are meters; strings remain COMSOL expressions."""
+    if isinstance(value, bool):
+        raise ValueError("Boolean is not a length")
+    if isinstance(value, (int, float)):
+        if not math.isfinite(value):
+            raise ValueError("Length must be finite")
+        return f"{value}[m]"
+    if isinstance(value, str) and value.strip():
+        return value
+    raise ValueError("Expected a finite number in meters or a COMSOL expression")
+
+
+def _vector(values, dimension):
+    if len(values) != dimension:
+        raise ValueError(f"Expected {dimension} coordinates, received {len(values)}")
+    return [_length(value) for value in values]
+
+
+def _configure_feature(node, properties):
+    """Keep partial nodes visible. Property acceptance is not geometry validity."""
+    records = {}
+    for key, value in properties.items():
+        record = {"requested": value, "status": "NOT_RUN", "readback": None}
+        try:
+            node.property(key, value)
+            record["status"] = "PASS"
+        except Exception as error:
+            record.update(status="FAIL", error=str(error))
+        try:
+            readback = node.property(key)
+            record["readback"] = readback.tolist() if hasattr(readback, "tolist") else readback
+        except Exception as error:
+            record["readback_error"] = str(error)
+        records[key] = record
+    ok = all(record["status"] == "PASS" for record in records.values())
+    return {"success": ok, "creation_status": "PASS",
+            "configuration_status": "PASS" if ok else "FAIL", "build_status": "NOT_RUN",
+            "properties": records, "safe_for_build": ok, "safe_for_solve": False,
+            "recovery": "Retained node; inspect and correct failed properties or explicitly remove it." if not ok else None}
 
 
 def _get_geometry_node(model, geometry_name: Optional[str], component_name: str = "comp1"):
@@ -122,6 +165,7 @@ def register_geometry_tools(mcp: FastMCP) -> None:
         geometry_name: Optional[str] = None,
         feature_name: Optional[str] = None,
         model_name: Optional[str] = None,
+        properties: Optional[dict] = None,
         **kwargs
     ) -> dict:
         """
@@ -166,29 +210,19 @@ def register_geometry_tools(mcp: FastMCP) -> None:
                 return {"success": False, "error": f"Geometry not found: {target_geom}"}
             
             geom_node = model / "geometries" / target_geom
-            feature_node = geom_node.create(feature_type, feature_name)
+            feature_node = geom_node.create(feature_type, name=feature_name)
             
-            for prop_name, prop_value in kwargs.items():
-                try:
-                    feature_node.property(prop_name, prop_value)
-                except Exception:
-                    pass
-            
-            return {
-                "success": True,
-                "feature": {
-                    "name": feature_node.name() if hasattr(feature_node, 'name') else feature_name,
-                    "type": feature_type,
-                    "geometry": target_geom,
-                }
-            }
+            result = _configure_feature(feature_node, {**(properties or {}), **kwargs})
+            result["feature"] = {"name": feature_node.name(), "tag": feature_node.tag(),
+                                 "type": feature_type, "geometry": target_geom}
+            return result
         except Exception as e:
             return {"success": False, "error": f"Failed to add geometry feature: {str(e)}"}
     
     @mcp.tool()
     def geometry_add_block(
-        position: Sequence[float] = (0, 0, 0),
-        size: Sequence[float] = (1, 1, 1),
+        position: Sequence[Union[float, str]] = (0, 0, 0),
+        size: Sequence[Union[float, str]] = (1, 1, 1),
         geometry_name: Optional[str] = None,
         component_name: str = "comp1",
         feature_name: Optional[str] = None,
@@ -220,14 +254,17 @@ def register_geometry_tools(mcp: FastMCP) -> None:
             if error:
                 return {"success": False, "error": error}
             
-            feat_name = feature_name or f"blk{len(geom.feature())+1}"
+            _vector(position, 3)
+            _vector(size, 3)
+            feat_name = feature_name or f"blk{len(geom.feature().tags())+1}"
             block = geom.feature().create(feat_name, "Block")
             
-            block.set("pos", [str(p) for p in position])
-            block.set("size", [str(s) for s in size])
+            block.set("pos", _vector(position, len(position)))
+            block.set("size", _vector(size, len(size)))
             
             return {
-                "success": True,
+                "success": True, "creation_status": "PASS", "configuration_status": "PASS",
+                "build_status": "NOT_RUN", "numeric_input_unit": "m", "geometry_unit": str(geom.lengthUnit()),
                 "feature": {
                     "name": feat_name,
                     "type": "Block",
@@ -236,13 +273,13 @@ def register_geometry_tools(mcp: FastMCP) -> None:
                 }
             }
         except Exception as e:
-            return {"success": False, "error": f"Failed to add block: {str(e)}"}
+            return {"success": False, "partial_feature": locals().get("feat_name"), "build_status": "NOT_RUN", "safe_for_solve": False, "error": f"Failed to add block: {str(e)}"}
     
     @mcp.tool()
     def geometry_add_cylinder(
-        position: Sequence[float] = (0, 0, 0),
-        radius: float = 0.5,
-        height: float = 1.0,
+        position: Sequence[Union[float, str]] = (0, 0, 0),
+        radius: Union[float, str] = 0.5,
+        height: Union[float, str] = 1.0,
         geometry_name: Optional[str] = None,
         component_name: str = "comp1",
         feature_name: Optional[str] = None,
@@ -275,15 +312,19 @@ def register_geometry_tools(mcp: FastMCP) -> None:
             if error:
                 return {"success": False, "error": error}
             
-            feat_name = feature_name or f"cyl{len(geom.feature())+1}"
+            _vector(position, 3)
+            _length(radius)
+            _length(height)
+            feat_name = feature_name or f"cyl{len(geom.feature().tags())+1}"
             cyl = geom.feature().create(feat_name, "Cylinder")
             
-            cyl.set("pos", [str(p) for p in position])
-            cyl.set("r", str(radius))
-            cyl.set("h", str(height))
+            cyl.set("pos", _vector(position, len(position)))
+            cyl.set("r", _length(radius))
+            cyl.set("h", _length(height))
             
             return {
-                "success": True,
+                "success": True, "creation_status": "PASS", "configuration_status": "PASS",
+                "build_status": "NOT_RUN", "numeric_input_unit": "m", "geometry_unit": str(geom.lengthUnit()),
                 "feature": {
                     "name": feat_name,
                     "type": "Cylinder",
@@ -293,12 +334,12 @@ def register_geometry_tools(mcp: FastMCP) -> None:
                 }
             }
         except Exception as e:
-            return {"success": False, "error": f"Failed to add cylinder: {str(e)}"}
+            return {"success": False, "partial_feature": locals().get("feat_name"), "build_status": "NOT_RUN", "safe_for_solve": False, "error": f"Failed to add cylinder: {str(e)}"}
     
     @mcp.tool()
     def geometry_add_sphere(
-        position: Sequence[float] = (0, 0, 0),
-        radius: float = 0.5,
+        position: Sequence[Union[float, str]] = (0, 0, 0),
+        radius: Union[float, str] = 0.5,
         geometry_name: Optional[str] = None,
         component_name: str = "comp1",
         feature_name: Optional[str] = None,
@@ -330,14 +371,17 @@ def register_geometry_tools(mcp: FastMCP) -> None:
             if error:
                 return {"success": False, "error": error}
             
-            feat_name = feature_name or f"sph{len(geom.feature())+1}"
+            _vector(position, 3)
+            _length(radius)
+            feat_name = feature_name or f"sph{len(geom.feature().tags())+1}"
             sphere = geom.feature().create(feat_name, "Sphere")
             
-            sphere.set("pos", [str(p) for p in position])
-            sphere.set("r", str(radius))
+            sphere.set("pos", _vector(position, len(position)))
+            sphere.set("r", _length(radius))
             
             return {
-                "success": True,
+                "success": True, "creation_status": "PASS", "configuration_status": "PASS",
+                "build_status": "NOT_RUN", "numeric_input_unit": "m", "geometry_unit": str(geom.lengthUnit()),
                 "feature": {
                     "name": feat_name,
                     "type": "Sphere",
@@ -346,12 +390,12 @@ def register_geometry_tools(mcp: FastMCP) -> None:
                 }
             }
         except Exception as e:
-            return {"success": False, "error": f"Failed to add sphere: {str(e)}"}
+            return {"success": False, "partial_feature": locals().get("feat_name"), "build_status": "NOT_RUN", "safe_for_solve": False, "error": f"Failed to add sphere: {str(e)}"}
     
     @mcp.tool()
     def geometry_add_rectangle(
-        position: Sequence[float] = (0, 0),
-        size: Sequence[float] = (1, 1),
+        position: Sequence[Union[float, str]] = (0, 0),
+        size: Sequence[Union[float, str]] = (1, 1),
         geometry_name: Optional[str] = None,
         component_name: str = "comp1",
         feature_name: Optional[str] = None,
@@ -383,14 +427,17 @@ def register_geometry_tools(mcp: FastMCP) -> None:
             if error:
                 return {"success": False, "error": error}
             
-            feat_name = feature_name or f"r{len(geom.feature())+1}"
+            _vector(position, 2)
+            _vector(size, 2)
+            feat_name = feature_name or f"r{len(geom.feature().tags())+1}"
             rect = geom.feature().create(feat_name, "Rectangle")
             
-            rect.set("pos", [str(p) for p in position])
-            rect.set("size", [str(s) for s in size])
+            rect.set("pos", _vector(position, len(position)))
+            rect.set("size", _vector(size, len(size)))
             
             return {
-                "success": True,
+                "success": True, "creation_status": "PASS", "configuration_status": "PASS",
+                "build_status": "NOT_RUN", "numeric_input_unit": "m", "geometry_unit": str(geom.lengthUnit()),
                 "feature": {
                     "name": feat_name,
                     "type": "Rectangle",
@@ -399,12 +446,12 @@ def register_geometry_tools(mcp: FastMCP) -> None:
                 }
             }
         except Exception as e:
-            return {"success": False, "error": f"Failed to add rectangle: {str(e)}"}
+            return {"success": False, "partial_feature": locals().get("feat_name"), "build_status": "NOT_RUN", "safe_for_solve": False, "error": f"Failed to add rectangle: {str(e)}"}
     
     @mcp.tool()
     def geometry_add_circle(
-        position: Sequence[float] = (0, 0),
-        radius: float = 0.5,
+        position: Sequence[Union[float, str]] = (0, 0),
+        radius: Union[float, str] = 0.5,
         geometry_name: Optional[str] = None,
         model_name: Optional[str] = None
     ) -> dict:
@@ -436,9 +483,10 @@ def register_geometry_tools(mcp: FastMCP) -> None:
             geom_node = model / "geometries" / target_geom
             circle_node = geom_node.create("Circle")
             
+            _vector(position, 2)
             if len(position) == 2:
-                circle_node.property("pos", list(position))
-            circle_node.property("r", radius)
+                circle_node.property("pos", _vector(position, 2))
+            circle_node.property("r", _length(radius))
             
             return {
                 "success": True,
@@ -534,7 +582,7 @@ def register_geometry_tools(mcp: FastMCP) -> None:
             if error:
                 return {"success": False, "error": error}
             
-            feat_name = feature_name or f"dif{len(geom.feature())+1}"
+            feat_name = feature_name or f"dif{len(geom.feature().tags())+1}"
             diff = geom.feature().create(feat_name, "Difference")
             
             diff.selection("input").set([input_object])

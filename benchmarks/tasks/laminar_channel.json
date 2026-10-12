@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "run_id": "laminar_channel",
+  "source": {
+    "kind": "original analytic/regression fixture",
+    "runner": "benchmarks/mcp_cases.py"
+  },
+  "version": "6.4",
+  "input_hashes": {},
+  "parameters": {
+    "length": "1[m]",
+    "height": "0.1[m]"
+  },
+  "geometry": {
+    "dimension": 2,
+    "unit": "m",
+    "requirements": [
+      {
+        "metric": "area",
+        "reference": 0.1,
+        "rtol": 1e-06
+      }
+    ],
+    "native_steps": [
+      {
+        "fixture": "laminar_channel"
+      }
+    ]
+  },
+  "selections": [
+    {
+      "id": "inlet",
+      "tag": "inlet",
+      "dimension": 1,
+      "count": {
+        "reference": 1
+      },
+      "allow_empty": false,
+      "purpose": "inlet",
+      "rule": {
+        "type": "Box",
+        "condition": "inside",
+        "axis": "x",
+        "position": 0,
+        "tolerance": 1e-09
+      }
+    },
+    {
+      "id": "outlet",
+      "tag": "outlet",
+      "dimension": 1,
+      "count": {
+        "reference": 1
+      },
+      "allow_empty": false,
+      "purpose": "outlet",
+      "rule": {
+        "type": "Box",
+        "condition": "inside",
+        "axis": "x",
+        "position": 1,
+        "tolerance": 1e-09
+      }
+    }
+  ],
+  "materials": [
+    {
+      "source": "Local COMSOL basic material library: air",
+      "valid_range": "293.15 K, 1 atm"
+    }
+  ],
+  "physics": {
+    "interfaces": [
+      "LaminarFlow"
+    ],
+    "boundaries": [
+      {
+        "id": "inl",
+        "selection": "inlet",
+        "type": "Inlet",
+        "U0in": "6*0.01[m/s]*(y/0.1[m])*(1-y/0.1[m])"
+      },
+      {
+        "id": "out",
+        "selection": "outlet",
+        "type": "Outlet",
+        "p0": "0[Pa]"
+      }
+    ],
+    "couplings": []
+  },
+  "mesh": {
+    "auto_size": 5
+  },
+  "study": {
+    "type": "Stationary"
+  },
+  "solver": {
+    "stationary_relative_tolerance": 0.001,
+    "repair_budget_solves": 1
+  },
+  "observables": [
+    {
+      "expression": "relative mass imbalance",
+      "unit": "1",
+      "location": "inlet/outlet boundary integrals",
+      "time": "stationary",
+      "reference": 0,
+      "atol": 1e-06,
+      "rtol": 0
+    },
+    {
+      "expression": "u",
+      "unit": "m/s",
+      "location": "domain area mean",
+      "time": "stationary",
+      "reference": 0.01,
+      "atol": 0.0002,
+      "rtol": 0
+    }
+  ],
+  "assumptions": [
+    "Geometry measure tolerance 1e-6 relative: kernel measurement precision, separate from PDE error."
+  ],
+  "missing_information": [],
+  "benchmark": {
+    "required_modules": [
+      "CFD"
+    ],
+    "expected_seconds": 120,
+    "max_solves": 1,
+    "status": "NOT_RUN",
+    "score": "Separate API, geometry, selection, physics, numerical, scientific, reopen; unknown scores remain null",
+    "reference_derivation": "Conduction: linear T and k*A*dT/L. Convection: Q=h*A*(Tsurface-Tambient). Laminar: planar Poiseuille profile area mean Umean. Turbulent: mass conservation only; no analytic turbulence claim."
+  }
+}

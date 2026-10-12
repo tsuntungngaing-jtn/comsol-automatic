@@ -1,0 +1,310 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "source",
+    "version",
+    "input_hashes",
+    "parameters",
+    "geometry",
+    "selections",
+    "materials",
+    "physics",
+    "mesh",
+    "study",
+    "solver",
+    "observables",
+    "assumptions",
+    "missing_information"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object"
+    },
+    "version": {
+      "type": "string"
+    },
+    "input_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "geometry": {
+      "type": "object",
+      "required": [
+        "dimension",
+        "unit",
+        "requirements"
+      ],
+      "properties": {
+        "dimension": {
+          "enum": [
+            1,
+            2,
+            3
+          ]
+        },
+        "unit": {
+          "type": "string"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "metric"
+            ],
+            "properties": {
+              "metric": {
+                "type": "string"
+              },
+              "reference": {},
+              "range": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "atol": {
+                "type": "number",
+                "minimum": 0
+              },
+              "rtol": {
+                "type": "number",
+                "minimum": 0
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "require_exact": {
+                "type": "boolean"
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "reference"
+                ]
+              },
+              {
+                "required": [
+                  "range"
+                ]
+              }
+            ]
+          }
+        },
+        "native_steps": {
+          "type": "array"
+        },
+        "cad": {
+          "type": "object"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "native_steps"
+          ]
+        },
+        {
+          "required": [
+            "cad"
+          ]
+        }
+      ]
+    },
+    "selections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tag",
+          "dimension",
+          "count",
+          "allow_empty",
+          "purpose"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tag": {
+            "type": "string"
+          },
+          "dimension": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "count": {
+            "type": "object",
+            "anyOf": [
+              {
+                "required": [
+                  "reference"
+                ]
+              },
+              {
+                "required": [
+                  "range"
+                ]
+              }
+            ]
+          },
+          "allow_empty": {
+            "type": "boolean"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "measurements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "metric"
+              ],
+              "properties": {
+                "metric": {
+                  "type": "string"
+                },
+                "reference": {},
+                "range": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "atol": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "rtol": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "required": {
+                  "type": "boolean"
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "reference"
+                  ]
+                },
+                {
+                  "required": [
+                    "range"
+                  ]
+                }
+              ]
+            }
+          },
+          "bindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "physics"
+              ],
+              "properties": {
+                "physics": {
+                  "type": "string"
+                },
+                "feature": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "valid_range"
+        ]
+      }
+    }
+  },
+  "physics": {
+    "type": "object"
+  },
+  "mesh": {
+    "type": "object"
+  },
+  "study": {
+    "type": "object"
+  },
+  "solver": {
+    "type": "object"
+  },
+  "observables": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": [
+        "expression",
+        "unit",
+        "location",
+        "time",
+        "reference",
+        "atol",
+        "rtol"
+      ]
+    }
+  },
+  "assumptions": {
+    "type": "array"
+  },
+  "missing_information": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": [
+        "description",
+        "affects"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "affects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

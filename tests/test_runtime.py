@@ -231,6 +231,14 @@ class RuntimeTests(unittest.TestCase):
                     tools = await session.list_tools()
                     names = {tool.name for tool in tools.tools}
                     assert {"comsol_start", "model_create", "comsol_run_case", "comsol_job_status", "comsol_model_code"} <= names
+                    discovered = {item.name:item for item in tools.tools}
+                    for name in ('simulation_spec_validate','geometry_accept','selection_validate','selection_bind_checked','geometry_perturb','geometry_import_cad'):
+                        assert name in discovered
+                    assert 'properties' in discovered['geometry_add_feature'].inputSchema['properties']
+                    invalid = await session.call_tool('simulation_spec_validate', {'document':{}})
+                    assert json.loads(invalid.content[0].text)['status'] == 'FAIL'
+                    missing = await session.call_tool('geometry_accept', {'requirements':[], 'model_name':'missing'})
+                    assert json.loads(missing.content[0].text)['status'] == 'BLOCKED'
                     status = await session.call_tool("comsol_status", {})
                     assert not status.isError
                     payload = json.loads(status.content[0].text)

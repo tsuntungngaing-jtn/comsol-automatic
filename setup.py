@@ -9,7 +9,7 @@ class BuildWithResources(build_py):
         super().run()
         root = Path(__file__).parent
         dest = Path(self.build_lib) / 'server' / 'resources'
-        for folder in ['vendor', 'examples']:
+        for folder in ['vendor', 'examples', 'schemas', 'benchmarks', 'tutorials']:
             for source in (root/folder).rglob('*'):
                 if not source.is_file() or any(p in {'__pycache__', '.venv', 'validation'} for p in source.parts):
                     continue

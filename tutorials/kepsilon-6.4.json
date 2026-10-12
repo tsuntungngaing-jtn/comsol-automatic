@@ -1,0 +1,33 @@
+{
+  "id": "kepsilon-6.4",
+  "version": "6.4",
+  "required_modules": [
+    "CFD"
+  ],
+  "official_source": "https://doc.comsol.com/6.4/doc/com.comsol.help.cfd/cfd_ug_fluidflow_single.06.011.html",
+  "local_document": "com.comsol.help.cfd/cfd_ug_fluidflow_single.06.011.html",
+  "interface": "TurbulentFlowkeps",
+  "geometry_selection_strategy": "Named Box/generated selections checked after rebuild; validate geometry dimensions and measures",
+  "reference_observables": "See benchmarks/tasks/kepsilon_channel.json",
+  "scope": "Representative recipe; no commercial files redistributed",
+  "validation_status": "NOT_RUN for new tutorial-driven agent experiments",
+  "limitations": "A working API or loaded official example is not physical or scientific validation",
+  "key_api": {
+    "TurbulentFlowkeps": {
+      "TurbulenceModelProperty.TurbulenceModelType": "RANS"
+    },
+    "InletBoundary": {
+      "U0in": "m/s",
+      "RANSVarOption": "SpecifyTurbulentLengthScaleAndIntensity",
+      "IT_list": "user_defined",
+      "IT": "dimensionless",
+      "LT_list": "user_defined",
+      "LT": "m"
+    },
+    "OutletBoundary": {
+      "p0": "Pa"
+    }
+  },
+  "official_library_policy": "Use a nearby local Application Library case from examples/catalog.json; check its actual version and parameters. Models/manuals are accessed under local license and not bundled.",
+  "execution_validation": "See docs/geometry-validation-results.md; bounded original fixture tests do not validate all tutorial applications."
+}

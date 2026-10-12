@@ -77,6 +77,8 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
 
     from .inspector import register_inspector_tools
     register_inspector_tools(mcp, runtime)
+    from .validation_tools import register_validation_tools
+    register_validation_tools(mcp, runtime)
 
     @mcp.tool()
     async def comsol_doctor() -> dict:

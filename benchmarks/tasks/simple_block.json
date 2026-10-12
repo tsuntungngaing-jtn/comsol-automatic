@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "run_id": "simple_block",
+  "source": {
+    "kind": "original analytic/regression fixture",
+    "runner": "benchmarks/mcp_cases.py"
+  },
+  "version": "6.4",
+  "input_hashes": {},
+  "parameters": {
+    "w": "10[mm]",
+    "depth": "20[mm]",
+    "height": "30[mm]"
+  },
+  "geometry": {
+    "dimension": 3,
+    "unit": "mm",
+    "requirements": [
+      {
+        "metric": "bbox",
+        "reference": [
+          0,
+          10,
+          0,
+          20,
+          0,
+          30
+        ],
+        "atol": 1e-08
+      },
+      {
+        "metric": "volume",
+        "reference": 6000,
+        "rtol": 1e-10
+      },
+      {
+        "metric": "counts",
+        "reference": [
+          8,
+          12,
+          6,
+          1
+        ]
+      }
+    ],
+    "native_steps": [
+      {
+        "fixture": "simple_block"
+      }
+    ]
+  },
+  "selections": [],
+  "materials": [],
+  "physics": {
+    "interfaces": [],
+    "boundaries": [],
+    "couplings": []
+  },
+  "mesh": {},
+  "study": {},
+  "solver": {},
+  "observables": [],
+  "assumptions": [],
+  "missing_information": [],
+  "benchmark": {
+    "required_modules": [
+      "COMSOL"
+    ],
+    "expected_seconds": 30,
+    "max_solves": 1,
+    "status": "NOT_RUN",
+    "score": "Separate API, geometry, selection, physics, numerical, scientific, reopen; unknown scores remain null"
+  }
+}

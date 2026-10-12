@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "run_id": "cad_import",
+  "source": {
+    "kind": "original analytic/regression fixture",
+    "runner": "benchmarks/mcp_cases.py"
+  },
+  "version": "6.4",
+  "input_hashes": {},
+  "parameters": {},
+  "geometry": {
+    "dimension": 3,
+    "unit": "mm",
+    "requirements": [
+      {
+        "metric": "bbox",
+        "reference": [
+          0,
+          10,
+          0,
+          20,
+          0,
+          30
+        ],
+        "atol": 1e-05
+      },
+      {
+        "metric": "volume",
+        "reference": 6000,
+        "rtol": 1e-06
+      },
+      {
+        "metric": "count_3",
+        "reference": 1
+      }
+    ],
+    "cad": {
+      "source": "Operator-provided or generated simple block STEP fixture; hash at runtime",
+      "source_unit": "mm",
+      "finalization": "union",
+      "interior_boundaries": true,
+      "pair_strategy": "none",
+      "transforms": [],
+      "repair_tolerance": "1e-7"
+    }
+  },
+  "selections": [],
+  "materials": [],
+  "physics": {
+    "interfaces": [],
+    "boundaries": [],
+    "couplings": []
+  },
+  "mesh": {},
+  "study": {},
+  "solver": {},
+  "observables": [],
+  "assumptions": [],
+  "missing_information": [
+    {
+      "description": "Source file path and runtime hash required",
+      "affects": [
+        "cad_import"
+      ]
+    }
+  ],
+  "benchmark": {
+    "required_modules": [
+      "CADIMPORT"
+    ],
+    "expected_seconds": 90,
+    "max_solves": 1,
+    "status": "NOT_RUN",
+    "score": "Separate API, geometry, selection, physics, numerical, scientific, reopen; unknown scores remain null"
+  }
+}

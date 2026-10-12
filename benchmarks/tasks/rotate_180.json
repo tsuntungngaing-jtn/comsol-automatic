@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "run_id": "rotate_180",
+  "source": {
+    "kind": "original analytic/regression fixture",
+    "runner": "benchmarks/mcp_cases.py"
+  },
+  "version": "6.4",
+  "input_hashes": {},
+  "parameters": {
+    "theta": "180[deg]"
+  },
+  "geometry": {
+    "dimension": 3,
+    "unit": "mm",
+    "requirements": [
+      {
+        "metric": "bbox",
+        "reference": [
+          -4,
+          -2,
+          -2,
+          -1,
+          0,
+          1.25
+        ],
+        "atol": 1e-08
+      },
+      {
+        "metric": "volume",
+        "reference": 2.015625,
+        "atol": 1e-08
+      }
+    ],
+    "native_steps": [
+      {
+        "fixture": "rotate_180"
+      }
+    ]
+  },
+  "selections": [],
+  "materials": [],
+  "physics": {
+    "interfaces": [],
+    "boundaries": [],
+    "couplings": []
+  },
+  "mesh": {},
+  "study": {},
+  "solver": {},
+  "observables": [],
+  "assumptions": [
+    "Raised off-center marker distinguishes a 180-degree rotation from translation of a symmetric rectangle. Validate the marker top-face position."
+  ],
+  "missing_information": [],
+  "benchmark": {
+    "required_modules": [
+      "COMSOL"
+    ],
+    "expected_seconds": 45,
+    "max_solves": 1,
+    "status": "NOT_RUN",
+    "score": "Separate API, geometry, selection, physics, numerical, scientific, reopen; unknown scores remain null"
+  }
+}

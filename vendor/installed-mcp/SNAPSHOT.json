@@ -1,153 +1,155 @@
 {
-  "source_kind": "modified English repair derivative, not unchanged upstream",
-  "base_commit": "ef476da8c14cc73662b7c8aad7d091e9d641ba9c",
+  "source_kind": "Modified geometry reliability derivative; see git diff and validation results",
+  "base_commit": "a012b21bcfd604adb8843f3b0e734478fc13b4a3",
   "release_date": "2026-10-12",
   "license": "MIT",
   "files": [
     {
       "path": "CITATION.cff",
-      "bytes": 1100,
-      "sha256": "09d73cc2fa05c70a09613b84afb2f6a39ea5f162faede2da03f3f40e883c614f"
+      "bytes": 1070,
+      "sha256": "fab761d76c2efd8136f54e8c9481e35b74d9581a50abef68cad4911e80be5b40"
     },
     {
       "path": "LICENSE",
-      "bytes": 1077,
-      "sha256": "b800a52c77c8ac924a16bbd34136fe2877f477efac1eaa1af7af0c36703d8966"
+      "bytes": 1056,
+      "sha256": "06dcddbb6908a0c6dd4a9e8ec822eea41d5a460a53089fecccc8a68049e99241"
     },
     {
       "path": "pyproject.toml",
-      "bytes": 638,
-      "sha256": "d6424fb0b71e1cf11553e342cf9c4e75e34a763776cd72486fa1b90d352d7633"
+      "bytes": 608,
+      "sha256": "39f21700940d3a47c87ffd3f03be41a6c8a4219f93a98f5f9306709db6f221de"
     },
     {
       "path": "README.md",
-      "bytes": 16500,
-      "sha256": "c9815c294d664809e3e75dc832fc02325689a2b3e139a277f4b35c607f81c7b6"
+      "bytes": 16022,
+      "sha256": "1261a8e5fb32177c86cace2e52af3f8fc3074014e9597fc411c47d3f5baa543c"
     },
     {
       "path": "src/__init__.py",
-      "bytes": 102,
-      "sha256": "9927ec249e3a5682b149d2785a12f91e01ee6c2fa49aceea9fb60828e422585a"
+      "bytes": 99,
+      "sha256": "4083bcc6665bd664708241eb445505ac2a4a4ba92511338136bc4999c8030f97"
     },
     {
       "path": "src/async_handler/__init__.py",
-      "bytes": 218,
-      "sha256": "8ba165323c0eae2776f032039ca60f08966d0309c6790730e9b1c516c194d6f4"
+      "bytes": 214,
+      "sha256": "7f5340006f31a8669644646d040adb3e17578ba31678726304dc66ae22443b63"
     },
     {
       "path": "src/async_handler/solver.py",
-      "bytes": 7214,
-      "sha256": "6c9267d8a3324e4eff5b23acba5cc78a76936add5498cfe10103f24549b0eae3"
+      "bytes": 7007,
+      "sha256": "0bc47e78c15e277a02f74092fedcb91d7f0318d8c037322bc7345dc2eacaf362"
     },
     {
       "path": "src/knowledge/__init__.py",
-      "bytes": 475,
-      "sha256": "e53ca9a570e8db66ece1413898c9797f78359e1cc6ab8d331becde5dd3cb86e9"
+      "bytes": 460,
+      "sha256": "39af59e2dd17420a1c5126883139877f349f97e27214bc9f9788daf385a9936d"
     },
     {
       "path": "src/knowledge/embedded.py",
-      "bytes": 23023,
-      "sha256": "53a0e0d6fed17a726350eaba489618f05c4fbf2457c5b9ffc9c638c88329ba4b"
+      "bytes": 22371,
+      "sha256": "63bcbc3eaa04064ae08a5927cf2bfad10adb2c0cb74667763b23ed785124859d"
     },
     {
       "path": "src/knowledge/pdf_processor.py",
-      "bytes": 8673,
-      "sha256": "124e6eefd15e959dc80935d96e371ecfbb0f75ccc404e2cc414ed72d81f0baa8"
+      "bytes": 8414,
+      "sha256": "267311ab9514a69db031a6be829c56b86be86430968753e1adcceb573786a097"
     },
     {
       "path": "src/knowledge/prompts/mph_api.md",
-      "bytes": 4549,
-      "sha256": "c6a74f9d0f3d490ca80bf1e09aca643068d462acd48885f3b8ad0c78482e5845"
+      "bytes": 4345,
+      "sha256": "642ea1d8b2d8a20980d8d2d218b2cdb51a40ce0202cac38620659ecc7e01d536"
     },
     {
       "path": "src/knowledge/prompts/physics_guide.md",
-      "bytes": 12827,
-      "sha256": "4da956ae16c4a5aa7446164c67513dfc48180d2752236e4aa72b8ef245cc0257"
+      "bytes": 12386,
+      "sha256": "56a5ff0d2260eba66c1221929318878ef6daa6c623d7871cbec479e2fb866864"
     },
     {
       "path": "src/knowledge/prompts/workflow.md",
-      "bytes": 16349,
-      "sha256": "6cb4804fb776eb0d40560b8b1606ec87394d85cd34d4555237b33dc1131af955"
+      "bytes": 15851,
+      "sha256": "bddc6d997a0922e153e926a2bdef682270fd83e5e07525643926a472b97e762e"
     },
     {
       "path": "src/knowledge/retriever.py",
-      "bytes": 10412,
-      "sha256": "4d3133cb1e1f87adb1b17a4d016f5061e78c31dcd8f735182e303cc7c443577d"
+      "bytes": 10108,
+      "sha256": "877eab8b13a557874a8f46d1502db6797ff30f5a0ef395884a5d71a8560dcbd2"
     },
     {
       "path": "src/resources/__init__.py",
-      "bytes": 139,
-      "sha256": "d6d450d6858b73ea5dac62e45ff47cabfc17b0ba0499e11312a8205cceb42710"
+      "bytes": 134,
+      "sha256": "2720e244b0ff3964c89f0ec73fa971b1ea46f7d496e79129ef77f2939d2f4a1a"
     },
     {
       "path": "src/resources/model_resources.py",
-      "bytes": 6500,
-      "sha256": "ca213b2210ab4393393b66571d6ce0786db7aec70fbea9ea69cc97df8238a022"
+      "bytes": 6318,
+      "sha256": "6f1f2f06d2d45812a111121f71a0e9aecb48d62de34d37eecf834f8c480aa629"
     },
     {
       "path": "src/server.py",
-      "bytes": 1546,
-      "sha256": "bb90e530f43c7356f0c105f31410a32d8a544053fc5b5025ddda0187e18dc23a"
+      "bytes": 1492,
+      "sha256": "45c8bf1b984f0a9e4cb911c456664a03f4374c608fce25f9154e4c2687818310"
     },
     {
       "path": "src/tools/__init__.py",
-      "bytes": 657,
-      "sha256": "f218d384f81b6cc09f3bcfefea62b3c9825a52d225d98478b933c617db58e06b"
+      "bytes": 636,
+      "sha256": "91b86447ed37012c6497d1faf34fe32f540566e8d779546cae9f3412696be86c"
     },
     {
       "path": "src/tools/geometry.py",
-      "bytes": 32856,
-      "sha256": "20c4772465804e762fcba8f729972f618a201070bbeb097831c118d79895ffb3"
+      "bytes": 35229,
+      "sha256": "c4763f07f402084ea1d1e5c1ca043f53ed9f6cf87a27a589c2edcc96c93a49a7"
     },
     {
       "path": "src/tools/mesh.py",
-      "bytes": 10684,
-      "sha256": "55145da35e5019ae75e2a96bf2a3dfc568aee86c82cebd95578a0fd831aa045b"
+      "bytes": 10385,
+      "sha256": "248b68c62b737ee36930c52a20c473994de348ad877d4369b9ec01580af5ddf8"
     },
     {
       "path": "src/tools/model.py",
-      "bytes": 15925,
-      "sha256": "941273bf98be6325803dd678ad835eba25db45f27ed2e93c11725d14d48d35b4"
+      "bytes": 15471,
+      "sha256": "ee79c2bd83c9b0198826a2c2a2e98680a12c9341ddba199d9ae06ea9981b6077"
     },
     {
       "path": "src/tools/parameters.py",
-      "bytes": 8250,
-      "sha256": "e11c9f8a76d086d03ad1e755983990e4317107254113bf2213036da5770adc97"
+      "bytes": 8014,
+      "sha256": "60b39e07867b2f9b813094249f7b93ae15ba374838c4c22e824066b79ae6dab9"
     },
     {
       "path": "src/tools/physics.py",
-      "bytes": 73346,
-      "sha256": "f2bcd38c44599ccafeb0317b13a5798ffc2bb6ae6314d0383ce2fc424877087c"
+      "bytes": 71478,
+      "sha256": "2e9aad25f5e46061e1a257435c61877ec7edac54eaa1324a46e17d717bca6dd7"
     },
     {
       "path": "src/tools/results.py",
-      "bytes": 11049,
-      "sha256": "3f37574bd26d6963d27034e5a92f552105379baab003aa6c9b2dc40a6e6230c2"
+      "bytes": 10730,
+      "sha256": "18198f595a392696ca63b311527c39c76e6bfc1880431f313f72390805a43a8a"
     },
     {
       "path": "src/tools/session.py",
-      "bytes": 8880,
-      "sha256": "0e28706fb7b52f6839f193754504556c57ff326e1b20e35ae8392865db1fa592"
+      "bytes": 8630,
+      "sha256": "b603482f33bb9b52e8616fd066fb564cb186ce0818d3598f78a495d6d4175802"
     },
     {
       "path": "src/tools/study.py",
-      "bytes": 10967,
-      "sha256": "68829f74f875892a0c2276d3e9af011b0be982806c2ab55673e0f8209782198a"
+      "bytes": 10635,
+      "sha256": "c813b2f282c312db4ef43626578272589a905f4f282515aca2052215284078f3"
     },
     {
       "path": "src/utils/__init__.py",
-      "bytes": 174,
-      "sha256": "20bff5b3dc89167e413499b8bced15e8ce68be68e898d30858a90e60b607ee81"
+      "bytes": 169,
+      "sha256": "043a4e2b59b22f4d47a046a9ebe7e945bea85b4fbc3d4a908ad6b95b30027361"
     },
     {
       "path": "src/utils/versioning.py",
-      "bytes": 4120,
-      "sha256": "f27710ba71ce1a96ccddd65fc7124fb0f1d5e8acbef817d13a28a082e19c5550"
+      "bytes": 3991,
+      "sha256": "c0169ea9f3a80d2f6e0446261d2b684f3cff5743e2fbb3117da880dc5db1e3bd"
     },
     {
       "path": "UPSTREAM_SNAPSHOT.json",
-      "bytes": 4942,
-      "sha256": "ad3af2baf4eae29918e5a8d9469a19701d704920c2d6b86f97bd535a37811609"
+      "bytes": 4789,
+      "sha256": "e3e702c914d4407c76714410a2b86d2075a95d331b4bf7aa4b44cd58aec5bb7f"
     }
-  ]
+  ],
+  "hash_mode": "lf-normalized",
+  "hash_note": "SHA-256 and bytes describe UTF-8 source bytes with CRLF normalized to LF; release manifest hashes exact archive bytes."
 }

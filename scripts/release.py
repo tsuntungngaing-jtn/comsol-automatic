@@ -13,7 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {'SKILL.md','README.md','LICENSE','NOTICE.md','.gitignore','pyproject.toml','setup.py','MANIFEST.in'}
-DIRECTORIES = {'server','vendor','examples','docs','scripts','tests'}
+DIRECTORIES = {'server','vendor','examples','docs','scripts','tests','schemas','benchmarks','tutorials'}
 EXTENSIONS = {'.py','.md','.toml','.json','.cff','.ps1'}
 SKIP_PARTS = {'.git','.venv','__pycache__','.pytest_cache','runs','runtime','dist','build'}
 FORBIDDEN_EXTENSIONS = {'.csv','.png','.mph','.mphbin','.log','.pdf','.step','.stp','.pem','.key','.pfx','.zip','.pyc','.pyo'}
@@ -71,7 +71,10 @@ def public_files(root=ROOT):
     snapshot=json.loads(snapshot_path.read_text(encoding='utf-8'))
     for record in snapshot['files']:
         source=root/'vendor/installed-mcp'/record['path']
-        if digest(source.read_bytes()) != record['sha256']:
+        source_data = source.read_bytes()
+        if snapshot.get('hash_mode') == 'lf-normalized':
+            source_data = source_data.replace(b'\r\n', b'\n')
+        if digest(source_data) != record['sha256']:
             raise ValueError(f'Vendor provenance mismatch: {record["path"]}')
     return result
 

@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "run_id",
+    "spec_hash",
+    "environment",
+    "status",
+    "layers",
+    "repair_history"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "spec_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "environment": {
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "NOT_RUN"
+      ]
+    },
+    "layers": {
+      "type": "object",
+      "required": [
+        "api",
+        "geometry",
+        "selection",
+        "physics",
+        "numerical",
+        "scientific",
+        "reopen"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "api": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "geometry": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "selection": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "physics": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "numerical": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "scientific": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "reopen": {
+          "type": "object",
+          "required": [
+            "status",
+            "checks"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "BLOCKED",
+                "NOT_RUN"
+              ]
+            },
+            "checks": {
+              "type": "array"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "repair_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "stage",
+          "error",
+          "warnings",
+          "change",
+          "executions",
+          "solves",
+          "elapsed_seconds",
+          "validation",
+          "repeated_failures",
+          "stop_reason",
+          "operation"
+        ],
+        "properties": {
+          "executions": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "solves": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "elapsed_seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "operation": {
+            "enum": [
+              "necessary",
+              "repair"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

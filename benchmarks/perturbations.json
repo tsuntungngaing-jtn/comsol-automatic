@@ -1,0 +1,222 @@
+{
+  "width": {
+    "parameters": [
+      "w"
+    ],
+    "baseline_requirements": [
+      {
+        "metric": "volume",
+        "reference": 2000,
+        "atol": 1e-06
+      }
+    ],
+    "associations": [
+      {
+        "parameter": "w",
+        "feature": "blk",
+        "selection": "left",
+        "physics": "ht/temperature"
+      }
+    ],
+    "baseline_selections": [
+      {
+        "id": "left",
+        "tag": "left",
+        "dimension": 2,
+        "count": {
+          "reference": 1
+        },
+        "allow_empty": false,
+        "purpose": "Temperature boundary",
+        "bindings": [
+          {
+            "physics": "ht",
+            "feature": "temperature",
+            "type": "TemperatureBoundary"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "width20",
+        "parameters": {
+          "w": "20[mm]"
+        },
+        "requirements": [
+          {
+            "metric": "volume",
+            "reference": 4000,
+            "atol": 1e-06
+          }
+        ],
+        "relations": [
+          {
+            "metric": "volume",
+            "operation": "ratio",
+            "reference": 2,
+            "atol": 1e-08
+          }
+        ],
+        "selections": [
+          {
+            "id": "left",
+            "tag": "left",
+            "dimension": 2,
+            "count": {
+              "reference": 1
+            },
+            "allow_empty": false,
+            "purpose": "Temperature boundary",
+            "bindings": [
+              {
+                "physics": "ht",
+                "feature": "temperature",
+                "type": "TemperatureBoundary"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "device_count": {
+    "parameters": [
+      "n"
+    ],
+    "baseline_requirements": [
+      {
+        "metric": "count_3",
+        "reference": 3
+      }
+    ],
+    "associations": [
+      {
+        "parameter": "n",
+        "feature": "devices",
+        "selection": "devices_domain",
+        "physics": "ht/source"
+      }
+    ],
+    "variants": [
+      {
+        "id": "five_devices",
+        "parameters": {
+          "n": "5"
+        },
+        "requirements": [
+          {
+            "metric": "count_3",
+            "reference": 5
+          },
+          {
+            "metric": "volume",
+            "reference": 5,
+            "atol": 1e-08
+          }
+        ]
+      }
+    ]
+  },
+  "rotation": {
+    "parameters": [
+      "theta"
+    ],
+    "baseline_requirements": [
+      {
+        "metric": "bbox",
+        "reference": [
+          2,
+          4,
+          1,
+          2,
+          0,
+          1.25
+        ],
+        "atol": 1e-06
+      }
+    ],
+    "associations": [
+      {
+        "parameter": "theta",
+        "feature": "turn",
+        "selection": "tip",
+        "physics": null
+      }
+    ],
+    "variants": [
+      {
+        "id": "rotate180",
+        "parameters": {
+          "theta": "180[deg]"
+        },
+        "requirements": [
+          {
+            "metric": "bbox",
+            "reference": [
+              -4,
+              -2,
+              -2,
+              -1,
+              0,
+              1.25
+            ],
+            "atol": 1e-06
+          }
+        ],
+        "selections": [
+          {
+            "id": "tip",
+            "tag": "tip",
+            "dimension": 2,
+            "count": {
+              "reference": 1
+            },
+            "allow_empty": false,
+            "purpose": "Oriented tip position",
+            "measurements": [
+              {
+                "metric": "bbox",
+                "reference": [
+                  -4,
+                  -3.75,
+                  -2,
+                  -1.75,
+                  1.25,
+                  1.25
+                ],
+                "atol": 1e-06
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "baseline_selections": [
+      {
+        "id": "tip",
+        "tag": "tip",
+        "dimension": 2,
+        "count": {
+          "reference": 1
+        },
+        "allow_empty": false,
+        "purpose": "Oriented tip position",
+        "measurements": [
+          {
+            "metric": "bbox",
+            "reference": [
+              3.75,
+              4,
+              1.75,
+              2,
+              1.25,
+              1.25
+            ],
+            "atol": 1e-06
+          }
+        ]
+      }
+    ]
+  }
+}
