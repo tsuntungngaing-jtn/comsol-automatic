@@ -52,6 +52,16 @@ Prefer named/generated/spatial selections. Revalidate their contracts and physic
 
 Keep validation layers separate: API, geometry, selection, physics, numerical, scientific and reopen. Unsupported evidence remains NOT_RUN; unresolved errors remain FAIL. Use [benchmark procedures](benchmarks/README.md) and versioned `tutorials/` metadata when relevant. Count required execution separately from repair attempts. Do not infer performance improvements from unrun experiments or from paper results under different conditions.
 
+## Feedback-driven execution discipline
+
+Read [stage contracts and solver safeguards](docs/stage-contracts.md) before paper-based or coupled turbulent work. Use `simulation_task_admit` for the specific next task; a schema PASS alone does not admit a solve. Legacy modeling tools are not automatically bound to a specification, so the operator must honor this gate.
+
+Check `comsol_queue_status` before Java inspection or repair. Poll metadata while busy. `study_cancel` only cancels queued work; `cancel_requested` is not stopped. Recovered manifests are historical and require verification. Never kill COMSOL, automatically resubmit a recovered job, or overwrite a failed baseline to manufacture success.
+
+Use `validation_gate` for supplied-evidence freshness, residual trends, signed conservation and comparison admission. It does not collect or authenticate COMSOL results. Bind metrics and plots to a fresh run/revision/study/solver/solution/dataset/parameter identity. A residual alarm is not a root-cause diagnosis. Initialization completion is not convergence. Missing diagnostics, mesh independence, or B results remain NOT_RUN.
+
+For local review-only endpoints, set `COMSOL_TOOL_ROLE=reviewer` before startup. This exposes only offline validation and job metadata. Operator mode and arbitrary code remain trusted, unsandboxed capabilities. See [portfolio resolution and remaining gaps](docs/portfolio-feedback.md) for exact enforcement limits.
+
 ## Delivery
 
 Provide the actual MPH path, tracked model name, server port, metrics and limits. After authorized model creation/solving, tell the user to manually select **File > COMSOL Multiphysics Server > Import App from Server** and choose the returned name. Do not click or claim to have imported it. Read-only inspection does not require opening Desktop.

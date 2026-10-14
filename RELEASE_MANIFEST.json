@@ -16,18 +16,18 @@
     },
     {
       "path": "benchmarks/mcp_cases.py",
-      "bytes": 7373,
-      "sha256": "c84b17574fb3b649a5e9363b27e36eee532cfb510c20e215a9bde18b6e83d4a4"
+      "bytes": 7260,
+      "sha256": "70d9d5af7f7dc6114431108462d2be5c3b4b2cd0d35148993374dcbdcb6be778"
     },
     {
       "path": "benchmarks/perturbations.json",
-      "bytes": 4580,
-      "sha256": "60a7d9ce7d8261a7d1533d32e2f401c040f9e90837d2ac7214afbfdf7f4e53bb"
+      "bytes": 4358,
+      "sha256": "23ce87b0c4acf2ab74d6fb12313a6d8bbf427719027db4155a5a21bc486016e8"
     },
     {
       "path": "benchmarks/README.md",
-      "bytes": 5245,
-      "sha256": "4bb15ede88fb360262f8e4290c5dc9cd77b5ee7beb2bc8444db4b5507a25dcd5"
+      "bytes": 5210,
+      "sha256": "b5ecb36f34ac579c2f32cdb30fc6dc6b7169ab887f3e2d6a96138c73abea1857"
     },
     {
       "path": "benchmarks/score.py",
@@ -66,8 +66,8 @@
     },
     {
       "path": "benchmarks/tasks/rotate_180.json",
-      "bytes": 1413,
-      "sha256": "d4b76bb901514dd18079b104cf97a6514fbc084f7af13c675c746bc902c27525"
+      "bytes": 1348,
+      "sha256": "14d22820894ed86f8b760a5a3a792c87585ea9ba1426dba15da51caa0a950ffa"
     },
     {
       "path": "benchmarks/tasks/selection_rebind.json",
@@ -106,13 +106,13 @@
     },
     {
       "path": "docs/geometry-validation-results.md",
-      "bytes": 7492,
-      "sha256": "efd3520e48e4a21c1e866f8e74f387f94ca24422d30c7a87fd91654c32138812"
+      "bytes": 7441,
+      "sha256": "4fd78e25cb6a1db57a9ad1ed8c91a5c945fe27b030600c31846a3cc72b132777"
     },
     {
       "path": "docs/geometry-workflow.md",
-      "bytes": 6543,
-      "sha256": "3f40120ca66f118a44a70eb9dde8129bc3b9f44269672b5fc449e5a35e7b735a"
+      "bytes": 6495,
+      "sha256": "cc190b57fc1babd69d56d5b611b6d23f414c2189686b8da9a4a31e46c1c9810b"
     },
     {
       "path": "docs/hpc-execution.md",
@@ -138,6 +138,11 @@
       "path": "docs/paper-reproduction.md",
       "bytes": 759,
       "sha256": "cec9fb3519260eaf4b8c80e7b9b6852cce9468c8cda656ca3734fec3c548c2b1"
+    },
+    {
+      "path": "docs/portfolio-feedback.md",
+      "bytes": 8048,
+      "sha256": "eba43192868dcc810614282740bc9ef086fb95f9ed3844e43d346f5402e462ce"
     },
     {
       "path": "docs/publishing.md",
@@ -175,14 +180,19 @@
       "sha256": "e2a8c90af8ed5a8349b8731f7e966ef47dc03c8018356654262ccbd6e78fff86"
     },
     {
+      "path": "docs/stage-contracts.md",
+      "bytes": 5060,
+      "sha256": "4f97a1bb66197f40166125be810b68e540b19bdfdbd37ceb7e0ffa7f7288f3dc"
+    },
+    {
       "path": "docs/validation.md",
       "bytes": 1365,
       "sha256": "f61be26a4b55f2c74fd3a933cc91e4be6c8fbf98fd98567cd3c42f642169354f"
     },
     {
       "path": "docs/version-compatibility.md",
-      "bytes": 3875,
-      "sha256": "96fe140307ea16ccdd33919e0e3e8113fc32a2bcb6ee8a56e48a547366a7d691"
+      "bytes": 3853,
+      "sha256": "677864e4a33c079d44b4fa5b8c43516f11e43de4634a67184aaaaa996b315198"
     },
     {
       "path": "examples/catalog.json",
@@ -212,22 +222,22 @@
     {
       "path": "pyproject.toml",
       "bytes": 880,
-      "sha256": "bcdf61288ce753309253162e9bb55e3edb31632e75c26c1f686fc73a13a34ee2"
+      "sha256": "7b0fce2b4c988a9ee794f999c150dbfdaf99cea9f4d90dc508139b9b32bba9e5"
     },
     {
       "path": "README.md",
-      "bytes": 2469,
-      "sha256": "2689b5e6d12de0390f8734d34277f89b3c3d835c787dd39d7d9f97d8aa51b785"
+      "bytes": 2778,
+      "sha256": "1c4fa1eaa8827ad642a3720ec17eaba12298a7b82b628b1380334086b5846edf"
     },
     {
       "path": "schemas/simulation-spec.schema.json",
-      "bytes": 6639,
-      "sha256": "bdf717528af9ab5ae0dce6fd60a65a15afa0c152acd1671f34faaaed5760804b"
+      "bytes": 7636,
+      "sha256": "ba3483a9a46abc80fe858794735393555aff893ca46b790fea043986ee81a662"
     },
     {
       "path": "schemas/validation-report.schema.json",
-      "bytes": 5131,
-      "sha256": "24369a84f2748e1801d1e726da2097e6f90105dd41166a589b255fcc47a20bbf"
+      "bytes": 14772,
+      "sha256": "88ea8c45a9f7dbb42807611d694d7950374134872b58daa4c7d47303d99b48b7"
     },
     {
       "path": "scripts/install.ps1",
@@ -261,23 +271,23 @@
     },
     {
       "path": "server/compatibility.py",
-      "bytes": 744,
-      "sha256": "608fe2f54c2b864d9b52e1fc25323677b650c65f9501ad9196a657f6e45bb692"
+      "bytes": 743,
+      "sha256": "3f844aedbd9cbaaa73ef4b689ee35f47107ba9770fc8125e152d482b88014774"
     },
     {
       "path": "server/contracts.py",
-      "bytes": 5351,
-      "sha256": "b9bf76ed3e56e72e2f8e5efbff953bdab2a231c979f225091c9a5a331b13cd9e"
+      "bytes": 6695,
+      "sha256": "43e46dcee4fea6a9b4b6106fd21a6b5cf589206f83bfe8add4bc10314bcc7b5c"
     },
     {
       "path": "server/geometry_validation.py",
-      "bytes": 7014,
-      "sha256": "c92f73f370ef51d856b3d15a85b5ab43c21555956a30bbf819b11ab00174f690"
+      "bytes": 6903,
+      "sha256": "11a29ef31b914668888c4ca49c94d382d29685857893c558243f2441a7d93860"
     },
     {
       "path": "server/geometry_workflows.py",
-      "bytes": 9620,
-      "sha256": "348788434579565887772db67d046184a7ce5c94239986fb1a999cf824025bb2"
+      "bytes": 9471,
+      "sha256": "bebc26531efeb7773fd58a9f9929d1c42b8dafa5f4660607590297b1b7637469"
     },
     {
       "path": "server/inspector.py",
@@ -286,18 +296,23 @@
     },
     {
       "path": "server/main.py",
-      "bytes": 13996,
-      "sha256": "98a484943eedc42b14221fb1341e69b7eff3173de20a37f4fced45aa95112225"
+      "bytes": 15491,
+      "sha256": "df52b5142eb07564128983807e75b1452dbff7155f89ecef973b4343b86654ad"
     },
     {
       "path": "server/runtime.py",
-      "bytes": 28868,
-      "sha256": "4b2577d32f12b13fc8a8ef54ab4f1e117d69e91230aeda6c1d423f914e4b2e2f"
+      "bytes": 33050,
+      "sha256": "7f59d56e3502fb1a422ff7386dba74a89b4e68e743a1978bf766e2fb0cdf1330"
+    },
+    {
+      "path": "server/scientific_gates.py",
+      "bytes": 5724,
+      "sha256": "c473cd08fcd0725db1937eef1d0463eca7f00d2fe11e63dbd4f7264cbc90544e"
     },
     {
       "path": "server/validation_tools.py",
-      "bytes": 4079,
-      "sha256": "3cf03c648ab73014ae7e3dc85fc28df1cbe30813de0c5887b4e63ba9583bae27"
+      "bytes": 4013,
+      "sha256": "622328a96703c65d951056a7e91d7cdbaafd2c00b2111dc49b9e167857d2c39c"
     },
     {
       "path": "setup.py",
@@ -306,18 +321,23 @@
     },
     {
       "path": "SKILL.md",
-      "bytes": 6877,
-      "sha256": "05edad996c39e62f14972e73d6667a258e26b703300363d9c17672d8614e626d"
+      "bytes": 8340,
+      "sha256": "823169b52a7b691fe5a8720e4b68361179a3d1f0c02b7ca569a97aebea3fa68d"
     },
     {
       "path": "tests/test_geometry_contracts.py",
-      "bytes": 9588,
-      "sha256": "dbdd69201927d3b9355856c5e2da3fa6ab3942bf1b593a146d9b9d82a1ac38c8"
+      "bytes": 9602,
+      "sha256": "9f1d1f9e7443e586260c576fa924b0b9d769489849cb0c2a0f80c613ac3d2e29"
     },
     {
       "path": "tests/test_inspector.py",
       "bytes": 14634,
       "sha256": "9d50caaabb929744ee74ad5900177c0ad35939e2dd4a1b91032bef3fe30191a0"
+    },
+    {
+      "path": "tests/test_portfolio.py",
+      "bytes": 6205,
+      "sha256": "458cfe6fb37b931a81b5a3799d99d888005ad50b568c696d6ccb20711e31b435"
     },
     {
       "path": "tests/test_release.py",
@@ -353,6 +373,11 @@
       "path": "tutorials/kepsilon-6.4.json",
       "bytes": 1509,
       "sha256": "938b5203a3071ad6c77058f4bb8d1813dd094def140a63319b324b5d48435044"
+    },
+    {
+      "path": "tutorials/sst-diagnostics-6.4.json",
+      "bytes": 2159,
+      "sha256": "fc64557aa45a5effac27297621e9cb29ca3a9799043f63a5d3dc48d6870dcb53"
     },
     {
       "path": "vendor/installed-mcp/CITATION.cff",

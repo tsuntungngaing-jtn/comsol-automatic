@@ -1,0 +1,28 @@
+{
+  "id": "sst-diagnostics-6.4",
+  "version": "6.4",
+  "status": "NOT_RUN",
+  "required_modules": ["CFD", "Heat Transfer (for coupled target)"],
+  "official_sources": [
+    "https://doc.comsol.com/6.4/doc/com.comsol.help.cfd/cfd_ug_fluidflow_single.06.115.html",
+    "https://doc.comsol.com/6.4/doc/com.comsol.help.comsol/comsol_ref_solver.36.064.html"
+  ],
+  "local_document_root": "<COMSOL_ROOT>/doc/help/wtpwebapps/ROOT/doc",
+  "manual_findings": [
+    "SST uses k and omega. Do not copy k-epsilon inlet fields without installed-interface readback.",
+    "Wall distance is supplied by the included mathematical interface; lref affects representation of small objects.",
+    "The theory recommends a Wall Distance Initialization step before Stationary or Time Dependent. Initialization alone does not prove convergence.",
+    "Read the actual interface wall-treatment options; distinguish model theory from active automatic wall treatment."
+  ],
+  "sequence": [
+    "Preserve a new immutable baseline and all actual solver diagnostics after confirmed idle.",
+    "Read inlet turbulence quantities, wall treatment, distance state, material domains, nonisothermal coupling and pressure constraint from the model.",
+    "In a separate copy test isothermal SST and mass conservation with predeclared integral definitions.",
+    "In another copy test heat transfer using the verified fixed flow and energy balance.",
+    "Test the coupled target, then mesh independence and independent save/reopen."
+  ],
+  "hypotheses_not_findings": ["Low-Mach density-temperature/enthalpy consistency", "Dependent-variable scaling", "Linear solver tolerance", "Nonlinear damping", "Pressure constraint", "Wall resolution and treatment"],
+  "prohibited_inferences": ["k-epsilon regression validates SST", "Wall-distance step completion proves initialization effect", "A decreasing turbulence group proves global convergence", "Switching to laminar validates the SST target"],
+  "api_status": "No new SST Java property spelling is asserted without installed-version readback.",
+  "distribution": "Official documentation and models remain in the user's licensed installation."
+}

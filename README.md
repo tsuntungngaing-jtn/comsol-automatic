@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.2.0
+# COMSOL Automatic 6.4 English — 0.2.1
+
+Version 0.2.1 adds strict specification/report checks, recoverable job metadata, busy/cancellation semantics, reviewer tool exposure, submission caps and offline scientific evidence gates. Read [feedback resolution and remaining gaps](docs/portfolio-feedback.md). New SST physical verification is NOT_RUN.
 
 Geometry reliability extension based on commit a012b21bcfd604adb8843f3b0e734478fc13b4a3 of tsuntungngaing-jtn/comsol-automatic. Not an official COMSOL product. Original provenance and licenses are in NOTICE.md and vendor/installed-mcp/LICENSE.
 

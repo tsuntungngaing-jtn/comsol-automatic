@@ -59,7 +59,8 @@
           ]
         },
         "unit": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "requirements": {
           "type": "array",
@@ -254,54 +255,92 @@
           "valid_range"
         ]
       }
-    }
-  },
-  "physics": {
-    "type": "object"
-  },
-  "mesh": {
-    "type": "object"
-  },
-  "study": {
-    "type": "object"
-  },
-  "solver": {
-    "type": "object"
-  },
-  "observables": {
-    "type": "array",
-    "items": {
+    },
+    "physics": {
       "type": "object",
-      "required": [
-        "expression",
-        "unit",
-        "location",
-        "time",
-        "reference",
-        "atol",
-        "rtol"
-      ]
-    }
-  },
-  "assumptions": {
-    "type": "array"
-  },
-  "missing_information": {
-    "type": "array",
-    "items": {
-      "type": "object",
-      "required": [
-        "description",
-        "affects"
-      ],
       "properties": {
-        "description": {
-          "type": "string"
-        },
-        "affects": {
+        "boundaries": {
           "type": "array",
           "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "selection"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "selection": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "mesh": {
+      "type": "object"
+    },
+    "study": {
+      "type": "object"
+    },
+    "solver": {
+      "type": "object"
+    },
+    "observables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "expression",
+          "unit",
+          "location",
+          "time",
+          "reference",
+          "atol",
+          "rtol"
+        ],
+        "properties": {
+          "expression": {
+            "type": "string",
+            "minLength": 1
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          },
+          "atol": {
+            "type": "number",
+            "minimum": 0
+          },
+          "rtol": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "missing_information": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "description",
+          "affects"
+        ],
+        "properties": {
+          "description": {
             "type": "string"
+          },
+          "affects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }

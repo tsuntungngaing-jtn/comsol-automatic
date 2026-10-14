@@ -56,6 +56,8 @@ def compare(measured, requirement, source, error=None):
     return record
 
 def validate_document(document, kind='simulation-spec'):
+    if kind not in ('simulation-spec', 'validation-report'):
+        return {'success':False, 'status':'FAIL', 'errors':[{'error':'Unknown document kind'}]}
     root = Path(__file__).resolve().parent
     resources = root/'resources' if (root/'resources'/'schemas').exists() else root.parent
     schema = json.loads((resources/'schemas'/f'{kind}.schema.json').read_text(encoding='utf-8'))
@@ -77,12 +79,20 @@ def validate_document(document, kind='simulation-spec'):
                 errors.append({'path':contract['id'], 'error':'Selection dimension exceeds geometry dimension'})
     if kind == 'validation-report' and not errors:
         for name, layer in document['layers'].items():
+            for check in layer['checks']:
+                if check['run_id'] != document['run_id']:
+                    errors.append({'path':'layers/'+name, 'error':'Evidence belongs to another run'})
+                if check['status'] == 'PASS' and check['measured'] is None:
+                    errors.append({'path':'layers/'+name, 'error':'PASS requires an observed value'})
             if layer['status'] == 'PASS' and aggregate(layer['checks']) != 'PASS':
                 errors.append({'path': 'layers/'+name, 'error': 'PASS requires executed passing evidence'})
         computed = aggregate(document['layers'].values())
         if document['status'] != computed:
             errors.append({'path':'status', 'error':f'Expected conservative aggregate {computed}'})
-    return {'success':not errors, 'status':'FAIL' if errors else 'PASS', 'errors':errors, 'dependencies':dependencies}
+    status = 'FAIL' if errors else ('BLOCKED' if dependencies else 'PASS')
+    return {'success':status == 'PASS', 'status':status, 'schema_status':'FAIL' if errors else 'PASS',
+            'dependency_status':'BLOCKED' if dependencies else 'PASS',
+            'execution_admissible':status == 'PASS', 'errors':errors, 'dependencies':dependencies}
 
 def new_report(run_id, spec_hash, environment):
     return {'run_id':run_id, 'spec_hash':spec_hash, 'environment':environment, 'status':'NOT_RUN',
@@ -98,3 +108,12 @@ def repair_event(stage, error, change, executions, solves, elapsed_seconds, vali
                 executions=executions, solves=solves, elapsed_seconds=elapsed_seconds,
                 validation=validation, repeated_failures=repeated_failures,
                 stop_reason=stop_reason, operation=operation)
+
+
+def admit_task(document, task):
+    """Missing evidence blocks only tasks explicitly dependent on it."""
+    result = validate_document(document)
+    blockers = [d for d in result.get('dependencies', []) if d['task'] == task]
+    allowed = result.get('schema_status') == 'PASS' and not blockers
+    return {'success':allowed, 'status':'PASS' if allowed else 'BLOCKED',
+            'task':task, 'blockers':blockers, 'schema_errors':result.get('errors', [])}

@@ -57,7 +57,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"
@@ -80,7 +125,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"
@@ -103,7 +193,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"
@@ -126,7 +261,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"
@@ -149,7 +329,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"
@@ -172,7 +397,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"
@@ -195,7 +465,52 @@
               ]
             },
             "checks": {
-              "type": "array"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "status",
+                  "run_id",
+                  "measured",
+                  "reference",
+                  "unit",
+                  "tolerance",
+                  "evidence",
+                  "required"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "status": {
+                    "enum": [
+                      "PASS",
+                      "FAIL",
+                      "BLOCKED",
+                      "NOT_RUN"
+                    ]
+                  },
+                  "run_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "type": "object"
+                  },
+                  "evidence": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                }
+              }
             },
             "required": {
               "type": "boolean"

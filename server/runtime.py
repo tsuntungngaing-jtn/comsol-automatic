@@ -10,6 +10,7 @@ import functools
 import importlib.util
 import inspect
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -67,10 +68,69 @@ class Runtime:
         self.lock = threading.Lock()
         self.desktop_process = None
         self.desktop_endpoint = None
+        self.started_at = time.monotonic()
+        self.journal_errors = []
+        self._restore_jobs()
+
+    def _restore_jobs(self):
+        for path in (self.output_root / 'job-manifests').glob('*.json'):
+            try:
+                job = json.loads(path.read_text(encoding='utf-8'))
+                if job['job_id'] != path.stem:
+                    raise ValueError('Job identity mismatch')
+                job['previous_status'] = job['status']
+                job['status'] = 'recovery_pending'
+                job['recovery_note'] = 'Historical metadata only; verify server and solution identity. Never resubmit automatically.'
+                self.jobs[job['job_id']] = job
+            except Exception as error:
+                self.journal_errors.append({'path':str(path), 'error':str(error)})
+
+    def _persist(self, job_id):
+        # Called with self.lock held. Atomic replacement prevents torn manifests.
+        directory = inside(self.output_root, 'job-manifests')
+        directory.mkdir(parents=True, exist_ok=True)
+        path = inside(directory, job_id + '.json')
+        temporary = path.with_suffix('.tmp')
+        temporary.write_text(json.dumps(self.jobs[job_id], default=str, indent=2), encoding='utf-8')
+        temporary.replace(path)
+
+    def _finished(self, job_id):
+        with self.lock:
+            try:
+                self._persist(job_id)
+            except Exception as error:
+                self.jobs[job_id]['persistence_error'] = str(error)
+
+    def queue_status(self):
+        with self.lock:
+            active = [j['job_id'] for j in self.jobs.values() if j['status'] in ('running','queued')]
+            return {'success':True, 'busy':bool(active), 'active_jobs':active,
+                    'metadata_nonblocking':True, 'java_reads_require_idle':True,
+                    'recovery_pending':[j['job_id'] for j in self.jobs.values() if j['status']=='recovery_pending'],
+                    'journal_errors':list(self.journal_errors)}
 
     async def call(self, function, *args, **kwargs):
+        if self.queue_status()['busy']:
+            return {'success':False, 'status':'BLOCKED', 'error':'JVM_BUSY',
+                    'retryable':True, 'next_step':'Poll job metadata; do not queue repair calls behind a solve.'}
         loop = asyncio.get_running_loop()
         return await loop.run_in_executor(self.executor, functools.partial(function, *args, **kwargs))
+
+    def _admit_submission(self):
+        active = sum(j['status'] in ('queued','running') for j in self.jobs.values())
+        try:
+            max_active = int(os.getenv('COMSOL_MAX_ACTIVE_JOBS', '8'))
+            max_jobs = int(os.getenv('COMSOL_MAX_SUBMISSIONS', '100'))
+            max_seconds = float(os.getenv('COMSOL_SUBMISSION_WINDOW_SECONDS', '86400'))
+        except ValueError:
+            return {'success':False, 'status':'BLOCKED', 'error':'Invalid submission budget'}
+        if max_active <= 0 or max_jobs <= 0 or not math.isfinite(max_seconds) or max_seconds <= 0:
+            return {'success':False, 'status':'BLOCKED', 'error':'Invalid submission budget'}
+        # Submission count includes recovered jobs; restart does not reset this budget.
+        if active >= max_active or len(self.jobs) >= max_jobs or time.monotonic()-self.started_at >= max_seconds:
+            return {'success':False, 'status':'BLOCKED', 'error':'SUBMISSION_BUDGET_EXHAUSTED',
+                    'inflight_cancelled':False}
+        return None
 
     def installation_root(self, version: str | None = None) -> Path:
         import mph
@@ -275,6 +335,9 @@ class Runtime:
 
     def submit_case(self, case_id: str, solve: bool = False, study: str | None = None,
                     show_desktop: bool = True) -> dict:
+        denied = self._admit_submission()
+        if denied:
+            return denied
         if not re.fullmatch(r"[a-z][a-z0-9_]{0,79}", case_id):
             return {"success": False, "error": "Invalid case id."}
         entry = next((case for case in self.catalog() if case["id"] == case_id), None)
@@ -285,7 +348,10 @@ class Runtime:
         with self.lock:
             self.jobs[job_id] = {"job_id": job_id, "case_id": case_id, "status": "queued", "events": [],
                                  "output_dir": str(directory), "submitted_at": time.time()}
+        with self.lock:
+            self._persist(job_id)
         self.futures[job_id] = self.executor.submit(self._run_case, job_id, entry, directory, solve, study, show_desktop)
+        self.futures[job_id].add_done_callback(lambda future: self._finished(job_id))
         return {"success": True, "job_id": job_id, "status": "queued", "poll_tool": "comsol_job_status"}
 
     def _progress(self, job_id: str, message: str):
@@ -293,6 +359,7 @@ class Runtime:
             job = self.jobs[job_id]
             job["events"].append({"time": time.time(), "message": str(message)[:2000]})
             job["events"] = job["events"][-100:]
+            self._persist(job_id)
 
     def _run_case(self, job_id, entry, directory, solve, study, show_desktop):
         with self.lock:
@@ -363,16 +430,20 @@ class Runtime:
     def job_status(self, job_id: str) -> dict:
         with self.lock:
             if job_id not in self.jobs:
-                return {"success": False, "error": "Unknown job id. Jobs are retained in memory for this MCP process."}
+                return {"success": False, "error": "Unknown job id; check the configured output root and manifest recovery errors."}
             return json.loads(json.dumps(dict(success=True, **self.jobs[job_id]), default=str))
 
     def submit_study(self, study_name: str | None, model_name: str | None) -> dict:
+        denied = self._admit_submission()
+        if denied:
+            return denied
         model_name = model_name or (self.manager.current_model if self.manager else None)
         job_id = uuid4().hex
         with self.lock:
             self.jobs[job_id] = {"job_id": job_id, "kind": "study", "status": "queued", "events": [],
                                  "model_name": model_name, "study_name": study_name, "submitted_at": time.time()}
             self.latest_study_job = job_id
+            self._persist(job_id)
         def solve():
             with self.lock:
                 self.jobs[job_id]["status"] = "running"
@@ -392,6 +463,7 @@ class Runtime:
                     self.jobs[job_id].update(status="failed", completed_at=time.time(),
                                              error={"type": type(error).__name__, "message": str(error)[:12000]})
         self.futures[job_id] = self.executor.submit(solve)
+        self.futures[job_id].add_done_callback(lambda future: self._finished(job_id))
         return {"success": True, "job_id": job_id, "status": "queued", "poll_tool": "comsol_job_status"}
 
     async def wait_job(self, job_id: str | None, timeout: float | None = None) -> dict:
@@ -411,8 +483,14 @@ class Runtime:
         if self.futures[job_id].cancel():
             with self.lock:
                 self.jobs[job_id].update(status="cancelled", completed_at=time.time())
+                self._persist(job_id)
             return dict(self.job_status(job_id), cancellation="cancelled_before_start")
-        return {"success": False, "job_id": job_id,
+        with self.lock:
+            self.jobs[job_id]['cancel_requested'] = True
+            self.jobs[job_id]['cancellation'] = 'cancel_not_supported'
+            self._persist(job_id)
+        return {"success": False, "job_id": job_id, "cancel_requested":True,
+                "cancellation":"cancel_not_supported", "status":self.job_status(job_id)['status'],
                 "error": "This job is already running or finished. Running Java calls cannot be safely interrupted from another Python thread. If needed, ask the USER to manually press COMSOL Desktop's Stop control; the agent must not use screen recognition or UI automation."}
 
     def execute_code(self, model_name: str, code: str) -> dict:

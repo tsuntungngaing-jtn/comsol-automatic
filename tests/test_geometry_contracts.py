@@ -146,7 +146,7 @@ class SchemaAndBenchmarkTests(unittest.TestCase):
         for path in (ROOT/'benchmarks/tasks').glob('*.json'):
             with self.subTest(path=path.name):
                 result=validate_document(json.loads(path.read_text()))
-                self.assertTrue(result['success'],result)
+                self.assertEqual(result['schema_status'],'PASS',result)
                 if path.stem=='cad_import': self.assertEqual(result['dependencies'][0]['task'],'cad_import')
 
     def test_bbox_uses_final_entity_measurement_not_padded_sequence(self):

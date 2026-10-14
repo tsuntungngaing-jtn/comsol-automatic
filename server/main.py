@@ -116,7 +116,7 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
                           wait: bool = True, timeout: float | None = None) -> dict:
         """Solve on the one JVM thread. Returns a job id. wait=True waits at most 30 seconds; a running job continues and can be polled. study_name omitted solves all existing studies."""
         job = runtime.submit_study(study_name, model_name)
-        return await runtime.wait_job(job["job_id"], timeout) if wait else job
+        return await runtime.wait_job(job["job_id"], timeout) if wait and job.get("success") else job
 
     @mcp.tool()
     async def study_solve_async(study_name: str | None = None, model_name: str | None = None) -> dict:
@@ -163,6 +163,35 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
                 return {"success": False, "error": str(error)}
         return await runtime.call(create)
 
+    @mcp.tool()
+    async def comsol_queue_status() -> dict:
+        """Nonblocking job metadata, recovery and JVM busy state; no Java read."""
+        return runtime.queue_status()
+
+    from .scientific_gates import evaluate
+    @mcp.tool()
+    async def validation_gate(kind: str, payload: dict) -> dict:
+        """Offline evidence gate: freshness, residual plateau, conservation or comparison. Does not acquire COMSOL evidence or stop jobs."""
+        return evaluate(kind, payload)
+
+    @mcp.tool()
+    async def simulation_task_admit(document: dict, task: str) -> dict:
+        """Evaluate task-specific missing evidence. This gate does not authorize arbitrary code."""
+        from .contracts import admit_task
+        return admit_task(document, task)
+
+    role = os.getenv('COMSOL_TOOL_ROLE', 'operator')
+    if role not in ('operator', 'reviewer'):
+        raise ValueError('COMSOL_TOOL_ROLE must be operator or reviewer')
+    if role == 'reviewer':
+        # Explicit allowlist; no arbitrary code, mutation, result export or resources.
+        allowed = {'comsol_queue_status','comsol_job_status','study_get_progress',
+                   'simulation_spec_validate','simulation_task_admit','validation_gate'}
+        for name in list(mcp._tool_manager._tools):
+            if name not in allowed:
+                mcp.remove_tool(name)
+        mcp._resource_manager._resources.clear()
+        mcp._resource_manager._templates.clear()
     return mcp, runtime
 
 
