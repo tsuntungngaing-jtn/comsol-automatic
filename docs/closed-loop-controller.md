@@ -28,7 +28,7 @@ COMSOL via existing MCP only.
 
 Also: `WAITING_FOR_USER`, `DIAGNOSIS`, `REPAIR_READY`, `REPAIRING`, `FAIL`, `BLOCKED`, `BUDGET_EXHAUSTED`, `CALIBRATED_NOT_INDEPENDENTLY_VALIDATED`.
 
-`WAITING_FOR_USER` cannot enter `SOLVING`. `FAIL` cannot enter `DELIVERY_READY`. State JSON is persisted under `{COMSOL_OUTPUT_ROOT}/workflow-cases/`.
+`WAITING_FOR_USER` cannot enter `SOLVING`. `FAIL` cannot enter `DELIVERY_READY`. State JSON is persisted under `{COMSOL_OUTPUT_ROOT}/workflow-cases/`, including `evidence_records` (origin/certainty) and `spec`. Restart reloads those records; it does not re-run COMSOL or mark recovered jobs verified.
 
 ## Rollback (DESIGN_POLICY)
 

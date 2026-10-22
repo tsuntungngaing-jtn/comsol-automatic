@@ -21,6 +21,18 @@ class ClosedLoopController:
         self._specs: dict[str, dict] = {}
         self._gate = DecisionGate()
         self._default_budgets = extra
+        self._hydrate()
+
+    def _hydrate(self):
+        for case_id, case in self.store._cases.items():
+            self._specs[case_id] = dict(case.get('spec') or {})
+            self._evidence[case_id] = EvidenceLedger.from_records(case.get('evidence_records') or [])
+
+    def _flush_evidence(self, case_id: str):
+        case = self.store.get(case_id)
+        case['evidence_records'] = self._evidence[case_id].all()
+        case['spec'] = self._specs.get(case_id, case.get('spec') or {})
+        self.store.save(case)
 
     def start(self, case_id: str, spec: dict | None = None) -> dict:
         extra = dict(self._default_budgets)
@@ -41,6 +53,7 @@ class ClosedLoopController:
         case = self.store.get(case_id)
         case['pending_decisions'] = decisions
         case['spec'] = spec
+        case['evidence_records'] = self._evidence[case_id].all()
         self.store.save(case)
         if decisions:
             return self.store.transition(case_id, 'WAITING_FOR_USER')
@@ -82,9 +95,14 @@ class ClosedLoopController:
         case['spec_revision'] = int(case['spec_revision']) + 1
         case['evidence_revision'] = int(case['evidence_revision']) + 1
         case['budgets']['user_question_count'] += 1
+        case['evidence_records'] = self._evidence[case_id].all()
+        case['spec'] = self._specs.get(case_id) or case.get('spec') or {}
         self.store.save(case)
         if case['workflow_state'] == 'WAITING_FOR_USER' and not pending:
             self.store.transition(case_id, 'SPEC_COMPILATION')
+            flushed = self.store.get(case_id)
+            flushed['evidence_records'] = self._evidence[case_id].all()
+            self.store.save(flushed)
         return rec
 
     def mutate_model(self, case_id: str, kind: str, note: str = '') -> dict:

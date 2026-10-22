@@ -57,6 +57,16 @@ class EvidenceLedger:
     def all(self) -> list[dict]:
         return [dict(r) for r in self._records.values()]
 
+    @classmethod
+    def from_records(cls, records: list[dict] | None):
+        ledger = cls()
+        for rec in records or []:
+            copied = dict(rec)
+            evidence_id = copied['evidence_id']
+            ledger._records[evidence_id] = copied
+            ledger._by_quantity.setdefault(copied['quantity_id'], []).append(evidence_id)
+        return ledger
+
     def relabel_origin(self, evidence_id: str, new_origin: str) -> dict:
         rec = self._records[evidence_id]
         if new_origin == 'reported' and rec['origin'] != 'reported':

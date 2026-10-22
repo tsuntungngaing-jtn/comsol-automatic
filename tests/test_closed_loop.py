@@ -120,6 +120,23 @@ class StateMachineTests(unittest.TestCase):
         self.assertEqual(restored.get('case-d')['workflow_state'], 'EVIDENCE_INTAKE')
         self.assertIn('EVIDENCE_INTAKE', STATES)
 
+    def test_restart_restores_evidence_origin_and_spec(self):
+        directory = tempfile.mkdtemp()
+        ctrl = ClosedLoopController(directory)
+        ctrl.start('persist-a', spec={'missing_information': [
+            {'description': 'missing thickness', 'affects': ['solve']}]})
+        decision = ctrl.pending_decisions('persist-a')[0]
+        ctrl.resolve_decision('persist-a', decision['decision_id'], action='supply_value',
+                              value=0.8, unit='mm', origin='user_supplied')
+        restored = ClosedLoopController(directory)
+        records = restored.evidence('persist-a')
+        self.assertTrue(records)
+        self.assertEqual(records[-1]['origin'], 'user_supplied')
+        self.assertEqual(records[-1]['value'], 0.8)
+        self.assertEqual(restored.state('persist-a')['workflow_state'], 'SPEC_COMPILATION')
+        self.assertGreater(restored.state('persist-a')['spec_revision'], 1)
+        self.assertTrue(restored.admit('persist-a', 'geometry_construction')['success'])
+
 
 class RevisionTests(unittest.TestCase):
     def test_mutation_increases_revision_and_invalidates(self):
