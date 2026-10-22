@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["evidence_id", "quantity_id", "origin", "certainty", "source_type", "status", "created_at", "revision"],
+  "properties": {
+    "evidence_id": {"type": "string", "minLength": 1},
+    "quantity_id": {"type": "string", "minLength": 1},
+    "value": {},
+    "unit": {"type": ["string", "null"]},
+    "origin": {"enum": ["reported", "derived", "library", "documented_default", "assumption", "user_supplied", "fitted", "missing"]},
+    "certainty": {"type": "string", "minLength": 1},
+    "source_type": {"type": "string"},
+    "source_document": {"type": ["string", "null"]},
+    "source_location": {"type": ["string", "null"]},
+    "extraction_method": {"type": ["string", "null"]},
+    "candidate_values": {"type": "array"},
+    "conflicts": {"type": "array"},
+    "affects": {"type": "array", "items": {"type": "string"}},
+    "status": {"type": "string"},
+    "created_at": {"type": "string"},
+    "revision": {"type": "integer", "minimum": 1},
+    "decision": {"type": ["string", "null"]}
+  }
+}

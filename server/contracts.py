@@ -55,8 +55,14 @@ def compare(measured, requirement, source, error=None):
         record.update(status='FAIL', error=str(error))
     return record
 
+DOCUMENT_KINDS = (
+    'simulation-spec', 'validation-report', 'evidence-record', 'claim-contract',
+    'decision-request', 'controller-state', 'repair-plan', 'observation',
+)
+
+
 def validate_document(document, kind='simulation-spec'):
-    if kind not in ('simulation-spec', 'validation-report'):
+    if kind not in DOCUMENT_KINDS:
         return {'success':False, 'status':'FAIL', 'errors':[{'error':'Unknown document kind'}]}
     root = Path(__file__).resolve().parent
     resources = root/'resources' if (root/'resources'/'schemas').exists() else root.parent

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["observation_id", "case_id", "run_id", "spec_revision", "model_revision", "expression", "unit", "value"],
+  "properties": {
+    "observation_id": {"type": "string"},
+    "case_id": {"type": "string"},
+    "run_id": {"type": "string"},
+    "spec_revision": {"type": "integer"},
+    "model_revision": {"type": "integer"},
+    "study": {"type": "string"},
+    "solver": {"type": "string"},
+    "solution": {"type": "string"},
+    "dataset": {"type": "string"},
+    "parameter_state": {"type": "object"},
+    "expression": {"type": "string"},
+    "selection": {},
+    "unit": {"type": "string"},
+    "value": {},
+    "timestamp": {"type": "string"},
+    "mph_hash": {},
+    "spec_hash": {},
+    "warnings": {"type": "array"},
+    "collector_version": {"type": "string"}
+  }
+}

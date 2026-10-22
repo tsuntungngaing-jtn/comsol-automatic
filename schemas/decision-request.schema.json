@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["decision_id", "question", "reason", "affected_tasks", "requires_user", "status"],
+  "properties": {
+    "decision_id": {"type": "string"},
+    "question": {"type": "string"},
+    "reason": {"type": "string"},
+    "affected_tasks": {"type": "array", "items": {"type": "string"}},
+    "affected_claims": {"type": "array"},
+    "candidate_options": {"type": "array"},
+    "candidate_sources": {"type": "array"},
+    "consequence_if_unresolved": {"type": "string"},
+    "recommended_option": {},
+    "recommendation_basis": {"type": "string"},
+    "requires_user": {"type": "boolean"},
+    "status": {"type": "string"},
+    "quantity_id": {"type": "string"},
+    "sensitivity": {}
+  }
+}

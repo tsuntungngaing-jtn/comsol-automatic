@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["repair_id", "failure_id", "hypothesis", "repair_type", "proposed_change", "requires_user", "baseline_revision", "status"],
+  "properties": {
+    "repair_id": {"type": "string"},
+    "failure_id": {"type": "string"},
+    "hypothesis": {"type": "string"},
+    "supporting_evidence": {"type": "array"},
+    "repair_type": {"enum": ["mechanical", "epistemic"]},
+    "proposed_change": {"type": "string"},
+    "expected_effect": {},
+    "affected_checks": {"type": "array"},
+    "requires_user": {"type": "boolean"},
+    "baseline_revision": {"type": "integer"},
+    "budget_cost": {"type": "number"},
+    "status": {"type": "string"},
+    "atomic_multi_change": {"type": "boolean"}
+  }
+}

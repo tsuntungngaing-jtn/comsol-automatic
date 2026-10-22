@@ -96,6 +96,8 @@ class PortfolioTests(unittest.TestCase):
                 mcp,_=create_server(runtime)
                 names={t.name for t in asyncio.run(mcp.list_tools())}
                 self.assertIn('validation_gate',names)
+                self.assertIn('workflow_status',names)
+                self.assertNotIn('repair_apply',names)
                 self.assertNotIn('comsol_model_code',names)
                 self.assertNotIn('model_create',names)
                 self.assertFalse(asyncio.run(mcp.list_resources()))

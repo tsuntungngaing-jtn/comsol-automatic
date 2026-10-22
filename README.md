@@ -2,6 +2,8 @@
 
 Version 0.2.1 adds strict specification/report checks, recoverable job metadata, busy/cancellation semantics, reviewer tool exposure, submission caps and offline scientific evidence gates. Read [feedback resolution and remaining gaps](docs/portfolio-feedback.md). New SST physical verification is NOT_RUN.
 
+Closed-loop reconstruction (EvidenceRecord, DecisionRequest, persistent controller, repair/calibration provenance) is **`tested_with_mock`**. It is **not** `tested_with_real_COMSOL`. Do not treat unit-test PASS as physical validation. See [closed-loop controller](docs/closed-loop-controller.md). P3 sensitivity/Bayesian optimization remains **`proposed` / `NOT_IMPLEMENTED`**.
+
 Geometry reliability extension based on commit a012b21bcfd604adb8843f3b0e734478fc13b4a3 of tsuntungngaing-jtn/comsol-automatic. Not an official COMSOL product. Original provenance and licenses are in NOTICE.md and vendor/installed-mcp/LICENSE.
 
 This package contains the skill, MCP adapter, vendored tools, catalog metadata, original teaching source, tests and installation scripts. It contains no commercial COMSOL models, manuals, research results, credentials or Python environment.

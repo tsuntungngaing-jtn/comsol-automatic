@@ -180,13 +180,17 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
         from .contracts import admit_task
         return admit_task(document, task)
 
+    from .controller_tools import register_controller_tools
+    register_controller_tools(mcp, runtime)
+
     role = os.getenv('COMSOL_TOOL_ROLE', 'operator')
     if role not in ('operator', 'reviewer'):
         raise ValueError('COMSOL_TOOL_ROLE must be operator or reviewer')
     if role == 'reviewer':
         # Explicit allowlist; no arbitrary code, mutation, result export or resources.
         allowed = {'comsol_queue_status','comsol_job_status','study_get_progress',
-                   'simulation_spec_validate','simulation_task_admit','validation_gate'}
+                   'simulation_spec_validate','simulation_task_admit','validation_gate',
+                   'workflow_status'}
         for name in list(mcp._tool_manager._tools):
             if name not in allowed:
                 mcp.remove_tool(name)

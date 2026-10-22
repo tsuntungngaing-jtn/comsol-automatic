@@ -34,7 +34,7 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 
 - Read [API patterns](docs/api-patterns.md) before configuring heat transfer, single-phase flow or materials. Use real local Material Library imports for ordinary materials; preserve temperature/pressure dependence and provenance.
 - Prefer nearby official Application Library models for interface choices and parameter scales. Loading a case is not solving or validating it. A teaching heat sink does not establish turbulent conjugate-heat-transfer correctness.
-- For paper reproduction, follow [evidence recovery](docs/paper-reproduction.md), [simulation specifications](docs/simulation-specification.md) and [claim validation](docs/claim-validation.md). Distinguish reference baselines, reconstructed assumptions and actual paper claims.
+- For paper reproduction, follow [evidence recovery](docs/paper-reproduction.md), [simulation specifications](docs/simulation-specification.md), [claim validation](docs/claim-validation.md) and the closed-loop section below. Distinguish reference baselines, reconstructed assumptions and actual paper claims.
 - Before solving, define observables, units, comparisons and acceptance thresholds. Inspect effective selections and coupling references. Parameters must change the built geometry or equations as intended.
 - Use asynchronous study jobs for long solves. In the MPh study tools, pass the study label returned by the model, not an assumed Java tag.
 - Evaluate conservation using COMSOL derived values/probes. Read solver convergence criteria, logs and warnings. Completing a job alone is not physical validation. For transient conservation, use solver time points and storage terms.
@@ -61,6 +61,25 @@ Check `comsol_queue_status` before Java inspection or repair. Poll metadata whil
 Use `validation_gate` for supplied-evidence freshness, residual trends, signed conservation and comparison admission. It does not collect or authenticate COMSOL results. Bind metrics and plots to a fresh run/revision/study/solver/solution/dataset/parameter identity. A residual alarm is not a root-cause diagnosis. Initialization completion is not convergence. Missing diagnostics, mesh independence, or B results remain NOT_RUN.
 
 For local review-only endpoints, set `COMSOL_TOOL_ROLE=reviewer` before startup. This exposes only offline validation and job metadata. Operator mode and arbitrary code remain trusted, unsandboxed capabilities. See [portfolio resolution and remaining gaps](docs/portfolio-feedback.md) for exact enforcement limits.
+
+## Evidence-constrained closed-loop reconstruction
+
+Paper reproduction defaults to:
+
+Evidence → Spec → Decision → Admission → Build → Precheck → Solve → Collect → Validate → Diagnose → Repair → Revalidate → Reopen → Deliver
+
+Validation failure may roll back to Evidence, Specification, Construction or Execution according to the failed check; do not restart every case from scratch.
+
+Deterministic rules (see [closed-loop controller](docs/closed-loop-controller.md), [evidence provenance](docs/evidence-provenance.md), [human decision gates](docs/human-decision-gates.md)):
+
+- No silent completion of missing research inputs; origin and certainty stay separate and are never promoted (`library`/`fitted`/`user_supplied` remain those origins even after a successful match).
+- Missing evidence blocks only dependent tasks. Schema PASS is not task admission. Solver completion is not validation.
+- Epistemic assumptions and constitutive/BC reinterpretation require user approval. Mechanical tag/selection repairs may be auto-admitted.
+- Failed baselines are immutable; a repair creates a new model revision and invalidates prior PASS. Default: one identifiable change per repair cycle.
+- Calibration targets cannot independently validate the fitted parameter. Old datasets cannot validate a new revision.
+- Overall PASS requires declared required checks. NOT_RUN stays visible. Unperformed reopen verification is NOT_RUN, not PASS.
+
+Controller facade tools (persistent JSON under the output workspace): `workflow_start`, `workflow_status`, `workflow_step`, `decision_resolve`, `repair_propose`, `repair_apply`. They do not replace existing MCP modeling tools. Software tests of this loop are mock/unit tests, not real-COMSOL physical validation.
 
 ## Delivery
 
