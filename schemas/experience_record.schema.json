@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "experience_record.schema.json",
+  "title": "ExperienceRecord",
+  "type": "object",
+  "required": [
+    "experience_id",
+    "task_id",
+    "task_family",
+    "dataset_split",
+    "agent_version",
+    "created_at"
+  ],
+  "properties": {
+    "experience_id": {"type": "string"},
+    "task_id": {"type": "string"},
+    "task_family": {"type": "string"},
+    "dataset_split": {"enum": ["experience", "development", "held_out"]},
+    "state": {"type": "object"},
+    "context": {"type": "object"},
+    "unknown_parameters": {"type": "array"},
+    "parameter_beliefs": {"type": "array"},
+    "candidate_action": {},
+    "prediction": {
+      "type": ["object", "null"],
+      "description": "Frozen at write time; must not be overwritten by observation"
+    },
+    "actual_outcome": {"type": ["object", "null"]},
+    "prediction_error": {},
+    "failure_type": {"type": ["string", "null"]},
+    "diagnosis": {},
+    "repair": {},
+    "repair_result": {},
+    "scientific_validation": {},
+    "parameter_validation": {},
+    "user_feedback": {},
+    "comsol_cost": {},
+    "solver_calls": {"type": "integer"},
+    "tool_calls": {"type": "integer"},
+    "runtime": {"type": ["number", "null"]},
+    "lesson_learned": {"type": ["string", "null"]},
+    "reusable_skill": {},
+    "agent_version": {"type": "string"},
+    "parent_agent_version": {"type": ["string", "null"]},
+    "retention_status": {"type": "string"},
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"}
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "agent_version.schema.json",
+  "title": "AgentVersion",
+  "type": "object",
+  "required": [
+    "version_id",
+    "status",
+    "changes",
+    "experience_used",
+    "created_at"
+  ],
+  "properties": {
+    "version_id": {"type": "string"},
+    "parent_version_id": {"type": ["string", "null"]},
+    "status": {
+      "enum": [
+        "active",
+        "candidate",
+        "retained",
+        "rejected",
+        "rolled_back",
+        "superseded"
+      ]
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "component": {"type": "string"},
+          "summary": {"type": "string"}
+        }
+      }
+    },
+    "experience_used": {"type": "array", "items": {"type": "string"}},
+    "gate_results": {"type": ["object", "null"]},
+    "reason": {"type": "string"},
+    "policies": {"type": "object"},
+    "promoted_to": {"type": "string"},
+    "created_at": {"type": "string"}
+  }
+}

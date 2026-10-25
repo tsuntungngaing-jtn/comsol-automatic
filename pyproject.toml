@@ -1,7 +1,7 @@
 [project]
 name = "comsol-automatic"
-version = "0.2.1"
-description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; no screen recognition."
+version = "0.3.0"
+description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; uncertainty-aware RSI outer layer; no screen recognition."
 authors = [{name = "Mengzhu Guohe (Douyin)"}]
 maintainers = [{name = "tsuntungngaing-jtn"}]
 readme = "README.md"
@@ -21,7 +21,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["server"]
+packages = ["server", "uncertainty", "rsi"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

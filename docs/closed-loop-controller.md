@@ -52,3 +52,7 @@ Fitted origin stays `fitted`. Same claim cannot independently validate. Without 
 ## Validation semantics
 
 Layers stay separate: api, geometry, selection, physics, numerical, scientific, reopen. Conservatively aggregate FAIL > BLOCKED > NOT_RUN > PASS. Missing required check is NOT_RUN, not PASS. Reopen not performed → `reopen=NOT_RUN`.
+
+## Outer RSI layer (0.3.0)
+
+Cross-task uncertainty-aware RSI (`rsi/`, `uncertainty/`) wraps this controller and does not change its state names. See [closed-loop-rsi-note.md](closed-loop-rsi-note.md) and [uncertainty-aware-rsi.md](uncertainty-aware-rsi.md).

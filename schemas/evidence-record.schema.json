@@ -7,7 +7,19 @@
     "quantity_id": {"type": "string", "minLength": 1},
     "value": {},
     "unit": {"type": ["string", "null"]},
-    "origin": {"enum": ["reported", "derived", "library", "documented_default", "assumption", "user_supplied", "fitted", "missing"]},
+    "origin": {
+      "enum": [
+        "reported",
+        "derived",
+        "library",
+        "documented_default",
+        "assumption",
+        "user_supplied",
+        "fitted",
+        "missing",
+        "inferred"
+      ]
+    },
     "certainty": {"type": "string", "minLength": 1},
     "source_type": {"type": "string"},
     "source_document": {"type": ["string", "null"]},

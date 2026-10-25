@@ -1,10 +1,11 @@
 ---
 name: comsol-automatic-6-4-en
-description: Build, inspect, solve, and validate COMSOL models through MCP, including paper reproduction and editable MPH delivery. Use installed-version documentation and licensed local libraries. Do not use for literature summaries without modeling.
+description: Build, inspect, solve, and validate COMSOL models through MCP, including paper reproduction, editable MPH delivery, and uncertainty-aware cross-task RSI. Use installed-version documentation and licensed local libraries. Do not use for literature summaries without modeling.
 license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
+  version: "0.3.0"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -72,7 +73,7 @@ Validation failure may roll back to Evidence, Specification, Construction or Exe
 
 Deterministic rules (see [closed-loop controller](docs/closed-loop-controller.md), [evidence provenance](docs/evidence-provenance.md), [human decision gates](docs/human-decision-gates.md)):
 
-- No silent completion of missing research inputs; origin and certainty stay separate and are never promoted (`library`/`fitted`/`user_supplied` remain those origins even after a successful match).
+- No silent completion of missing research inputs; origin and certainty stay separate and are never promoted (`library`/`fitted`/`user_supplied`/`inferred` remain those origins even after a successful match).
 - Missing evidence blocks only dependent tasks. Schema PASS is not task admission. Solver completion is not validation.
 - Epistemic assumptions and constitutive/BC reinterpretation require user approval. Mechanical tag/selection repairs may be auto-admitted.
 - Failed baselines are immutable; a repair creates a new model revision and invalidates prior PASS. Default: one identifiable change per repair cycle.
@@ -80,6 +81,46 @@ Deterministic rules (see [closed-loop controller](docs/closed-loop-controller.md
 - Overall PASS requires declared required checks. NOT_RUN stays visible. Unperformed reopen verification is NOT_RUN, not PASS.
 
 Controller facade tools (persistent JSON under the output workspace): `workflow_start`, `workflow_status`, `workflow_step`, `decision_resolve`, `repair_propose`, `repair_apply`. They do not replace existing MCP modeling tools. Software tests of this loop are mock/unit tests, not real-COMSOL physical validation.
+
+## Unknown Parameter Protocol
+
+When a scientifically relevant parameter is missing, the agent MUST NOT silently invent a nominal value. It must classify the missing information, retrieve available evidence, construct an evidence-grounded plausible range when justified, assess the parameter's impact on the reported result, disclose the inference and uncertainty to the user, and escalate to information seeking or user confirmation when the scientific conclusion is sensitive to that uncertainty.
+
+Outer RSI / uncertainty APIs (`uncertainty/`, `rsi/`) run **outside** the closed-loop controller. See [uncertainty-aware RSI](docs/uncertainty-aware-rsi.md) and [parameter inference](docs/parameter-inference.md).
+
+Provenance states for scientifically relevant inputs:
+
+`USER_SUPPLIED` | `MEASURED` | `MANUFACTURER_SPEC` | `LITERATURE` | `DATABASE` | `VALIDATED_PRIOR_TASK` | `INFERRED` | `DEFAULT` | `UNKNOWN`
+
+EvidenceRecord origin includes `inferred`. Never promote `inferred` to `reported`.
+
+Decision impact uses uncertainty × sensitivity (normalized). Recommended actions:
+
+`AUTO_ACCEPT` | `RUN_SENSITIVITY` | `SEEK_MORE_EVIDENCE` | `ASK_USER` | `BLOCK_FINAL_VALIDATION`
+
+Prefer endpoint low/mid/high sensitivity before inventing a sensitivity scalar. If no measured/propagated sensitivity exists, status remains `unknown`.
+
+Always produce an Inference Disclosure Report for inferred or unresolved scientifically relevant parameters.
+
+## Scientific Validity Under Inferred Inputs
+
+Use `server/scientific_validity.py` (and disclosure) in addition to layered validation:
+
+- Execution PASS and Numerical PASS do not imply Scientific PASS.
+- If key inputs are `INFERRED` with `decision_impact` HIGH or CRITICAL, scientific status is `CONDITIONAL` or `INSUFFICIENT_EVIDENCE` — not final Scientific PASS.
+- `INSUFFICIENT_EVIDENCE` is a legal scientific conclusion, not a soft FAIL.
+- Cross-task ExperienceRecords store Prediction separately from Observation; never rewrite past predictions with future observations.
+- Held-out audit data must not update priors, prompts, or repair policies.
+- Retain AgentVersion `A_{k+1}` only after gated evaluation; false scientific PASS increase ⇒ REJECT.
+
+Hard inequalities:
+
+- `INFERRED ≠ MEASURED`
+- `PLAUSIBLE RANGE ≠ CONFIDENCE INTERVAL`
+- `SOLVER PASS ≠ SCIENTIFIC PASS`
+- `INSUFFICIENT EVIDENCE ≠ FAIL`
+- `NOT_RUN ≠ PASS`
+- `UNKNOWN ≠ permission to guess`
 
 ## Delivery
 

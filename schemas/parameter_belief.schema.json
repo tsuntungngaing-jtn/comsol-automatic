@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parameter_belief.schema.json",
+  "title": "ParameterBelief",
+  "type": "object",
+  "required": [
+    "parameter",
+    "symbol",
+    "status",
+    "range_kind",
+    "evidence_grade",
+    "coverage",
+    "recommended_action",
+    "reliability",
+    "provenance",
+    "agent_version",
+    "timestamp"
+  ],
+  "properties": {
+    "parameter": {"type": "string", "minLength": 1},
+    "symbol": {"type": "string"},
+    "unit": {"type": ["string", "null"]},
+    "status": {"enum": ["known", "inferred", "unresolved"]},
+    "central_estimate": {},
+    "plausible_range": {
+      "type": ["object", "null"],
+      "properties": {
+        "low": {},
+        "high": {}
+      }
+    },
+    "range_kind": {
+      "enum": [
+        "none",
+        "estimated_plausible_range",
+        "posterior_credible_interval",
+        "confidence_interval"
+      ]
+    },
+    "distribution": {"type": ["object", "null"]},
+    "credible_interval": {"type": ["object", "null"]},
+    "evidence_sources": {"type": "array"},
+    "evidence_grade": {"enum": ["A", "B", "C", "D"]},
+    "coverage": {"enum": ["high", "moderate", "low", "insufficient"]},
+    "epistemic_uncertainty": {"type": ["number", "null"]},
+    "aleatoric_uncertainty": {"type": ["number", "null"]},
+    "sensitivity": {"type": ["object", "null"]},
+    "identifiability": {"type": ["string", "null"]},
+    "decision_impact": {
+      "type": ["string", "null"],
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL", null]
+    },
+    "recommended_action": {
+      "enum": [
+        "AUTO_ACCEPT",
+        "RUN_SENSITIVITY",
+        "SEEK_MORE_EVIDENCE",
+        "ASK_USER",
+        "BLOCK_FINAL_VALIDATION"
+      ]
+    },
+    "safe_for": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "screening",
+          "exploratory_simulation",
+          "optimization",
+          "final_validation"
+        ]
+      }
+    },
+    "reliability": {"enum": ["RELIABLE", "UNRELIABLE", "INSUFFICIENT"]},
+    "provenance": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "USER_SUPPLIED",
+          "MEASURED",
+          "MANUFACTURER_SPEC",
+          "LITERATURE",
+          "DATABASE",
+          "VALIDATED_PRIOR_TASK",
+          "INFERRED",
+          "DEFAULT",
+          "UNKNOWN"
+        ]
+      }
+    },
+    "agent_version": {"type": "string"},
+    "timestamp": {"type": "string"},
+    "why_unknown": {"type": ["string", "null"]},
+    "notes": {"type": ["string", "null"]}
+  }
+}
