@@ -36,14 +36,23 @@ comp.multiphysics().create('nitf1', 'NonIsothermalFlow')
 
 After create, confirm `comp.multiphysics().tags()` contains the node. Manual `fluid1.set('u','u')` is **not** equivalent to full turbulent NITF (stabilization / keff / wall functions).
 
-### Study solve identity
+### Study solve identity (tag ≠ label)
+
+MPh / MCP `study_solve` / `study_solve_async` resolve **`study_name` by LABEL**, not Java tag.
 
 ```text
 std = model.study().create('std1')
 std.create('stat', 'Stationary')
-std.label('Stationary')   # required: study_solve often matches LABEL
-# Verify tags/labels before study_solve(..., study_name='Stationary')
+std.label('Stationary')   # required: study_solve matches LABEL
+# Verify (tag, label) pairs before study_solve(..., study_name=<LABEL>)
 ```
+
+| Failure mode | Typical message | Cause |
+|--------------|-----------------|-------|
+| Create without `label()` | `Study "Stationary" does not exist.` | Assumed label never set |
+| Pass **tag** on loaded MPH | `Study "std1" does not exist.` | Tag≠label; Zhang `Baseline_mesh5` is tag=`std1`, label=`Baseline_mesh5` |
+
+**Zhang Baseline_mesh5 control (2026-10-28):** clear+resolve submitted `study_name="std1"` → instant `LookupError`; not a physics/mesh failure. Fix: pass `Baseline_mesh5`, or `study('std1').label('Stationary')` then pass `Stationary`. Enumerate tags/labels before every solve on an existing MPH. See campaign `DIFF_STUDY_LABEL_vs_TAG_20261028.md`.
 
 Chained `study().create('std1').create('stat','Stationary')` without `label` caused **"Stationary does not exist"** in campaign scripts.
 
@@ -106,7 +115,7 @@ Treat as scientifically relevant unknowns (disclosure + impact):
 
 HIGH impact + INFERRED → scientific ceiling **CONDITIONAL** / **INSUFFICIENT_EVIDENCE**; never silent VALIDATED. See [uncertainty-aware RSI](uncertainty-aware-rsi.md).
 
-## Institutional inlet thermal default (paper silent)
+## Institutional inlet / outlet thermal defaults (paper silent)
 
 If the paper gives **Tin** (or equivalent) but does **not** specify the inlet *feature class*:
 
@@ -115,6 +124,22 @@ If the paper gives **Tin** (or equivalent) but does **not** specify the inlet *f
 - Do **not** default to bulk **Temperature** Dirichlet on the port (port heat sink/source risk; enthalpy gates fail).
 - Do **not** take the default from a benchmark MPH during build; oracle is post-solve compare only.
 - Build **Inflow from the start** when possible; Temperature→Inflow migration needs the playbook below.
+
+If the paper specifies a **pressure outlet** (or open discharge) but does **not** name the HT outlet feature class:
+
+- Status: `[SOFTWARE_DOC_DEFAULT]`.
+- Default for **open fluid outlets** in HT/CHT: **`ConvectiveOutflow`** on the outlet selection (pair with SPF `OutletBoundary`), not a silent omission of all HT outlet features.
+- Campaign control (2026-10-28): Zhang Baseline has `ifl1=Inflow` + `ofl1=ConvectiveOutflow`; an H3 Inflow-only build (no outflow HT feature) **timed out 30 min** while the same machine **clear+resolved Zhang in ~17 min**. Treat missing `ConvectiveOutflow` as a first-class BC gap before blaming mesh.
+- Still **compare-only** for oracle tag names (`ofl1` etc.); builders create their own tags.
+
+### Pre-solve solver sequence (turbulent CHT)
+
+Before a long `Stationary` job on turbulent flow + NITF:
+
+1. Ensure a solution sequence exists (`sol.createAutoSequence(studyTag)` or equivalent).
+2. Probe that a **`Segregated`** node is present for the default turbulent Stationary path (Zhang Baseline control uses Segregated, `stol=0.001`).
+3. Do **not** burn the full campaign timeout on an unspecified auto Fully Coupled first attempt when Segregated is the product default for this physics class.
+4. Oracle solver *trees* remain compare-only — copy the **class** (Segregated / stol order), not node tags.
 
 ## Inlet BC migration — convergence playbook (CHT + NITF)
 
@@ -135,10 +160,10 @@ on an already-meshed turbulent CHT model:
 
 | Step | Action | Pass if |
 |------|--------|---------|
-| S0 | Confirm Inflow + Tustr; nitf ON; heater not on inlet | probe green |
-| S1 | Init from previous solution (flow+T if any); **fully coupled** Stationary, moderate timeout | completed + Tw physical + evaluate enthalpy |
+| S0 | Confirm Inflow + Tustr; **ConvectiveOutflow on outlet** (if paper-silent); nitf ON; heater not on inlet; **Segregated sequence present** | probe green |
+| S1 | Init from previous solution (flow+T if any); Stationary with **Segregated** (preferred), moderate timeout | completed + Tw physical + evaluate enthalpy |
 | S2 | **Continuation:** ramp `qw` 0→full (or heat-flux multiplier) with Inflow+nitf ON | same |
-| S3 | Segregated / more Newton iterations / smaller initial damping (doc-driven) | same |
+| S3 | More Newton iterations / smaller initial damping / then try Fully Coupled only if Segregated failed honestly | same |
 | S4 | Optional: freeze **flow DOFs** only while keeping wall thermal coupling / nitf ON — if API allows without deactivating nitf | same |
 | S5 | If all fail within campaign budget | `BLOCKED_SOLVER`; record matrix; escalate — **no Temperature revert** |
 

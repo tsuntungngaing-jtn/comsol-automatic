@@ -1,4 +1,10 @@
-# COMSOL Automatic 6.4 English — 0.3.2
+# COMSOL Automatic 6.4 English — 0.3.3
+
+Version **0.3.3** (Round 3, after Z vs H3 control): open-outlet **`ConvectiveOutflow`** + turbulent CHT **Segregated** pre-solve class — merged with Round 1–2 without dropping Ain option cards / independent gates:
+
+- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — outlet `SOFTWARE_DOC_DEFAULT`; S0 requires Inflow + ConvectiveOutflow + Segregated sequence; copy solver **class** not oracle node tags
+- Control evidence: Zhang clear+resolve ~17 min vs H3 Inflow-only timeout — missing outlet HT feature is a first-class BC gap before mesh
+- Companion ERS: `decision-gate` / `paper-analysis` / `comsol-debug` / `validation` (NONPHYSICAL veto retained)
 
 Version **0.3.2** institutionalizes **paper-silent → official software documentation** defaults for CHT (not a single-campaign exception):
 
