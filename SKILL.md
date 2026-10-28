@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.3.1"
+  version: "0.3.2"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -35,6 +35,7 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 
 - Read [API patterns](docs/api-patterns.md) before configuring heat transfer, single-phase flow or materials. Use real local Material Library imports for ordinary materials; preserve temperature/pressure dependence and provenance.
 - For CHT / NITF enthalpy-gated work, follow [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md). Keep hydraulic and thermal gates separate; prefer inlet **Inflow** (`Tustr`).
+- When the paper is silent on COMSOL feature classes, use installed official product documentation as `[SOFTWARE_DOC_DEFAULT]` (open inlets → Inflow/`Tustr`); never silent Temperature habit or oracle MPH as the build default.
 - Keep paper-only build separate from authorized compare; see [paper-only vs oracle compare](docs/paper-only-vs-oracle-compare.md).
 - Prefer nearby official Application Library models for interface choices and parameter scales. Loading a case is not solving or validating it. A teaching heat sink does not establish turbulent conjugate-heat-transfer correctness.
 - For paper reproduction, follow [evidence recovery](docs/paper-reproduction.md), [simulation specifications](docs/simulation-specification.md), [claim validation](docs/claim-validation.md) and the closed-loop section below. Distinguish reference baselines, reconstructed assumptions and actual paper claims.

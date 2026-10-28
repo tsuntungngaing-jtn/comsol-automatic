@@ -1,11 +1,17 @@
-# COMSOL Automatic 6.4 English — 0.3.1
+# COMSOL Automatic 6.4 English — 0.3.2
 
-Version **0.3.1** adds Round-1 CHT / compare hygiene docs (no new MCP tools; does not upgrade scientific VALIDATED status):
+Version **0.3.2** institutionalizes **paper-silent → official software documentation** defaults for CHT (not a single-campaign exception):
+
+- Hierarchy: paper explicit > installed official product docs (`SOFTWARE_DOC_DEFAULT`) > option cards / ask user > never GUI/prior-campaign habit; oracle MPH is post-solve compare only
+- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — P0 `5b` Inflow default when paper silent; inlet thermal migration playbook (Temperature→Inflow) without greenwashing enthalpy
+- Companion ERS policy lives in `paper-analysis` / `decision-gate` / `session-boot` (software-doc default)
+
+Version **0.3.1** added Round-1 CHT / compare hygiene docs (no new MCP tools; does not upgrade scientific VALIDATED status):
 
 - [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — inlet **Inflow** preference, coupling probe export, independent hydraulic vs enthalpy gates
 - [Paper-only vs oracle compare](docs/paper-only-vs-oracle-compare.md) — counterpart labels (`Z_ORACLE` / `B_REPLICA` / `PAPER_FIGURE` / `NONE`); build vs compare phase separation
 
-Inflow solver-recovery playbooks and mandatory NITF velocity-wiring rules remain deferred (Round 2).
+Mandatory global NITF velocity-wiring rewrite rules remain deferred pending clean probe evidence.
 
 Version **0.3.0** added an **outer** uncertainty-aware recursive self-improvement (RSI) layer:
 
