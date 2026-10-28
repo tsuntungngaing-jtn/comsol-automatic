@@ -1,12 +1,19 @@
-# COMSOL Automatic 6.4 English — 0.3.0
+# COMSOL Automatic 6.4 English — 0.3.1
 
-Version **0.3.0** adds an **outer** uncertainty-aware recursive self-improvement (RSI) layer:
+Version **0.3.1** adds Round-1 CHT / compare hygiene docs (no new MCP tools; does not upgrade scientific VALIDATED status):
+
+- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — inlet **Inflow** preference, coupling probe export, independent hydraulic vs enthalpy gates
+- [Paper-only vs oracle compare](docs/paper-only-vs-oracle-compare.md) — counterpart labels (`Z_ORACLE` / `B_REPLICA` / `PAPER_FIGURE` / `NONE`); build vs compare phase separation
+
+Inflow solver-recovery playbooks and mandatory NITF velocity-wiring rules remain deferred (Round 2).
+
+Version **0.3.0** added an **outer** uncertainty-aware recursive self-improvement (RSI) layer:
 
 `Experience → Infer → Improve → Evaluate → Calibrate → Retain`
 
 It does **not** replace the existing MCP-only closed-loop controller. Model edits alone are not RSI; only gated `AgentVersion` updates (`A₀ → A₁`) count as harness-side self-improvement.
 
-### V0.1 RSI scope (this release)
+### V0.1 RSI scope (from 0.3.0)
 
 - Unknown parameter detection + `ParameterBelief`
 - Evidence provenance including EvidenceRecord origin `inferred`

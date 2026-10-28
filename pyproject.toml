@@ -1,6 +1,6 @@
 [project]
 name = "comsol-automatic"
-version = "0.3.0"
+version = "0.3.1"
 description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; uncertainty-aware RSI outer layer; no screen recognition."
 authors = [{name = "Mengzhu Guohe (Douyin)"}]
 maintainers = [{name = "tsuntungngaing-jtn"}]
