@@ -1,55 +1,56 @@
-# COMSOL Automatic 6.4 English — 0.3.5
-
-Version **0.3.5** (SKILL_UPLIFT_GENERAL_20261029): SegregatedStep API true names (`subdtech`/`maxsubiter`); one-class solver ladder + telemetry classes; forensic≠builder partition A/B; HARD GATE persist after expensive steps; `BLOCKED_SOLVER` delivery matrix. Trial numbers remain forensic only.
-
-
-- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — outlet `SOFTWARE_DOC_DEFAULT`; S0 requires Inflow + ConvectiveOutflow + Segregated sequence; copy solver **class** not oracle node tags
-- Control evidence: Zhang clear+resolve ~17 min vs H3 Inflow-only timeout — missing outlet HT feature is a first-class BC gap before mesh
-- Companion ERS: `decision-gate` / `paper-analysis` / `comsol-debug` / `validation` (NONPHYSICAL veto retained)
-
-Version **0.3.2** institutionalizes **paper-silent → official software documentation** defaults for CHT (not a single-campaign exception):
-
-- Hierarchy: paper explicit > installed official product docs (`SOFTWARE_DOC_DEFAULT`) > option cards / ask user > never GUI/prior-campaign habit; oracle MPH is post-solve compare only
-- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — P0 `5b` Inflow default when paper silent; inlet thermal migration playbook (Temperature→Inflow) without greenwashing enthalpy
-- Companion ERS policy lives in `paper-analysis` / `decision-gate` / `session-boot` (software-doc default)
-
-Version **0.3.1** added Round-1 CHT / compare hygiene docs (no new MCP tools; does not upgrade scientific VALIDATED status):
-
-- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — inlet **Inflow** preference, coupling probe export, independent hydraulic vs enthalpy gates
-- [Paper-only vs oracle compare](docs/paper-only-vs-oracle-compare.md) — counterpart labels (`Z_ORACLE` / `B_REPLICA` / `PAPER_FIGURE` / `NONE`); build vs compare phase separation
-
-Mandatory global NITF velocity-wiring rewrite rules remain deferred pending clean probe evidence.
-
-Version **0.3.0** added an **outer** uncertainty-aware recursive self-improvement (RSI) layer:
-
-`Experience → Infer → Improve → Evaluate → Calibrate → Retain`
-
-It does **not** replace the existing MCP-only closed-loop controller. Model edits alone are not RSI; only gated `AgentVersion` updates (`A₀ → A₁`) count as harness-side self-improvement.
-
-### V0.1 RSI scope (from 0.3.0)
-
-- Unknown parameter detection + `ParameterBelief`
-- Evidence provenance including EvidenceRecord origin `inferred`
-- Plausible-range inference (not silent point guesses; not fake confidence intervals)
-- U×S decision gate + endpoint sensitivity plan/propagation helpers
-- Inference disclosure reports
-- Conditional / insufficient scientific validity under inferred inputs
-- `ExperienceRecord`, calibration compare, AgentVersion retain/reject
-- Unit tests CASE1–7 — **`tested_with_mock`**
-- Real-COMSOL endpoint propagation and held-out physical audit — **`NOT_RUN`**
-
-No new MCP tools in 0.3.0 (API + tests first). P3 full Bayesian / MC UQ remains **NOT_IMPLEMENTED**.
-
-Closed-loop reconstruction (EvidenceRecord, DecisionRequest, persistent controller, repair/calibration provenance) remains **`tested_with_mock`**, **not** `tested_with_real_COMSOL`. See [closed-loop controller](docs/closed-loop-controller.md) and [uncertainty-aware RSI](docs/uncertainty-aware-rsi.md).
-
-Geometry reliability extension based on commit a012b21bcfd604adb8843f3b0e734478fc13b4a3 of tsuntungngaing-jtn/comsol-automatic. Not an official COMSOL product. Original provenance and licenses are in NOTICE.md and vendor/installed-mcp/LICENSE.
-
-This package contains the skill, MCP adapter, vendored tools, catalog metadata, original teaching source, tests and installation scripts. It contains no commercial COMSOL models, manuals, research results, credentials or Python environment.
-
-On Windows, extract the full folder to a new directory, then run `powershell -ExecutionPolicy Bypass -File scripts/install.ps1`. Register the MCP command using the new folder's `.venv/Scripts/python.exe -m server.main serve --transport stdio` and its working directory. Set COMSOL_OUTPUT_ROOT to your research workspace, not this folder. See docs/connectors.md for details. Existing skills/connectors are not replaced automatically.
-
-The executable and package remain named comsol-automatic for compatibility. The discoverable skill name is comsol-automatic-6-4-en.
-
-Run `python -m unittest discover -s tests` for Python/protocol checks. Real COMSOL validation must run through MCP. Read docs/validation.md before using results in research.
-
-Software correctness and scientific correctness are reported separately.
+# COMSOL Automatic 6.4 English — 0.3.6
+
+Version **0.3.6** (skill hygiene): operator docs state **generalizable rules only**. No trial names, workspace paths, wall-clock control numbers, paper figure IDs, or one-shot geometry recipes in the skill tree. Put case-specific runbooks under `COMSOL_OUTPUT_ROOT`.
+
+Version **0.3.5** (SKILL_UPLIFT_GENERAL_20261029): SegregatedStep API true names (`subdtech`/`maxsubiter`); one-class solver ladder + telemetry classes; forensic≠builder partition A/B; HARD GATE persist after expensive steps; `BLOCKED_SOLVER` delivery matrix. Trial numbers remain forensic only.
+
+- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — outlet `SOFTWARE_DOC_DEFAULT`; S0 requires Inflow + ConvectiveOutflow + Segregated sequence; copy solver **class** not counterpart node tags; missing HT outlet feature is a first-class BC gap before mesh
+- Companion ERS: `decision-gate` / `paper-analysis` / `comsol-debug` / `validation` (NONPHYSICAL veto retained)
+- Principles index: [docs/uplift-20261029/GENERALIZABLE_PRINCIPLES.md](docs/uplift-20261029/GENERALIZABLE_PRINCIPLES.md)
+
+Version **0.3.2** institutionalizes **paper-silent → official software documentation** defaults for CHT (not a single-case exception):
+
+- Hierarchy: paper explicit > installed official product docs (`SOFTWARE_DOC_DEFAULT`) > option cards / ask user > never GUI/prior-trial habit; counterpart MPH is post-solve compare only
+- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — P0 `5b` Inflow default when paper silent; inlet thermal migration playbook (Temperature→Inflow) without greenwashing enthalpy
+- Companion ERS policy lives in `paper-analysis` / `decision-gate` / `session-boot` (software-doc default)
+
+Version **0.3.1** added CHT / compare hygiene docs (no new MCP tools; does not upgrade scientific VALIDATED status):
+
+- [CHT coupling and energy gates](docs/cht-coupling-energy-gates.md) — inlet **Inflow** preference, coupling probe export, independent hydraulic vs enthalpy gates
+- [Paper-only vs oracle compare](docs/paper-only-vs-oracle-compare.md) — counterpart labels (`Z_ORACLE` / `B_REPLICA` / `PAPER_FIGURE` / `NONE`); build vs compare phase separation
+
+Mandatory global NITF velocity-wiring rewrite rules remain deferred pending clean probe evidence.
+
+Version **0.3.0** added an **outer** uncertainty-aware recursive self-improvement (RSI) layer:
+
+`Experience → Infer → Improve → Evaluate → Calibrate → Retain`
+
+It does **not** replace the existing MCP-only closed-loop controller. Model edits alone are not RSI; only gated `AgentVersion` updates (`A₀ → A₁`) count as harness-side self-improvement.
+
+### V0.1 RSI scope (from 0.3.0)
+
+- Unknown parameter detection + `ParameterBelief`
+- Evidence provenance including EvidenceRecord origin `inferred`
+- Plausible-range inference (not silent point guesses; not fake confidence intervals)
+- U×S decision gate + endpoint sensitivity plan/propagation helpers
+- Inference disclosure reports
+- Conditional / insufficient scientific validity under inferred inputs
+- `ExperienceRecord`, calibration compare, AgentVersion retain/reject
+- Unit tests CASE1–7 — **`tested_with_mock`**
+- Real-COMSOL endpoint propagation and held-out physical audit — **`NOT_RUN`**
+
+No new MCP tools in 0.3.0 (API + tests first). P3 full Bayesian / MC UQ remains **NOT_IMPLEMENTED**.
+
+Closed-loop reconstruction (EvidenceRecord, DecisionRequest, persistent controller, repair/calibration provenance) remains **`tested_with_mock`**, **not** `tested_with_real_COMSOL`. See [closed-loop controller](docs/closed-loop-controller.md) and [uncertainty-aware RSI](docs/uncertainty-aware-rsi.md).
+
+Geometry reliability extension based on commit a012b21bcfd604adb8843f3b0e734478fc13b4a3 of tsuntungngaing-jtn/comsol-automatic. Not an official COMSOL product. Original provenance and licenses are in NOTICE.md and vendor/installed-mcp/LICENSE.
+
+This package contains the skill, MCP adapter, vendored tools, catalog metadata, original teaching source, tests and installation scripts. It contains no commercial COMSOL models, manuals, research results, credentials or Python environment.
+
+On Windows, extract the full folder to a new directory, then run `powershell -ExecutionPolicy Bypass -File scripts/install.ps1`. Register the MCP command using the new folder's `.venv/Scripts/python.exe -m server.main serve --transport stdio` and its working directory. Set COMSOL_OUTPUT_ROOT to your research workspace, not this folder. See docs/connectors.md for details. Existing skills/connectors are not replaced automatically.
+
+The executable and package remain named comsol-automatic for compatibility. The discoverable skill name is comsol-automatic-6-4-en.
+
+Run `python -m unittest discover -s tests` for Python/protocol checks. Real COMSOL validation must run through MCP. Read docs/validation.md before using results in research.
+
+Software correctness and scientific correctness are reported separately.
