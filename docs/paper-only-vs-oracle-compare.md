@@ -37,3 +37,20 @@ Blind-replica TypeI/II field montages that match oracle panels only support `B_R
 - ERS `session-boot` / `templates/SESSION_CONFIG.md` (`compare.counterpart`)
 - ERS `validation` independent gates
 - `docs/cht-coupling-energy-gates.md`
+## Forensic CAD / oracle geometry (institutional) — 0.3.5
+
+After blind build, a STEP/volume/bbox diff vs benchmark is **forensic only**:
+
+- Record “geometry family differs” (e.g. lateral fluid span, V_fluid delta).
+- **Do not** set builder targets to oracle volumes or entity tags.
+- Re-open **decision-gate** with **paper** evidence only (partition A/B, inlet face class, …).
+- Same-recipe CAD↔COMSOL match proves **implementation consistency**, not paper correctness.
+
+| Do not | Why |
+|--------|-----|
+| Align `V_fluid` to benchmark | Peek-fix |
+| Treat SW≡COMSOL as paper PASS | Same silent wrong recipe |
+| Call discrete partition ΔV a “round-off” | Wrong failure class |
+
+Round-off vs semantics: measured Ain/size vs the **same** formula at ~1e-12…1e-15 relative error is float; fluid bbox jumping to `0`/`wunit` vs indented `ww`, or clean integer mm³ fluid↔solid swap, is **lateral partition A/B** — reopen decision-gate, do not call it round-off.
+

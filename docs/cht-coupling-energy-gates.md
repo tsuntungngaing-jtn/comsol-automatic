@@ -183,3 +183,53 @@ Prefer open-channel inlets as **Inflow(Tustr)** over bulk **Temperature** (COMSO
 Passing these gates does **not** imply paper-figure numerical reproduction. They only prevent known false thermal PASS modes from this campaign.
 
 For authorized post-build oracle tables, Fig.8 METHOD-LEVEL ceilings, and IT/LT isolates, see [paper-only vs oracle compare](paper-only-vs-oracle-compare.md).
+## Solver ladder API names (SegregatedStep) — 0.3.5
+
+Use installed Programming Reference property names. Wrong names raise *Unknown property*.
+
+| Node | Properties | Notes |
+|------|------------|-------|
+| Stationary study | `useparam`, `pname`, `plistarr`, `pcontinuationmode`, `preusesol` | S2 continuation |
+| **SegregatedStep** | **`subdtech`**, **`maxsubiter`**, `subdamp`, `subinitsteph` | **Not** `dtech` / `maxiter` on SegStep |
+| FullyCoupled | `dtech`, `maxiter`, `initsteph` | FC node only |
+| Segregated | `maxsegiter` | default stationary often 100 |
+
+S3 preferred: `subdtech='hnlin'` + raise `maxsubiter`. Alternate: `subdtech='const'`, `subdamp=0.1`.
+
+### One class per job
+
+Change **one** ladder class per solve attempt: continuation **XOR** damping **XOR** freeze-flow **XOR** FullyCoupled swap. Do not mix S2+S3+mesh in one gun.
+
+### Telemetry hygiene
+
+- Mid-solve `comsol_model_code` often returns empty under client lock — prefer tailing `~\.comsol\vXX\logs\mphserver*.log` and post-job / post-cancel `message` on sol features.
+- Classify: `SLOW_IMPROVING` | `NONCONV_FLAT` | `NONCONV_MAX_NEWTON` | `STALL_UNKNOWN`.
+- Do not extend wall-clock on identical settings without residual evidence.
+- Oracle clear+resolve fast on the same machine ⇒ blame BC class / solver class / geometry family, not hardware.
+
+### S4 freeze-flow note
+
+Thermal segment must keep **`activate(nitf, True)`**. Isothermal flow seed may turn ht/nitf off; thermal segment must not. After flow `completed`, still require ΔP eval; eval failure goes into the BLOCKED matrix.
+
+## BLOCKED_SOLVER matrix (ladder exhausted) — 0.3.5
+
+When S0–S4 (or declared budget) is exhausted and Inflow+NITF still has no physical thermal solve, deliver:
+
+```yaml
+status: BLOCKED_SOLVER
+inlet_ht_type: Inflow|...
+outlet_ht_type: ConvectiveOutflow|missing|...
+nitf: on
+geometry_partition: A|B|AMBIGUOUS
+ladder:
+  S2: timeout|failed|skipped + note
+  S3: ...
+  S4: failed_max_newton|timeout|...
+telemetry_class: NONCONV_MAX_NEWTON|STALL_UNKNOWN|...
+oracle_control_wall_min: <number or NA>   # compare-only
+bans_honored: [no_nitf_off, no_Temperature, no_entity_copy, no_mesh_first]
+escalation: reopen_decision_gate|change_research_question|optional_FC_one_shot
+```
+
+Forbidden: Temperature to force enthalpy PASS; turn nitf off for Tw; infinite identical Stationary; rewrite BLOCKED as mesh FAIL without mesh evidence.
+

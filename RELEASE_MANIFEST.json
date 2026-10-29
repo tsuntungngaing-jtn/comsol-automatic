@@ -529,5 +529,8 @@
       "bytes": 4942,
       "sha256": "ad3af2baf4eae29918e5a8d9469a19701d704920c2d6b86f97bd535a37811609"
     }
-  ]
+  ],
+  "skill_version": "0.3.5",
+  "uplift": "SKILL_UPLIFT_GENERAL_20261029",
+  "updated_utc": "2026-10-29T02:56:42Z"
 }

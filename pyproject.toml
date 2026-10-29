@@ -1,27 +1,27 @@
-[project]
-name = "comsol-automatic"
-version = "0.3.3"
-description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; uncertainty-aware RSI outer layer; no screen recognition."
-authors = [{name = "Mengzhu Guohe (Douyin)"}]
-maintainers = [{name = "tsuntungngaing-jtn"}]
-readme = "README.md"
-requires-python = ">=3.10"
-dependencies = ["mcp>=1.29.0,<2", "mph>=1.4.0,<2", "numpy>=1.24", "uvicorn>=0.31", "jsonschema>=4.21,<5"]
-
-[project.optional-dependencies]
-test = ["pytest>=8", "httpx>=0.27"]
-pdf-search = ["pymupdf>=1.24", "chromadb>=0.4", "sentence-transformers>=2.2"]
-
-[project.scripts]
-comsol-automatic = "server.main:main"
-comsol-skill-mcp = "server.main:main"
-
-[build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools]
-packages = ["server", "uncertainty", "rsi"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
+[project]
+name = "comsol-automatic"
+version = "0.3.5"
+description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; uncertainty-aware RSI outer layer; no screen recognition."
+authors = [{name = "Mengzhu Guohe (Douyin)"}]
+maintainers = [{name = "tsuntungngaing-jtn"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.29.0,<2", "mph>=1.4.0,<2", "numpy>=1.24", "uvicorn>=0.31", "jsonschema>=4.21,<5"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "httpx>=0.27"]
+pdf-search = ["pymupdf>=1.24", "chromadb>=0.4", "sentence-transformers>=2.2"]
+
+[project.scripts]
+comsol-automatic = "server.main:main"
+comsol-skill-mcp = "server.main:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["server", "uncertainty", "rsi"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
