@@ -1,112 +1,111 @@
-# 可泛化原则（跨战役）
+# Generalizable principles (cross-paper)
 
-适用：**任意** 微通道 / MMC / CHT 论文复现或盲评，不限于 2026-10 某次 Zhang–H3 trial。
-
----
-
-## G0. 三层对象永不混用
-
-| 层 | 用途 | 禁入 |
-|----|------|------|
-| Paper / skill build | 建几何、BC、求解 | Oracle 真值、entity |
-| Self-consistency | 同 recipe 的 CAD↔COMSOL | 「实现一致」冒充「论文正确」 |
-| Forensic / oracle compare | 事后体积、墙钟、字段类对照 | 写回 builder 参数「凑齐 oracle」 |
-
-**失效模式：** Blind≈Oracle 场图被当成 paper-only 成功；或发现 ΔV 后 peek-fix。
+Applies to **any** microfluidic / MMC / CHT paper reproduction or blind evaluation. Skill text must state **rules and failure classes**, never a particular trial’s recipes, paths, wall clocks, figure IDs, or entity tags.
 
 ---
 
-## G1. 论文沉默 ≠ 静默猜一个习惯
+## G0. Three object layers never mix
 
-论文未写清的特征类 / 分区 / 求解细节：
+| Layer | Use | Forbidden |
+|-------|-----|-----------|
+| Paper / skill build | Geometry, BC, solve | Counterpart truth values, entity IDs |
+| Self-consistency | Same-recipe CAD↔COMSOL | “Implementation match” as “paper correct” |
+| Forensic / counterpart compare | Post-hoc volume, wall-clock, field-class checks | Writing counterpart numbers back into builder parameters |
 
-1. 标 `[NOT IN PAPER]` 或开 **decision-gate** 选项卡；或  
-2. 标 `[SOFTWARE_DOC_DEFAULT: <安装版文档 locus>]`（CFD/HT/REF/API 页码级）；  
-3. **禁止** 用 benchmark MPH 当默认来源。
-
-典型默认（可复用，仍须记 locus）：
-
-- 开放流体入口 + 仅给 Tin → HT **Inflow(Tustr)**，非 Temperature  
-- 开放出口 + 仅给压力 → HT **ConvectiveOutflow**  
-- 湍流 CHT Stationary → **Segregated** 序列先于长算  
-- 壁宽 `ww` 进单元宽度公式 → 侧向占位必须显式 **A/B**，禁止静默默认
+**Failure modes:** Treating counterpart field likeness as paper-only success; discovering ΔV then peek-fixing.
 
 ---
 
-## G2. 几何：身份闭合，不是答案闭合
+## G1. Paper silence ≠ silent habit
 
-建前写清并建后核：
+When the paper does not name a feature class / partition / solver detail:
 
-- 侧向占位 A（边壁固体）/ B（流体满宽）+ `claim_id`  
-- `V_fluid_analytic` / `V_solid_analytic` / `A_in` 身份  
-- 实测相对 analytic 容差（默认 0.1%）
+1. Mark `[NOT IN PAPER]` or open a **decision-gate** option card; or
+2. Mark `[SOFTWARE_DOC_DEFAULT: <installed-doc locus>]` (CFD/HT/REF/API, page-level when available);
+3. **Never** use a benchmark MPH as the build default.
 
-若事后法医显示与 oracle 分区不同：
+Reusable defaults (still require a documented locus):
 
-- 记「几何族不同」；  
-- **重开决策读论文**；  
-- **禁止**把 oracle `V_fluid` 设为目标。
-
-**鉴别 round-off：** 同一公式测得 vs 解析误差 ~机器精度 → 浮点；  
-**离散分区差**（如整 mm³ 布尔对称差、bbox 端点跳到单元边界）→ **语义选择**，不是舍入。
+- Open fluid inlet + Tin only → HT **Inflow(Tustr)**, not Temperature
+- Open outlet + pressure only → HT **ConvectiveOutflow**
+- Turbulent CHT Stationary → **Segregated** sequence before a long Fully Coupled first attempt
+- Wall width that enters the unit-cell width formula → lateral occupation must be explicit **A/B** (or equivalent options); no silent default
 
 ---
 
-## G3. 热液门禁分闸
+## G2. Geometry: identity closure, not answer closure
 
-| 闸 | 绿不代表 |
-|----|----------|
-| `GATE_DP` / 质量守恒 | 焓或 Tw 通过 |
-| `GATE_INLET_BC` Inflow | 已收敛 |
-| `GATE_ENTHALPY` | 可关 nitf 冲数 |
-| 求解 completed | 已落盘 mph |
+Before build and after:
 
-液压 MATCH + 焓 FAIL → **PARTIAL**，不单开绿灯。
+- Lateral occupation options (e.g. A = side-wall solids / B = fluid full width) + `claim_id`
+- Analytic identities: `V_fluid_analytic` / `V_solid_analytic` / `A_in`
+- Measured vs analytic tolerance (default 0.1%)
+
+If forensic compare shows a different partition than the counterpart:
+
+- Record “geometry family differs”;
+- **Re-open decision with paper evidence**;
+- **Never** set counterpart `V_fluid` as a builder target.
+
+**Round-off vs semantics:** same formula measured vs analytic at machine precision → float; discrete partition jumps (bbox to cell boundary, clean integer-unit fluid↔solid swap) → **semantic choice**, not rounding.
 
 ---
 
-## G4. 求解阶梯：一枪一类 + 诚实证据
+## G3. Hydraulic and thermal gates stay separate
 
-Inflow + NITF 难收敛时（纸面 BC 已绿）：
+| Gate green does **not** mean |
+|------------------------------|
+| `GATE_DP` / mass conservation → enthalpy or Tw PASS |
+| `GATE_INLET_BC` Inflow → already converged |
+| `GATE_ENTHALPY` → permission to disable nitf |
+| Solver completed → mph delivered on disk |
+
+Hydraulic MATCH + enthalpy FAIL → **PARTIAL**, never a single green light.
+
+---
+
+## G4. Solver ladder: one class per shot + honest telemetry
+
+When Inflow + NITF is hard to converge (paper BC class already green):
 
 ```
 S0 probe → S1 Segregated+init → S2 qw continuation ONLY
-→ S3 damping/iter ONLY (SegregatedStep: subdtech 非乱写 dtech)
+→ S3 damping/iter ONLY (SegregatedStep: subdtech — not mistaken dtech)
 → S4 freeze flow, nitf ON → S5 BLOCKED_SOLVER + matrix
 ```
 
-硬规则：
+Hard rules:
 
-- **一枪只改一类**（勿 S2+S3+网格同开）  
-- **禁止**关 nitf / 回 Temperature / 先加密网格 / 抄 oracle solver 节点  
-- 遥测：优先读 `~\.comsol\v*\logs\mphserver*.log` 与结束后 `message`；中途 `model_code` 常锁空  
-- 区分 **SLOW** / **NONCONV**（达最大牛顿等）/ **STALL_UNKNOWN**；无证据勿只加长 timeout  
-- 同机 oracle clear+resolve 很快而 paper 案卡住 → 先查 **BC 类 / 求解类 / 几何族**，不是「机器不行」
-
----
-
-## G5. 贵时步骤：无文件 = 未发生
-
-长几何 / 长求解：
-
-1. 开算前 `model_save(file_path=…_pre.mph)` 成功，且路径在 `COMSOL_OUTPUT_ROOT` 下  
-2. 算完立刻 `_solved.mph`；核对磁盘存在  
-3. API 参数名以工具 schema 为准（`file_path` ≠ `path`）  
-4. `comsol_model_code` 业务字段在 `result` 内；须解包再判 `ok`  
-5. 另一 MCP 会话 **捡不回** 未保存模型
+- **One class per attempt** (do not open S2+S3+mesh together)
+- **Forbidden:** disable nitf / revert Temperature / mesh-first / copy counterpart solver nodes
+- Telemetry: prefer `~\.comsol\v*\logs\mphserver*.log` and post-job `message`; mid-solve `model_code` is often lock-empty
+- Distinguish **SLOW** / **NONCONV** / **STALL_UNKNOWN**; do not only lengthen timeout without residual evidence
+- Counterpart clear+resolve fast on the same host while paper-only stalls → check **BC class / solver class / geometry family**, not “the machine”
 
 ---
 
-## G6. BLOCKED 是合法科学状态
+## G5. Expensive steps: no file = did not happen
 
-阶梯用尽仍无物理热解：
+Long geometry / long solve:
 
-- 状态：`BLOCKED_SOLVER`（≠ mesh FAIL ≠ coupling 未挂）  
-- 交付：矩阵（BC 类、nitf、阶梯各枪结果、几何 A/B、禁项遵守）  
-- 升级：重开论文决策卡 / 改研究问题；**不是** Temperature 绿瓦焓门  
+1. Before solve: `model_save(file_path=…_pre.mph)` succeeds under `COMSOL_OUTPUT_ROOT`
+2. After solve: `_solved.mph` immediately; verify on disk
+3. API argument names follow the tool schema (`file_path` ≠ `path`)
+4. Unwrap `comsol_model_code` business fields from `result` before judging `ok`
+5. Another MCP session **cannot** recover an unsaved in-memory model
 
 ---
 
-## 一句话
+## G6. BLOCKED is a legal scientific status
 
-**Skill 管「不会选 / 选错类 / 算完不存」；Trial 数字只作法医与回归样例，永不升格为全局几何真理。**
+When the ladder is exhausted without a physical thermal solve:
+
+- Status: `BLOCKED_SOLVER` (≠ mesh FAIL ≠ coupling missing)
+- Deliver the matrix (BC classes, nitf, ladder outcomes, geometry A/B, bans honored)
+- Escalate: reopen paper decision / change research question; **not** Temperature greenwashing of enthalpy
+
+---
+
+## One-liner
+
+**The skill governs wrong class / missing class / unfinished persist. Trial-specific numbers are forensic or regression samples only — never global geometry truth.**
