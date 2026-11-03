@@ -1,6 +1,6 @@
 # Human decision gates
 
-Status: **implemented** DecisionRequest + resolve path; PDF extraction and measured sensitivity ranking **NOT_IMPLEMENTED**.
+Status: **implemented** DecisionRequest + resolve path; autonomy profiles; figure digitize MVP; measured sensitivity ranking still operator-driven.
 
 | Mechanism | Basis | Support class |
 |---|---|---|
@@ -8,10 +8,15 @@ Status: **implemented** DecisionRequest + resolve path; PDF extraction and measu
 | Human oversight of scientific judgment | Miao et al. Nature 2026 HITL boundary | LITERATURE_ADAPTED |
 | When to ask / priority formula | this repository | DESIGN_POLICY |
 | Do not invent sensitivity | this repository | DESIGN_POLICY |
+| Optional autonomy `strict\|assisted\|auto` | this repository | DESIGN_POLICY |
+
+## Autonomy
+
+Default `COMSOL_RSI_AUTONOMY=strict`. See [rsi-autonomy-profiles](rsi-autonomy-profiles.md). `decision_resolve` may pass `autonomy_override` for one decision. Assisted packs related questions via `pack_decision_requests`.
 
 ## When to ask
 
-Ask when missing information would: block the current task; change a target claim; change physics interpretation; or leave unacceptable scientific ambiguity.
+Ask when missing information would: block the current task; change a target claim; change physics interpretation; or leave unacceptable scientific ambiguity. Under `assisted`/`auto`, LOW impact with doc default or dual-source agreement may `AUTO_ACCEPT` instead.
 
 ## When not to ask
 

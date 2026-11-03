@@ -1,4 +1,11 @@
-# COMSOL Automatic 6.4 English — 0.4.1
+# COMSOL Automatic 6.4 English — 0.5.0
+
+Version **0.5.0** (RSI Infer/Evaluate strengthen, bounded harness RSI):
+
+- Autonomy profiles `COMSOL_RSI_AUTONOMY=strict|assisted|auto` ([rsi-autonomy-profiles](docs/rsi-autonomy-profiles.md))
+- Channels: official `doc_default_resolve`, figure `digitized_estimate`, peer `peer_range_prior`
+- Endpoint sensitivity budget; DecisionRequest packing; harness retention heuristics (AgentVersion only)
+- Digitized/peer never → `reported` / final Scientific PASS
 
 Version **0.4.1**: MCP-only control; add on-disk **agent audit trail** (`.java` / Copy-as-Code snippets + step/progress logs under `COMSOL_OUTPUT_ROOT`) per official blog audit practice—see [agent audit trail](docs/agent-audit-trail.md). No dual bare-Java control path.
 

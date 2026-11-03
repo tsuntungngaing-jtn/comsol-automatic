@@ -1,6 +1,6 @@
 # Underspec decision loop
 
-Status: **P0 skill + gate text implemented**; `figure_colorbar_sample` offline tool is **P1 / NOT_IMPLEMENTED** until shipped; sensitivity child workflows are **P2**. Product policy **C** is locked.
+Status: **P0 skill + gate text implemented**; figure digitize MVP shipped as `uncertainty.figure_digitize` (`digitized_estimate` only); sensitivity child workflows via `plan_sensitivity_with_budget`. Product policy **C** is locked.
 
 | Mechanism | Basis | Support class |
 |---|---|---|

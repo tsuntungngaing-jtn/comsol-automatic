@@ -68,12 +68,20 @@ def decide_action(
     *,
     sensitivity: dict[str, Any] | None = None,
     allow_sensitivity_run: bool = True,
+    autonomy_profile: str | None = None,
+    has_software_doc_default: bool = False,
+    dual_source_agree: bool = False,
+    claim_critical: bool = False,
+    high_risk_action: str | None = None,
 ) -> ParameterBelief:
     """
     Update belief.recommended_action / decision_impact / safe_for.
 
     Avoids both extremes: ask-everything and guess-everything.
+    Optional autonomy_profile applies COMSOL_RSI_AUTONOMY after the U×S gate.
     """
+    from .autonomy import apply_autonomy_policy
+
     u = normalize_uncertainty(belief)
     sens = sensitivity if sensitivity is not None else belief.sensitivity
     s_norm = normalize_sensitivity(sens)
@@ -83,7 +91,14 @@ def decide_action(
         belief.recommended_action = "ASK_USER"
         belief.safe_for = []
         belief.sensitivity = sens or {"status": "unknown"}
-        return belief
+        return apply_autonomy_policy(
+            belief,
+            profile=autonomy_profile,
+            has_software_doc_default=has_software_doc_default,
+            dual_source_agree=dual_source_agree,
+            claim_critical=claim_critical,
+            high_risk_action=high_risk_action,
+        )
 
     if belief.status == "known":
         belief.decision_impact = DecisionImpact.LOW.value
@@ -94,7 +109,14 @@ def decide_action(
             "optimization",
             "final_validation",
         ]
-        return belief
+        return apply_autonomy_policy(
+            belief,
+            profile=autonomy_profile,
+            has_software_doc_default=has_software_doc_default,
+            dual_source_agree=dual_source_agree,
+            claim_critical=claim_critical,
+            high_risk_action=high_risk_action,
+        )
 
     if s_norm < 0:
         # Sensitivity unknown: do not invent a scalar. Prefer information-seeking.
@@ -111,7 +133,14 @@ def decide_action(
             belief.decision_impact = DecisionImpact.HIGH.value
             belief.recommended_action = "ASK_USER"
             belief.safe_for = []
-        return belief
+        return apply_autonomy_policy(
+            belief,
+            profile=autonomy_profile,
+            has_software_doc_default=has_software_doc_default,
+            dual_source_agree=dual_source_agree,
+            claim_critical=claim_critical,
+            high_risk_action=high_risk_action,
+        )
 
     impact = impact_from_product(u, s_norm)
     belief.decision_impact = impact.value
@@ -140,4 +169,11 @@ def decide_action(
             belief.recommended_action = "ASK_USER"
         belief.safe_for = []
 
-    return belief
+    return apply_autonomy_policy(
+        belief,
+        profile=autonomy_profile,
+        has_software_doc_default=has_software_doc_default,
+        dual_source_agree=dual_source_agree,
+        claim_critical=claim_critical,
+        high_risk_action=high_risk_action,
+    )

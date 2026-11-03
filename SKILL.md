@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.4.1"
+  version: "0.5.0"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -94,7 +94,9 @@ Controller facade tools (persistent JSON under the output workspace): `workflow_
 
 When a scientifically relevant parameter is missing, the agent MUST NOT silently invent a nominal value. It must classify the missing information, retrieve available evidence, construct an evidence-grounded plausible range when justified, assess the parameter's impact on the reported result, disclose the inference and uncertainty to the user, and escalate to information seeking or user confirmation when the scientific conclusion is sensitive to that uncertainty.
 
-Outer RSI / uncertainty APIs (`uncertainty/`, `rsi/`) run **outside** the closed-loop controller. See [uncertainty-aware RSI](docs/uncertainty-aware-rsi.md) and [parameter inference](docs/parameter-inference.md).
+Use three Infer channels before asking: (1) COMSOL official docs via `doc_default_resolve` / `[SOFTWARE_DOC_DEFAULT]`, (2) paper figure digitization as `digitized_estimate` only, (3) peer same-physics paper ranges as `INFERRED`+`LITERATURE`. Never promote digitized/peer values to `reported` or final Scientific PASS. Optional human-reduction profiles: `COMSOL_RSI_AUTONOMY=strict|assisted|auto` (default **strict**)—see [RSI autonomy profiles](docs/rsi-autonomy-profiles.md). Pack related questions in assisted/auto. Hard bans: overwrite sources, arbitrary code, delete audit, final VALIDATED.
+
+Outer RSI / uncertainty APIs (`uncertainty/`, `rsi/`) run **outside** the closed-loop controller. See [uncertainty-aware RSI](docs/uncertainty-aware-rsi.md) and [parameter inference](docs/parameter-inference.md). AgentVersion retention may use harness heuristics ([harness retention](docs/harness-retention-heuristics.md)); they do not relax VALIDATED.
 
 Provenance states for scientifically relevant inputs:
 

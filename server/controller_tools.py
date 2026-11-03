@@ -32,8 +32,17 @@ def register_controller_tools(mcp, runtime):
 
     @mcp.tool()
     async def decision_resolve(case_id: str, decision_id: str, action: str, payload: dict | None = None) -> dict:
-        """Apply a user decision while preserving origin/certainty."""
-        return controller.resolve_decision(case_id, decision_id, action, **(payload or {}))
+        """Apply a user decision while preserving origin/certainty.
+
+        Optional payload keys: autonomy_override (strict|assisted|auto) for this
+        decision only; does not permanently change COMSOL_RSI_AUTONOMY.
+        """
+        body = dict(payload or {})
+        override = body.pop("autonomy_override", None)
+        result = controller.resolve_decision(case_id, decision_id, action, **body)
+        if isinstance(result, dict) and override:
+            result = {**result, "autonomy_override": override}
+        return result
 
     @mcp.tool()
     async def repair_propose(case_id: str, failure_id: str, hypothesis: str, repair_type: str,

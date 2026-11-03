@@ -1,13 +1,13 @@
-# Uncertainty-aware RSI (V0.1)
+# Uncertainty-aware RSI (V0.5)
 
-Status: **implemented** (harness-side API + unit tests); **tested_with_mock**; real-COMSOL sensitivity propagation **NOT_RUN**.
+Status: **implemented** (harness-side API + unit tests); **tested_with_mock**; real-COMSOL sensitivity propagation **NOT_RUN**. Bounded self-refinement — not open strict RSI.
 
 ## Position in the stack
 
 ```
-Cross-task RSI Controller  (rsi/)
+Cross-task RSI Controller  (rsi/ + harness_heuristics)
         ↓
-Unknown-parameter / ParameterBelief layer  (uncertainty/)
+Unknown-parameter / ParameterBelief layer  (uncertainty/ + autonomy)
         ↓
 Existing ClosedLoopController  (server/orchestrator.py)
         ↓
@@ -20,9 +20,11 @@ RSI does **not** replace the closed-loop state machine. Model revision `M₀→M
 
 Experience → Infer → Improve → Evaluate → Calibrate → Retain
 
-## Non-goals (V0.1)
+Infer channels (see [rsi-autonomy-profiles](rsi-autonomy-profiles.md)): official docs → figure digitize → peer priors. Autonomy: `COMSOL_RSI_AUTONOMY`.
 
-LLM fine-tuning, full Bayesian posteriors, Monte Carlo UQ, autonomous literature scraping, new MCP tools.
+## Non-goals
+
+LLM fine-tuning, full Bayesian posteriors, Monte Carlo UQ, open-ended autonomous RSI, Desktop UI automation, promoting digitized/peer values to paper-reported.
 
 ## Distinctions
 
