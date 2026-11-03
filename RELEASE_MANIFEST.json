@@ -131,8 +131,8 @@
     },
     {
       "path": "docs/evidence-provenance.md",
-      "bytes": 1698,
-      "sha256": "572dfda086caa9c55ea621a0de06d69d8984cbfd2db1ceab09b2e1273818fc7e"
+      "bytes": 1972,
+      "sha256": "4363e660cafc5e2c29a5a505b0be7a8b38c72f683483034c3e61a67d9bd6a725"
     },
     {
       "path": "docs/geometry-validation-results.md",
@@ -145,14 +145,19 @@
       "sha256": "3f40120ca66f118a44a70eb9dde8129bc3b9f44269672b5fc449e5a35e7b735a"
     },
     {
+      "path": "docs/harness-retention-heuristics.md",
+      "bytes": 913,
+      "sha256": "978decc458add6f6738bfcf8fafc8f8374df2e6d72c44d69eec7a99661422952"
+    },
+    {
       "path": "docs/hpc-execution.md",
       "bytes": 626,
       "sha256": "dbbfaa96fbb240a45ee063b5074f0a3db4dd41674e5a23529d5506c660001a82"
     },
     {
       "path": "docs/human-decision-gates.md",
-      "bytes": 1552,
-      "sha256": "924361aadb011ee74805865733a15467b8c12529315065f90cc317c94f2c327e"
+      "bytes": 2002,
+      "sha256": "a30ea4bcbab7479cc257754a435444d886e3ad2d8248c550ee03a92637e025a8"
     },
     {
       "path": "docs/implementation-plan.md",
@@ -186,8 +191,8 @@
     },
     {
       "path": "docs/parameter-inference.md",
-      "bytes": 808,
-      "sha256": "442216bcf0d66b536d29557ac94cec9bcbe63b6b88064af1c4034bb972ea387c"
+      "bytes": 1372,
+      "sha256": "2e82e9b63c98c8f398350bd650c304e1c9ad2df32219b39c4453dacc5bce0232"
     },
     {
       "path": "docs/persist-hard-gate.md",
@@ -213,6 +218,11 @@
       "path": "docs/research-workflow.md",
       "bytes": 721,
       "sha256": "cb30da5b4ba5df746e0f7cc0ab0e170a0c6c1423ee91ad5fc3323ddc0ed23ee4"
+    },
+    {
+      "path": "docs/rsi-autonomy-profiles.md",
+      "bytes": 2215,
+      "sha256": "876a7619678173c769ece1b486d46223404ad7cc6e091162f7a9b442d365e07a"
     },
     {
       "path": "docs/rsi-evaluation-protocol.md",
@@ -251,13 +261,13 @@
     },
     {
       "path": "docs/uncertainty-aware-rsi.md",
-      "bytes": 1405,
-      "sha256": "349f36580a7ba29c2c82066a7cb4906208b5410557e01c2c8fabcf6838818a41"
+      "bytes": 1692,
+      "sha256": "12d9cfa9f2bf01fcff7219b7137d815c6516c6f04a66d67c31fed25449f3cb24"
     },
     {
       "path": "docs/underspec-decision-loop.md",
-      "bytes": 3613,
-      "sha256": "96d5b89c9b427c6ada0b4157c2b0fa7cadf88d15a39522806480f8b769b31d59"
+      "bytes": 3646,
+      "sha256": "64b455883c9eddc46a1bbdc68d9248f9f0a5cba6847aae84da32e9d8783d47af"
     },
     {
       "path": "docs/uplift-20261029/APPLY_TO_SKILLS.md",
@@ -312,17 +322,17 @@
     {
       "path": "pyproject.toml",
       "bytes": 937,
-      "sha256": "0ca7cbb9e11d9f791187310f260c990b4eb80c28164d51235b4cfcb69cd78902"
+      "sha256": "449e3d80be41d1520b8886ff9cb476988feb1d26c02abd150d734f12a8882f0b"
     },
     {
       "path": "README.md",
-      "bytes": 5972,
-      "sha256": "769b7b081fcb172c7ffd6926f6ecdf11cb2d6137e4b5c18ac00e0b60357ba015"
+      "bytes": 6437,
+      "sha256": "addced5f99fd6ceea2405ed72eaf376b3e642e1731d6b73798a42494aca460a1"
     },
     {
       "path": "rsi/__init__.py",
-      "bytes": 284,
-      "sha256": "9c43b3c85f7372ea73a1e7e61bb4a710de8bdb9a9a0bfe7f0d2e88ef96ce87e5"
+      "bytes": 459,
+      "sha256": "bf3b58f9dd3c36bdf7b5cc55fa1b1255f65da8a361e027303d16a8cb7c2c791e"
     },
     {
       "path": "rsi/controller.py",
@@ -333,6 +343,11 @@
       "path": "rsi/experience_store.py",
       "bytes": 5179,
       "sha256": "7802360e26738a4793c5f444cda3708f868bd8b2d829e0460b3a77d29f739c12"
+    },
+    {
+      "path": "rsi/harness_heuristics.py",
+      "bytes": 2425,
+      "sha256": "c71823ac7cd9ea74ef118bb8455b3365dc874795b2bee9a24ab355bdfa20a4bd"
     },
     {
       "path": "rsi/improver.py",
@@ -456,8 +471,8 @@
     },
     {
       "path": "server/controller_tools.py",
-      "bytes": 2263,
-      "sha256": "724688717a9ee89d95014c15a9e8046a934c76d588c90c829f4d32a6795054ec"
+      "bytes": 2651,
+      "sha256": "5878fe205a97d851f5c6ead87f92b8072313050dc8a97f25759edaca73907910"
     },
     {
       "path": "server/decisions.py",
@@ -536,8 +551,8 @@
     },
     {
       "path": "SKILL.md",
-      "bytes": 15863,
-      "sha256": "3972c8c41a3cd07e4e8039b7d1b9e9b4696dc689f041de41fd372e8f72f7d03f"
+      "bytes": 16603,
+      "sha256": "40d3b7b28ec2bd0dcb17706ece51f82a29256b65cd099828f81f86502e450319"
     },
     {
       "path": "tests/test_agent_versioning.py",
@@ -590,6 +605,11 @@
       "sha256": "f5ff7d78f05da62e22c95d25dfbb75d0aa9454a747c031a7f8fdb4551da993f6"
     },
     {
+      "path": "tests/test_rsi_autonomy_channels.py",
+      "bytes": 6530,
+      "sha256": "81f8cb2136241972c2b2a8216e522a0214b858c9bfa4a50f98846a9510d7b525"
+    },
+    {
       "path": "tests/test_runtime.py",
       "bytes": 14003,
       "sha256": "e2a6895196f57807e693042e4d0dad0cc32a48cb11d752ff2eede6a5c766ea74"
@@ -636,8 +656,13 @@
     },
     {
       "path": "uncertainty/__init__.py",
-      "bytes": 560,
-      "sha256": "91f6fab50e8503760d602589eef1c09627ccbdf039e301c8f5e5730263f358d6"
+      "bytes": 1286,
+      "sha256": "8a91f215608e5d233e5e6e0c68b4d9c240a7e076fcfd2bc87bc9282c9c06c60c"
+    },
+    {
+      "path": "uncertainty/autonomy.py",
+      "bytes": 4747,
+      "sha256": "a8a3a9bd0696ae1e5cd47ec1b32364ed7b6d4a3c4aa9692fb8b85c55da9b0cd9"
     },
     {
       "path": "uncertainty/calibration.py",
@@ -646,8 +671,8 @@
     },
     {
       "path": "uncertainty/decision_gate.py",
-      "bytes": 5157,
-      "sha256": "505edd1bc959218076ede032a2ff7c0ce9952b6b42539a5f7e27a75cb0198890"
+      "bytes": 6634,
+      "sha256": "362274bd95014cbf07e5dca71b4a3748756ebdaca27413683761695f69f70df8"
     },
     {
       "path": "uncertainty/detector.py",
@@ -655,9 +680,19 @@
       "sha256": "93d055ea153cce7e7f5207d222daf675a529f4cd19368881dfeab1247a906e34"
     },
     {
+      "path": "uncertainty/doc_default.py",
+      "bytes": 3261,
+      "sha256": "540ef12363286077b1f477bfce2c53a70c2e1b51e157a30b4d634a4b319ebdd5"
+    },
+    {
       "path": "uncertainty/evidence_ranker.py",
       "bytes": 2872,
       "sha256": "43d2b12f7694c92d6876d7b18b2ec2f2eebb6301b29e85840e6a502a40f0d65b"
+    },
+    {
+      "path": "uncertainty/figure_digitize.py",
+      "bytes": 3662,
+      "sha256": "6bff2f3fbd1ea2af8b4bc31538276ed7b487dbdd1cd7997b5284394580c798b3"
     },
     {
       "path": "uncertainty/inference.py",
@@ -670,6 +705,11 @@
       "sha256": "80e0c2ae4222312c82b42353d0f4e5e782717a5173d7f8e9b1e0c3947a3dfaf6"
     },
     {
+      "path": "uncertainty/peer_prior.py",
+      "bytes": 3222,
+      "sha256": "6d54ab6284dc8319b9bb563c0e58dee0b01de471b9b07a98660a4a1e0a9ad072"
+    },
+    {
       "path": "uncertainty/propagation.py",
       "bytes": 3295,
       "sha256": "c07058a399a99ec343fd02a43f34d389d6ed8d9ca6b659f309bb362177cceb3d"
@@ -678,6 +718,11 @@
       "path": "uncertainty/sensitivity.py",
       "bytes": 1261,
       "sha256": "a6b2c38efcaa384aa7c2bbe59b4ad948660dcfe760f3fe8be8e12f0a34eb9f61"
+    },
+    {
+      "path": "uncertainty/sensitivity_budget.py",
+      "bytes": 1843,
+      "sha256": "7e724b51e800db4579c31d1bb35e874a52303a6e382d91576da60d47d7a30d23"
     },
     {
       "path": "uncertainty/user_report.py",
@@ -835,7 +880,7 @@
       "sha256": "ad3af2baf4eae29918e5a8d9469a19701d704920c2d6b86f97bd535a37811609"
     }
   ],
-  "skill_version": "0.4.1",
-  "uplift": "SKILL_UPLIFT_AUDIT_TRAIL_20261104",
+  "skill_version": "0.5.0",
+  "uplift": "SKILL_UPLIFT_RSI_AUTONOMY_20261104",
   "updated_utc": "2026-11-04T00:00:00Z"
 }

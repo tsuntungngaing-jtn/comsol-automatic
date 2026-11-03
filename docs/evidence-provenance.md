@@ -23,6 +23,8 @@ Never relabel `library`, `fitted`, `assumption`, `user_supplied`, `documented_de
 
 If candidates disagree, status=`conflict`; keep all candidates. Do not auto-pick. Weaker sources must not overwrite stronger ones; rank (DESIGN_POLICY): paper > supplement > author code/data > figure/table > reference implementation > installed docs > application library > material library.
 
+Digitized figure samples use origin `digitized_estimate` (not `reported`). Peer CFD priors use `INFERRED`+`LITERATURE` with DOI/table. Official feature-class defaults use `DEFAULT` / `[SOFTWARE_DOC_DEFAULT: locus]`. See [rsi-autonomy-profiles](rsi-autonomy-profiles.md).
+
 ## Intake order (identity preserved)
 
 1. Main paper 2. SI 3. Author code 4. Author data 5. Figure/table 6. Reference implementation 7. Installed-version documentation 8. Official Application Library 9. Installed Material Library
