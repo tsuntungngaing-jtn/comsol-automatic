@@ -7,7 +7,7 @@ For stdio, configure the client with the absolute `.venv/Scripts/python.exe` pat
 
 Interactive agent work should use a **COMSOL Multiphysics Server** session (`comsolmphserver` / Launchers), not **COMSOL Server™** (app deployment). Read `comsol_status` for `standalone`, `host`, and `port`. Same-machine Desktop client + Multiphysics server is allowed on any license type; client and server on **different** computers require a Floating Network License (FNL). See COMSOL KB 1299 and the 6.4 client–server documentation linked from [agentic official alignment](agentic-official-alignment.md).
 
-After connect, resolve tracked model identity before edits. Connectivity smoke: `param_set` / `param_get` round-trip. Prefer MCP over bare `comsolcompile` Java clients; if MCP is down, restore it rather than automating the Desktop UI.
+After connect, resolve tracked model identity before edits. Connectivity smoke: `param_set` / `param_get` round-trip. If MCP is down, restore it rather than automating the Desktop UI. Persist agent step sources and logs under `COMSOL_OUTPUT_ROOT/.../audit/` ([agent-audit-trail](agent-audit-trail.md)).
 
 To install only skill discovery files, run `python scripts/install_skill.py --skills-dir <client-skills-directory>`. It refuses an existing destination. This does not install dependencies or configure a connector. Clients with an Upload Skill feature require that separate action; local copying does not prove visibility.
 

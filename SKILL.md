@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -16,7 +16,9 @@ This is an independent derivative, not an official COMSOL product. Keep the comp
 
 Use MCP for all COMSOL operations, including MPh and Java API calls. Never control COMSOL through screenshots, OCR, visual targeting, or mouse/keyboard automation. If MCP is unavailable, restore the connection; do not bypass it with external scripts. Reading papers with document tools is allowed.
 
-This package is an **external agent harness**, not the Desktop **Chatbot** window. Do not configure Chatbot from this skill. Prefer a **COMSOL Multiphysics Server** client–server session for interactive agent work; that engine is **not** COMSOL Server™. Map official Codex/agentic blog guidance to MCP tools—see [agentic official alignment](docs/agentic-official-alignment.md). Bare `comsolcompile` Java loops are a documented fallback only, never the default control plane.
+This package is an **external agent harness**, not the Desktop **Chatbot** window. Do not configure Chatbot from this skill. Prefer a **COMSOL Multiphysics Server** client–server session for interactive agent work; that engine is **not** COMSOL Server™. Map official Codex/agentic blog guidance to MCP tools—see [agentic official alignment](docs/agentic-official-alignment.md). There is **no** second bare-Java control path.
+
+For mutate/solve steps, keep an on-disk audit under `COMSOL_OUTPUT_ROOT` (Java/Copy-as-Code sources that actually ran, MCP step logs, progress/KPI text)—see [agent audit trail](docs/agent-audit-trail.md). Chat-only descriptions are not an audit.
 
 Respect the user's authorized scope. A read-only inspection does not authorize solving, editing, saving over sources, publishing, or uploading research data. Preserve existing server models. Store models, plots, logs and evidence in the user's workspace, outside this skill and its release tree.
 
@@ -132,6 +134,6 @@ Hard inequalities:
 
 Before/after every expensive solve, obey [HARD GATE persist](docs/persist-hard-gate.md): `model_save(file_path=…)` under `COMSOL_OUTPUT_ROOT`; study completed without mph on disk is **not delivered**.
 
-Provide the actual MPH path, tracked model name, server port, metrics and limits. After authorized model creation/solving, tell the user to manually select **File > COMSOL Multiphysics Server > Import App from Server** and choose the returned name. Do not click or claim to have imported it. Read-only inspection does not require opening Desktop.
+Provide the actual MPH path, tracked model name, server port, metrics and limits, and the case **`audit/`** directory when agent steps wrote Java snippets or step logs ([agent audit trail](docs/agent-audit-trail.md)). After authorized model creation/solving, tell the user to manually select **File > COMSOL Multiphysics Server > Import App from Server** and choose the returned name. Do not click or claim to have imported it. Read-only inspection does not require opening Desktop.
 
 For remote computing, read [HPC handoff](docs/hpc-execution.md); no cluster connector is implied. Review [publishing](docs/publishing.md) only when packaging or publishing is requested.

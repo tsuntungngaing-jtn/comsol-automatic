@@ -85,9 +85,14 @@
       "sha256": "31f6cb8f76c19d389ba2384f636ee56981b00e757bd5f6499d90660c574ce5c3"
     },
     {
+      "path": "docs/agent-audit-trail.md",
+      "bytes": 2933,
+      "sha256": "b8d6edb025a15f50a23ff3b8a66bb8ace5b5d0f49e4c97b7f954a1a8245f5e7e"
+    },
+    {
       "path": "docs/agentic-official-alignment.md",
-      "bytes": 5846,
-      "sha256": "1473e709be1cb100170c499499eb606339d08265d7f0869af15f8aa648a3dd5b"
+      "bytes": 6027,
+      "sha256": "015a94c4858d23e058841858814f48f39a54d9ecc405264cba14c38d5b9e3307"
     },
     {
       "path": "docs/api-patterns.md",
@@ -121,8 +126,8 @@
     },
     {
       "path": "docs/connectors.md",
-      "bytes": 2359,
-      "sha256": "dced0c48481d653a99220024611a9feddbb495b967bda1082cc6d22cb1ab68a5"
+      "bytes": 2427,
+      "sha256": "a2e99ffc1fa0ac6a0f815480a7935c945494bcc829fdd90ff73cf7ee85bae4e7"
     },
     {
       "path": "docs/evidence-provenance.md",
@@ -307,12 +312,12 @@
     {
       "path": "pyproject.toml",
       "bytes": 937,
-      "sha256": "c2ca468bf14f4f1053bb06a2c91a8fdcf1fe6fe887593fab97485a85f3f46875"
+      "sha256": "0ca7cbb9e11d9f791187310f260c990b4eb80c28164d51235b4cfcb69cd78902"
     },
     {
       "path": "README.md",
-      "bytes": 5697,
-      "sha256": "3422ac1bc4469460be80d6279c75c6c6541da50f9caeeb3e578f2217846ad0b5"
+      "bytes": 5972,
+      "sha256": "769b7b081fcb172c7ffd6926f6ecdf11cb2d6137e4b5c18ac00e0b60357ba015"
     },
     {
       "path": "rsi/__init__.py",
@@ -531,8 +536,8 @@
     },
     {
       "path": "SKILL.md",
-      "bytes": 15526,
-      "sha256": "ce8417b74e2668aa385398f9169a05a0de8b051f5967044b6103a6a319649c29"
+      "bytes": 15863,
+      "sha256": "3972c8c41a3cd07e4e8039b7d1b9e9b4696dc689f041de41fd372e8f72f7d03f"
     },
     {
       "path": "tests/test_agent_versioning.py",
@@ -830,7 +835,7 @@
       "sha256": "ad3af2baf4eae29918e5a8d9469a19701d704920c2d6b86f97bd535a37811609"
     }
   ],
-  "skill_version": "0.4.0",
-  "uplift": "SKILL_UPLIFT_AGENTIC_OFFICIAL_20261104",
+  "skill_version": "0.4.1",
+  "uplift": "SKILL_UPLIFT_AUDIT_TRAIL_20261104",
   "updated_utc": "2026-11-04T00:00:00Z"
 }
