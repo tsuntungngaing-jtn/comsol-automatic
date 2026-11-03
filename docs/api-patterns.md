@@ -11,6 +11,14 @@ For a k-epsilon inlet, explicitly set `RANSVarOption=SpecifyTurbulentLengthScale
 
 5% intensity and 0.07 times channel width are suitable illustrative scales, not universal boundary data. Match a nearby official model and justify operating conditions. A tiny mass imbalance does not replace mesh, wall-function or nonlinear convergence checks. `segtermonres=auto` can terminate on solution error while residual estimates remain larger; inspect the actual stopping criterion and log.
 
+## Discovering setters (Copy as Code)
+
+When a property name is unknown, do not guess after the first API-shape error. Probe `properties()` on the live node, search installed documentation, or ask the engineer to use Desktop **Copy as Code to Clipboard** / Record Method and paste the setters into an MCP step. Apply through structured tools or opt-in `comsol_model_code`. Official API overview: https://www.comsol.com/support/learning-center/article/overview-of-the-comsol-api-107912
+
+## Enum sweeps outside Parametric Sweep
+
+Dropdown/enum interface options (for example Laminar Flow compressibility) may be cycled via API when UI Parametric Sweep cannot express them. Compare KPI, time, and iterations, but keep the physically justified setting—not the fastest spurious one. Bounded segregated/nonlinear tuning with KPI anti-cheat gates: [nonlinear-solver-tuning](nonlinear-solver-tuning.md).
+
 ## Material Library
 Use `component.material().insert(local_library_path, [verified_material_tag])`. The basic library under the actual installation's data directory contains air, water,_liquid, copper and silicon. Read labels, property groups and dependencies. Use the material identifier, not necessarily its raw tag, in expressions. The repaired shortcut verifies required properties; existing materials are reported as existing, never falsely claimed newly imported.
 

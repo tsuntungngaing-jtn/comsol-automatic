@@ -1,4 +1,12 @@
-# COMSOL Automatic 6.4 English — 0.3.6
+# COMSOL Automatic 6.4 English — 0.4.0
+
+Version **0.4.0** (official agentic / Codex alignment, MCP-first):
+
+- Position this package as an **external agent harness**, not Desktop Chatbot; Multiphysics Server ≠ COMSOL Server™
+- Client–server status/license notes, connect smoke (`param_set`/`param_get`), MCP mapping of the public agent loop
+- Copy-as-Code / live `properties()` discovery; bounded segregated/nonlinear tuning with KPI gates
+- Docs: [agentic official alignment](docs/agentic-official-alignment.md), [nonlinear solver tuning](docs/nonlinear-solver-tuning.md)
+- Blog ~25%/~30% speed claims remain `NOT_VALIDATED_BASELINE` only—never scientific VALIDATED
 
 Version **0.3.6** (skill hygiene): operator docs state **generalizable rules only**. No trial names, workspace paths, wall-clock control numbers, paper figure IDs, or one-shot geometry recipes in the skill tree. Put case-specific runbooks under `COMSOL_OUTPUT_ROOT`.
 
