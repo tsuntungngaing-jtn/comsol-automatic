@@ -34,19 +34,20 @@ Doc anchors: [Client–Server Mode (6.4)](https://doc.comsol.com/6.4/doc/com.com
 
 ## Official agent loop → MCP mapping
 
-COMSOL's public blog describes: generate Java → `comsolcompile`/bundled JRE →
-connect → query/change → disconnect → reason. **This skill keeps MCP as the
-primary path.** Treat bare Java as a documented fallback only when MCP cannot be
-restored—not as the default.
+COMSOL's public blog describes: generate Java → compile/run → connect →
+query/change → disconnect → reason, and **save `.java` plus progress logs**.
+**This skill uses MCP only** as the control plane. Adopt the blog's **audit
+habit** (sources + logs on disk), not a second compile-and-connect driver.
+Layout and rules: [agent-audit-trail](agent-audit-trail.md).
 
-| Blog step | MCP-first action | Audit under `COMSOL_OUTPUT_ROOT` |
-|-----------|------------------|----------------------------------|
-| Connect / read tags | `comsol_status`, `inspect_current_model` / `get_model_tree` | session note: host, port, model name/tag |
-| Query properties | inspector tools; optional `comsol_model_code` with `properties()` | excerpt of tags/properties |
-| Controlled change | `param_*`, geometry/physics tools, or guarded code | step log + checkpoint MPH when expensive |
-| Run study | async study / job tools; poll queue | progress, warnings, DOF/time if available |
-| Evaluate | results / probes / evaluation groups | KPI table |
-| Reason / next step | agent planning outside COMSOL | short decision note |
+| Blog step | MCP action | Audit under `COMSOL_OUTPUT_ROOT` |
+|-----------|------------|----------------------------------|
+| Connect / read tags | `comsol_status`, `inspect_current_model` / `get_model_tree` | `audit/steps.jsonl` + session fields |
+| Query properties | inspector tools; optional `comsol_model_code` | tags/properties excerpt in logs |
+| Controlled change | `param_*`, geometry/physics, or guarded code | `audit/logs/*_mcp.json`; if code/Copy-as-Code ran → **`audit/java/*`** |
+| Run study | async study / job tools; poll queue | `*_progress.txt` (time/memory/DOF/warnings) or `NOT_AVAILABLE` |
+| Evaluate | results / probes / evaluation groups | KPI in steps/logs |
+| Reason / next step | agent planning outside COMSOL | short decision note in `steps.jsonl` |
 
 Connectivity smoke (blog-equivalent): `param_set` a ping parameter, `param_get`
 the same value. Success is round-trip identity—not solver speed claims.
@@ -95,5 +96,6 @@ injection risk called out in the official agentic blog).
 - https://doc.comsol.com/6.4/doc/com.comsol.help.comsol/comsol_ref_running.38.19.html
 - https://www.comsol.com/support/knowledgebase/1299
 
-Related skill workflows: [nonlinear-solver-tuning](nonlinear-solver-tuning.md),
+Related skill workflows: [agent-audit-trail](agent-audit-trail.md),
+[nonlinear-solver-tuning](nonlinear-solver-tuning.md),
 [connectors](connectors.md), [api-patterns](api-patterns.md), [security](security.md).

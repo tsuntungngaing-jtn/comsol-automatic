@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.4.0
+# COMSOL Automatic 6.4 English — 0.4.1
+
+Version **0.4.1**: MCP-only control; add on-disk **agent audit trail** (`.java` / Copy-as-Code snippets + step/progress logs under `COMSOL_OUTPUT_ROOT`) per official blog audit practice—see [agent audit trail](docs/agent-audit-trail.md). No dual bare-Java control path.
 
 Version **0.4.0** (official agentic / Codex alignment, MCP-first):
 
