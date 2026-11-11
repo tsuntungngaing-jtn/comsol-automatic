@@ -12,6 +12,12 @@ metadata:
 
 This is an independent derivative, not an official COMSOL product. Keep the complete package: the skill instructions alone do not install the MCP server. See [installation](docs/connectors.md) for setup and [repair scope](docs/validation.md) for evidence and limitations.
 
+## Experimental retrieval and RSI safety addendum (branch-only)
+
+- Historical context retrieval is optional: `RSIController.retrieve_experience_context` defaults to lexical search; an embedding provider can be explicitly injected. Retrieval reduces the amount of historical context placed into prompts, not the active conversation context. Never include held-out tests in retrieval or learning. See [bounded retrieval and evaluation](docs/context-retrieval-rsi-evaluation.md).
+- **Do not promote an AgentVersion from unverified aggregate metrics.** `propose_and_gate` requires same-task paired held-out evaluations, predeclared physical/geometry checks, distinct actual COMSOL artifacts and a trusted external evidence verifier. Without proof return `NOT_RUN` / reject. The real COMSOL evidence verifier is not shipped yet: real validation remains `NOT_RUN`.
+- All Transformer outputs remain advisory. The existing deterministic MCP, geometry, conservation, revision, human-approval and provenance gates have priority.
+
 ## Control and scope
 
 Use MCP for all COMSOL operations, including MPh and Java API calls. Never control COMSOL through screenshots, OCR, visual targeting, or mouse/keyboard automation. If MCP is unavailable, restore the connection; do not bypass it with external scripts. Reading papers with document tools is allowed.
