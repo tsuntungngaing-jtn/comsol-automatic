@@ -165,16 +165,58 @@ class RSIController:
             runtime=runtime,
         )
 
+    def retrieve_experience_context(
+        self, query: str, *, embedder=None, task_family: str | None = None,
+        max_records: int = 4, max_chars: int = 2400,
+    ) -> dict[str, Any]:
+        """Retrieve advisory snippets, never held-out experiences."""
+        from .context_retrieval import retrieve_context
+        return retrieve_context(
+            self.experiences.list(for_learning=True), query,
+            embedder=embedder, task_family=task_family,
+            max_records=max_records, max_chars=max_chars,
+        )
+
     def propose_and_gate(
         self,
         *,
-        old_metrics: dict[str, Any],
-        new_metrics: dict[str, Any],
+        paired_heldout_cases: list[dict[str, Any]] | None = None,
+        evidence_verifier: Callable[[dict[str, Any]], bool] | None = None,
+        min_cases: int = 3,
         reason: str = "post-task improvement",
+        old_metrics: dict[str, Any] | None = None,
+        new_metrics: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
+        """Fail-closed promotion: legacy caller-supplied metrics are not evidence.
+
+        A verifier is a trusted callback that inspects real COMSOL artifacts,
+        identities and scientific-check provenance. It must not merely return
+        a boolean field supplied by an LLM. Without it promotion is blocked.
+        """
+        from .evaluation import evaluate_paired_heldout
+
         learning = self.experiences.list(for_learning=True)
+        evaluation = evaluate_paired_heldout(
+            paired_heldout_cases or [],
+            learning_task_ids={r["task_id"] for r in learning},
+            evidence_verifier=evidence_verifier,
+            min_cases=min_cases,
+        )
         candidate = synthesize_candidate(self.versions, learning, reason=reason)
-        gate = self.retention.evaluate(old_metrics=old_metrics, new_metrics=new_metrics)
+        if evaluation["status"] != "PASS":
+            gate = {
+                "decision": "REJECT",
+                "status": "NOT_RUN",
+                "reason": "Promotion blocked: independent held-out evaluation incomplete",
+                "evaluation": evaluation,
+            }
+        else:
+            gate = self.retention.evaluate(
+                old_metrics=evaluation["old_metrics"],
+                new_metrics=evaluation["new_metrics"],
+            )
+            gate["evaluation"] = evaluation
+            gate["status"] = "PASS" if gate["decision"] == "RETAIN" else "FAIL"
         finalized = self.versions.finalize(
             candidate["version_id"],
             decision=gate["decision"],

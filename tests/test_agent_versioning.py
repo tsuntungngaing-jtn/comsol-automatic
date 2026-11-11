@@ -8,7 +8,7 @@ from rsi.controller import RSIController
 
 
 class TestAgentVersioning(unittest.TestCase):
-    def test_retain_promotes_active_version(self):
+    def test_legacy_metrics_do_not_promote_active_version(self):
         with tempfile.TemporaryDirectory() as tmp:
             ctrl = RSIController(tmp)
             self.assertEqual(ctrl.versions.active_id(), "A0")
@@ -50,9 +50,9 @@ class TestAgentVersioning(unittest.TestCase):
                     "cost": 8,
                 },
             )
-            self.assertEqual(out["gate"]["decision"], "RETAIN")
-            self.assertNotEqual(ctrl.versions.active_id(), "A0")
-            self.assertTrue(ctrl.versions.active_id().startswith("A"))
+            self.assertEqual(out["gate"]["decision"], "REJECT")
+            self.assertEqual(ctrl.versions.active_id(), "A0")
+            self.assertEqual(out["gate"]["status"], "NOT_RUN")
 
     def test_reject_keeps_parent(self):
         with tempfile.TemporaryDirectory() as tmp:
