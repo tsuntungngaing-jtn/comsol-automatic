@@ -53,6 +53,8 @@ Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or fai
 
 ## Geometry contracts and repeatable validation
 
+For dimensions taken from layered paper figures, follow [Dimensions across sections of a paper figure](docs/geometry-workflow.md#dimensions-across-sections-of-a-paper-figure) before assigning a width to another feature.
+
 Before geometry-sensitive work, read [geometry workflow](docs/geometry-workflow.md) and [selection contracts](docs/selection-contract.md). Validate a simulation specification with `simulation_spec_validate`. A missing prerequisite blocks only its dependent task; do not invent missing research inputs.
 
 After construction, inspect every property result and use `geometry_accept` against explicit dimension/unit/size/measure/count requirements. Numeric primitive lengths are meters; expression strings preserve their units and parameter dependence. Creation/configuration success is not build success. Retained partial nodes need correction or explicit removal before further use.

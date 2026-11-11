@@ -2,6 +2,14 @@
 
 The baseline is commit `a012b21bcfd604adb8843f3b0e734478fc13b4a3`. Existing convection, inlet, material, save confinement and wheel repairs remain in place. This extension adds acceptance capabilities without replacing Inspector, the serialized JVM runtime, asynchronous jobs or license checks.
 
+## Dimensions across sections of a paper figure
+
+When a width determines which material occupies a region, identify the cut plane in the parent view and the feature in that section. Mark both dimension endpoints on a local copy of the figure, or describe them by identifiable edges. Record the figure/panel, layer, measurement direction, two endpoints, units and source of the value (reported, derived with formula, or inferred). Use dimension labels and equations for magnitude. A schematic can establish which edges a dimension spans even when its pixels have no reliable scale.
+
+For example, a section through three channels and four walls, each 0.5 mm wide, gives a unit width of 3.5 mm. A transverse slot between the inner edges of the two outer walls spans 2.5 mm. Assigning that slot width to an upper plenum adds a separate assumption: the sidewalls continue into the upper layer. Check the section through the plenum for those walls. If the drawing leaves their extent ambiguous, retain both interpretations as hypotheses and record which one the build uses.
+
+For an existing model, read the positions and spans of the relevant features or cross-section boundaries through MCP. Check the slot and plenum separately: both interpretations can have exactly the same overall bounding box. An integrated fluid volume can corroborate the local measurements. This check needs no new solve. In a paper-only reconstruction, keep reference-model measurements in the authorized comparison phase.
+
 ## Construction and units
 
 `geometry_add_feature(properties={...})` accepts an explicit property map over MCP. Legacy direct Python keyword properties still work. The response separates `creation_status`, `configuration_status` and `build_status`, and exposes each requested property, write status, available readback and error. A write accepted by COMSOL is not a built geometry. Failed nodes are retained with their tag for explicit correction/removal; no rollback is promised.
