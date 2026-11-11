@@ -21,7 +21,7 @@ def _obs(task: str, variant: str, *, scientific: str = "PASS",
         },
         "evidence": {
             "origin": "real_comsol_mcp",
-            "artifact_sha256": "a" * 64,
+            "artifact_sha256": ("a" if variant == "old" else "b") * 64,
             "collector_run_id": f"{task}-{variant}",
         },
         "spec_hash": "frozen-spec",
