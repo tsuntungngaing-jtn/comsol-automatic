@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.5.0"
+  version: "0.5.1"
 ---
 
 # COMSOL Automatic 6.4 English

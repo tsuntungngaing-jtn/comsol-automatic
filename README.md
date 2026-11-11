@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.5.0
+# COMSOL Automatic 6.4 English — 0.5.1
+
+Version **0.5.1** adds [SST diagnosis and pressure validation](docs/sst-pressure-validation.md) and [cross-section dimension checks](docs/geometry-workflow.md#dimensions-across-sections-of-a-paper-figure).
 
 Version **0.5.0** (RSI Infer/Evaluate strengthen, bounded harness RSI):
 
