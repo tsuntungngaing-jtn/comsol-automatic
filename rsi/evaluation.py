@@ -103,6 +103,10 @@ def evaluate_paired_heldout(
         if old["spec_hash"] != pair["spec_hash"]:
             errors.append(f"{prefix}: observation spec differs from frozen case")
             continue
+        if (old["identity"].get("run_id") == new["identity"].get("run_id") or
+                old["evidence"].get("artifact_sha256") == new["evidence"].get("artifact_sha256")):
+            errors.append(f"{prefix}: baseline and candidate need distinct run/artifact identities")
+            continue
         if not _verified(old, evidence_verifier) or not _verified(new, evidence_verifier):
             errors.append(f"{prefix}: independent artifact/identity verification missing")
             continue
