@@ -103,6 +103,9 @@ def evaluate_paired_heldout(
         if old["spec_hash"] != pair["spec_hash"]:
             errors.append(f"{prefix}: observation spec differs from frozen case")
             continue
+        if not _artifact_declared(old) or not _artifact_declared(new):
+            errors.append(f"{prefix}: missing real-COMSOL identity/evidence declarations")
+            continue
         if (old["identity"].get("run_id") == new["identity"].get("run_id") or
                 old["evidence"].get("artifact_sha256") == new["evidence"].get("artifact_sha256")):
             errors.append(f"{prefix}: baseline and candidate need distinct run/artifact identities")
