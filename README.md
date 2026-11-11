@@ -1,5 +1,9 @@
 # COMSOL Automatic 6.4 English — 0.5.1
 
+### Experimental retrieval + evidence-gated RSI branch
+
+A proposed, non-default update adds bounded historical context retrieval (lexical by default, optional embeddings), and changes RSI AgentVersion promotion to require paired held-out cases with externally verified real-COMSOL evidence. Legacy raw metric-only promotion is blocked. The provided mock tests do not establish physical validity; the real evidence verifier has not been implemented. See [design and usage](docs/context-retrieval-rsi-evaluation.md). This is a proposal, not a published 0.5.1 release.
+
 Version **0.5.1** adds [SST diagnosis and pressure validation](docs/sst-pressure-validation.md) and [cross-section dimension checks](docs/geometry-workflow.md#dimensions-across-sections-of-a-paper-figure).
 
 Version **0.5.0** (RSI Infer/Evaluate strengthen, bounded harness RSI):
