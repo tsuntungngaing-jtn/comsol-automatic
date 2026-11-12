@@ -11,7 +11,7 @@ Status: **implemented** ledger + schema; offline figure extraction is **IMPLEMEN
 
 ## Origin taxonomy
 
-`reported` | `derived` | `library` | `documented_default` | `assumption` | `user_supplied` | `fitted` | `missing`
+`reported` | `derived` | `library` | `documented_default` | `assumption` | `user_supplied` | `fitted` | `missing` | `inferred` | `digitized_estimate`
 
 Origin is not certainty. Example: `origin=reported` and `certainty=ambiguous`. Example: `origin=library` and `certainty=exact_for_installed_library` still does not claim the paper used that library value.
 
@@ -23,7 +23,7 @@ Never relabel `library`, `fitted`, `assumption`, `user_supplied`, `documented_de
 
 If candidates disagree, status=`conflict`; keep all candidates. Do not auto-pick. Weaker sources must not overwrite stronger ones; rank (DESIGN_POLICY): paper > supplement > author code/data > figure/table > reference implementation > installed docs > application library > material library.
 
-Digitized figure samples use origin `digitized_estimate` (not `reported`). Peer CFD priors use `INFERRED`+`LITERATURE` with DOI/table. Official feature-class defaults use `DEFAULT` / `[SOFTWARE_DOC_DEFAULT: locus]`. See [rsi-autonomy-profiles](rsi-autonomy-profiles.md).
+Digitized figure samples use origin `digitized_estimate` (not `reported`); the ledger and evidence-record JSON Schema both recognize it as of v0.7.0. Offline intake remains a separate candidate review layer, not proof of scientific validity. See [offline input intake](offline-input-intake.md). Peer CFD priors use `INFERRED`+`LITERATURE` with DOI/table. Official feature-class defaults use `DEFAULT` / `[SOFTWARE_DOC_DEFAULT: locus]`. See [rsi-autonomy-profiles](rsi-autonomy-profiles.md).
 
 ## Intake order (identity preserved)
 

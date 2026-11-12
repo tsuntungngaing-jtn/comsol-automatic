@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Offline input reconstruction and admissibility review (v0.7.0)
+
+**No simulation computer is necessary for this stage.** For paper input provenance tables, use `python -m server.input_intake --source <CSV-or-JSON-or-ZIP> --output-root <workspace>` (Python standard library, without starting COMSOL or MCP); see [offline input intake](docs/offline-input-intake.md). This outputs candidate evidence, potential conflicts and explicitly reviewed input drafts; it never constructs or solves a model. A source category or existing verification note is not an independently verified scientific value.
+
+Preserve reported, digitized, inferred, missing, assumption and software/library source identities. Require a manual alias when the same quantity appears under different names; never infer identity just from similar units. A candidate requires a reviewed choice and reason; unknown units/complex expressions remain blocked. Explicit human-reviewed drafts are `INPUT_DRAFT_ONLY`, NOT COMSOL effective inputs or Scientific PASS. Missing supplemental files are NOT proof that supplemental numbers exist. Keep all underlying evidence and old revisions intact.
 
 ## Offline paper figure and pixel evidence (v0.6.0)
 
