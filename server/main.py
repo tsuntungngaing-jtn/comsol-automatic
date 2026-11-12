@@ -75,6 +75,9 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
     for module, registration in registrations:
         getattr(importlib.import_module("src." + module), registration)(registrar)
 
+    from .figure_analysis import register_figure_tools
+    register_figure_tools(mcp, runtime)
+
     from .inspector import register_inspector_tools
     register_inspector_tools(mcp, runtime)
     from .validation_tools import register_validation_tools
@@ -190,7 +193,7 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
         # Explicit allowlist; no arbitrary code, mutation, result export or resources.
         allowed = {'comsol_queue_status','comsol_job_status','study_get_progress',
                    'simulation_spec_validate','simulation_task_admit','validation_gate',
-                   'workflow_status'}
+                   'workflow_status', 'paper_figure_analyze'}
         for name in list(mcp._tool_manager._tools):
             if name not in allowed:
                 mcp.remove_tool(name)
