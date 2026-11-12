@@ -1,4 +1,8 @@
-# COMSOL Automatic 6.4 English — 0.6.0
+# COMSOL Automatic 6.4 English — 0.7.0
+
+Version **0.7.0** adds **offline paper-to-input intake**, requiring no COMSOL machine or connection. A standard-library-only CLI ingests the 12-column Chinese source ledger in CSV/JSON/ZIP format, distinguishes paper/figure/supplement/assumption sources, highlights potential numeric conflicts and missing/unrecognized units, retains all candidates, and emits reviewed-only `INPUT_DRAFT_ONLY` records. No value is automatically approved and **no simulation is executed**. Usage, limits and test instructions: [offline input intake](docs/offline-input-intake.md).
+
+
 
 Version **0.6.0** adds a real **offline scientific figure evidence tool** `paper_figure_analyze` (PDF crop, RGB sampling, single-color plot tracing, colorbar-to-field inversion, optional local OCR). Install optional dependencies with `pip install -e ".[figure-analysis]"`; OCR additionally requires a local Tesseract executable. Read [figure evidence](docs/figure-evidence.md). Inputs/outputs are confined to `COMSOL_OUTPUT_ROOT`; every extraction is `digitized_estimate` and requires review. Synthetic software unit tests exist; published-figure accuracy and physical COMSOL validation remain **NOT_RUN**.
 
