@@ -17,7 +17,8 @@
         "user_supplied",
         "fitted",
         "missing",
-        "inferred"
+        "inferred",
+        "digitized_estimate"
       ]
     },
     "certainty": {"type": "string", "minLength": 1},
