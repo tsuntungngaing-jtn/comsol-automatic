@@ -15,6 +15,7 @@ ORIGINS = (
     "fitted",
     "missing",
     "inferred",
+    "digitized_estimate",
 )
 SOURCE_RANK = {
     "paper": 90,
