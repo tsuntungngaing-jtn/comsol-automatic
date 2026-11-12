@@ -1,11 +1,11 @@
 ---
 name: comsol-automatic-6-4-en
-description: Build, inspect, solve, and validate COMSOL models through MCP, including paper reproduction, editable MPH delivery, and uncertainty-aware cross-task RSI. Use installed-version documentation and licensed local libraries. Do not use for literature summaries without modeling.
+description: Build, inspect, solve, and validate COMSOL models through MCP, including paper-figure pixel/colorbar evidence extraction, paper reproduction, editable MPH delivery, and uncertainty-aware cross-task RSI. Use installed-version documentation and licensed local libraries. Do not use for literature summaries without modeling.
 license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.5.1"
+  version: "0.6.0"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Offline paper figure and pixel evidence (v0.6.0)
+
+For a published-paper figure (NOT a COMSOL UI screenshot), use offline MCP tool `paper_figure_analyze` with `pdf_crop`, `pixel`, `curve`, `field` or `ocr`. It requires optional image dependencies and an input under `COMSOL_OUTPUT_ROOT`; it does not connect to or operate COMSOL. Follow [figure evidence](docs/figure-evidence.md) for ROI coordinate conventions, axes, colorbar calibration, outputs, limitations and test gates.
+
+Preserve the source PDF/figure hash, exact ROI, calibration, unit and figure locator with the result. All recovered values are `digitized_estimate` and `REVIEW_REQUIRED`, not `reported` or independent validation. For field inversion require the actual figure's colorbar; unknown scales yield no quantitative field. Never use pixels or OCR to target or automate the COMSOL interface.
 
 ## Geometry contracts and repeatable validation
 
