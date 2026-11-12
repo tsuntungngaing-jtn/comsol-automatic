@@ -1,4 +1,7 @@
-# COMSOL Automatic 6.4 English — 0.5.1
+# COMSOL Automatic 6.4 English — 0.6.0
+
+Version **0.6.0** adds a real **offline scientific figure evidence tool** `paper_figure_analyze` (PDF crop, RGB sampling, single-color plot tracing, colorbar-to-field inversion, optional local OCR). Install optional dependencies with `pip install -e ".[figure-analysis]"`; OCR additionally requires a local Tesseract executable. Read [figure evidence](docs/figure-evidence.md). Inputs/outputs are confined to `COMSOL_OUTPUT_ROOT`; every extraction is `digitized_estimate` and requires review. Synthetic software unit tests exist; published-figure accuracy and physical COMSOL validation remain **NOT_RUN**.
+
 
 Version **0.5.1** adds [SST diagnosis and pressure validation](docs/sst-pressure-validation.md) and [cross-section dimension checks](docs/geometry-workflow.md#dimensions-across-sections-of-a-paper-figure).
 

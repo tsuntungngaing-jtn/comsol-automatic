@@ -1,6 +1,6 @@
 # Evidence provenance
 
-Status: **implemented** ledger + schema; extraction from PDF/code is **NOT_IMPLEMENTED** (operator still supplies records).
+Status: **implemented** ledger + schema; offline figure extraction is **IMPLEMENTED in v0.6.0** via `paper_figure_analyze` (manual ROI/calibration and optional OCR); full autonomous text/PDF claim extraction remains **NOT_IMPLEMENTED**.
 
 | Mechanism | Basis | Support class |
 |---|---|---|

@@ -7,3 +7,5 @@ prune examples/validation
 recursive-include schemas *.json
 recursive-include benchmarks *.json *.py *.md
 recursive-include tutorials *.json *.md
+
+recursive-include docs *.md
