@@ -22,11 +22,11 @@ rules remain in force. Preserve the original author's attributions.
 2. Freeze a reviewed solver-neutral simulation spec, observables, dimensional
    units, expected conservation equations and reproducibility criteria.
 3. Ask the host for actual registered MCP server/tool inventory. Prefer
-   \`solver_route_plan\` to plan, not claim discovery. Select **one** solver and
+   `solver_route_plan` to plan, not claim discovery. Select **one** solver and
    session. Never combine tool lists without namespace+ownership.
 4. COMSOL: inspect via existing COMSOL MCP. Fluent: inspect using installed
-   **official** \`ansys/pyfluent-mcp\` tool schemas, beginning with read-only
-   discovery. Do not invoke third-party \`launch_fluent\` naming on official MCP.
+   **official** `ansys/pyfluent-mcp` tool schemas, beginning with read-only
+   discovery. Do not invoke third-party `launch_fluent` naming on official MCP.
 5. If not connected, locate installed software metadata and explain MCP
    registration. Do not silently execute direct API scripts or GUI clicks.
 6. Obtain authorization before solver launch, license consumption, writes or
