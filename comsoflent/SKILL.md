@@ -21,6 +21,10 @@ Before any live COMSOL or Fluent solver call, apply the shared, **offline** [ope
 
 LAB7/LAB8 remain on their authorized PyFluent route; LAB9/LAB10 remain on their designated COMSOL route. Do not start or connect the other solver merely because the unified Skill is loaded. Do not alter an ongoing job, automatically cancel, force-kill, retry, acquire another machine's task, or silently loosen targets. A user's intentional skip is SCOPE_CHANGED, never scientific PASS. The reported <15% all-main-paper-metrics rule is a **user-scoped** acceptance policy requiring a declared formula, reference, condition and source, not a default physical law.
 
+## Grid uncertainty: original-paper verification gate
+
+Follow [Eça & Hoekstra (2014), original-PDF verification](../docs/eca-hoekstra-2014-original-paper-review.md) before interpreting a mesh-refinement study. Use `server/grid_uncertainty_admission.py` **offline** to check whether a solver-provenance grid family is a candidate for later fitting; the checker never calculates a numerical uncertainty or claims scientific PASS. The paper recommends at least four geometrically comparable grids for noisy engineering CFD data, with iterative error negligible relative to discretization error. Two-grid changes are only grid sensitivity evidence, not a GCI or uncertainty interval. The paper contains a genuine discrepancy between the p upper bound for a safety-factor condition at printed p.108 (`2.14`) and Appendix A at printed p.125 (`2.1`); require human/source review before implementing this threshold. Do not expand an expensive grid family without available RAM and task budget. Verification uncertainty and comparison against paper claims are separate quantities.
+
 ## Sequence
 
 1. Extract original paper text/table numerical values before digitized figures,
