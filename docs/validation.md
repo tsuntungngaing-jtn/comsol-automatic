@@ -16,3 +16,7 @@ The offline input validator and cross-mesh interpolation tests are synthetic onl
 ## v0.7.2 adaptive scientific figure analysis
 
 The adaptive configuration router applies deterministic uncalibrated coverage/match-fraction proxies to a fixed scientific figure and explicitly abstains on weak or near-tied scores. Its performance on real published figures, empirical accuracy calibration and downstream COMSOL physical correctness are **NOT_RUN**. Candidate selection is not independently validated paper evidence.
+
+## v0.7.3 simulation dataset and DoE foundation
+
+An offline seeded randomized LHS planner, typed parameter/constraint schema, per-observable NOT_RUN placeholders, and caller-reported immutable outcome reviews are implemented. Local synthetic planner/unit tests were executed; real COMSOL batch simulation, mesh studies, authentic solve identity, physics validation, data-based agent learning and independent scientific benchmarks are **NOT_RUN**. Reports are not treated as verified physical data.
