@@ -20,3 +20,7 @@ The adaptive configuration router applies deterministic uncalibrated coverage/ma
 ## v0.7.3 simulation dataset and DoE foundation
 
 An offline seeded randomized LHS planner, typed parameter/constraint schema, per-observable NOT_RUN placeholders, and caller-reported immutable outcome reviews are implemented. Local synthetic planner/unit tests were executed; real COMSOL batch simulation, mesh studies, authentic solve identity, physics validation, data-based agent learning and independent scientific benchmarks are **NOT_RUN**. Reports are not treated as verified physical data.
+
+## v0.7.4 physical diagnostic hypothesis planning
+
+Implemented only a deterministic offline schema review, cost-tiered proposed experiments, externally reported observation comparison against predeclared rules, and UUID-scoped provenance reports. Synthetic tests exist and were run for the development module. No COMSOL solver launched; genuine model readbacks, root-cause identification accuracy, physical revalidation, causal attribution, or automatic repair remain **NOT_RUN**. Reported test agreement is never converted to physical PASS or confirmed cause. See [physics diagnostic hypotheses](physics-diagnostic-hypotheses.md).
