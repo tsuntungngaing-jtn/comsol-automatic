@@ -40,15 +40,14 @@ This is not a claim that the external Elsevier webpage is freely accessible.
    for `delta_RE` versus fixed-order candidates, then `Delta_phi`,
    safety factor and `U_phi`. Printed pp. 126–128 (PDF pp. 23–25),
    Appendix B: analytic weighted/unweighted least-squares equations.
-7. **Source-internal discrepancy requiring manual review:** printed
-   p. 108 (PDF p. 5), Eq. (19) discussion uses
-   `0.5 <= p < 2.14` for the `Fs=1.25` condition (confirmed visually);
-   Appendix A on printed p. 125 (PDF p. 22) uses
-   `0.5 <= p < 2.1`. Do NOT silently choose one. The distinct
-   condition on printed p. 108, §2.4.1 for accepting the
-   Richardson-derived **error estimator** is `0.5 <= p <= 2`.
-   A production implementation must document author clarification
-   or make the safety-factor ambiguity an explicit review item.
+7. **Important typographic clarification, checked against the rendered original:** 
+   printed p. 108 (PDF p. 5) shows `0.5 <= p < 2.1` immediately
+   followed by superscript footnote marker **4**. Text extraction may
+   incorrectly join this as `2.14`, but the numeric bound is **2.1**,
+   agreeing with Appendix A, printed p. 125 (PDF p. 22).
+   The separate estimator-selection range in §2.4.1 is
+   `0.5 <= p <= 2`. Do not conflate estimator selection and the
+   later safety-factor quality condition.
 
 ## What the Skill may safely automate immediately
 
@@ -68,8 +67,8 @@ This is not a claim that the external Elsevier webpage is freely accessible.
   published-method `U_phi` or Scientific PASS.
 - For a real estimator, independently implement and test all candidate
   models/weighting, fit-quality, anomalous data and degeneracy cases,
-  and explicitly resolve the noted source discrepancy before adopting
-  a safety factor. Do **not** infer a GCI or error bar from two grids.
+  and independently validate the safety-factor implementation
+  against the printed original PDF. Do **not** infer a GCI or error bar from two grids.
 
 ## Case-specific interpretation (reported, NOT verified)
 
