@@ -1,0 +1,40 @@
+name: Paper2Simu offline regression
+
+on:
+  push:
+    branches:
+      - main
+      - feature/paper2simu-unification-v0.2.0
+  pull_request:
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime and test dependencies
+        run: python -m pip install -e ".[test]"
+      - name: Offline policy and provenance regression
+        run: |
+          python -m unittest tests.test_solver_router tests.test_reproduction_guard tests.test_grid_uncertainty_admission tests.test_native_convergence tests.test_release tests.test_closed_loop -v
+      - name: Full offline unit regression
+        run: python -m unittest discover -s tests -v
+      - name: Build self-contained ZIP, check manifest and hashes
+        run: |
+          python scripts/release.py --output ../Paper2Simu-v0.2.0.zip
+          python - <<'PY'
+          import hashlib, json, zipfile
+          from pathlib import Path
+          p = Path("../Paper2Simu-v0.2.0.zip")
+          with zipfile.ZipFile(p) as z:
+              manifest = json.loads(z.read("paper2simu/RELEASE_MANIFEST.json"))
+              assert manifest["skill_name"] == "paper2simu"
+              assert "paper2simu/paper2simu/SKILL.md" in z.namelist()
+              for item in manifest["files"]:
+                  assert hashlib.sha256(z.read("paper2simu/" + item["path"])).hexdigest() == item["sha256"]
+          PY
