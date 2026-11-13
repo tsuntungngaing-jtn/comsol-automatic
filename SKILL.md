@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.2"
+  version: "0.7.3"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Offline Design of Experiments and simulation dataset foundation (v0.7.3)
+
+For evidence-grounded parameter-space planning, use `simulation_dataset_plan` (offline, bounded seeded randomized LHS and constraints). The reviewed DoE spec must declare ranges, units, source identities, origin evidence and per-observable required checks; see [simulation dataset and DoE](docs/simulation-dataset-doe.md). Each generated case is `PLANNED`, not an executed simulation. All checks start `NOT_RUN`; case-level train/validation/test assignments are organizational labels, not independent OOD verification. This is NOT optimized LHS, an automatic COMSOL batch scheduler or authenticated scientific dataset.
+
+Use `simulation_dataset_record` only for external, explicitly sourced observations or failure reports. It writes a separate immutable review record without altering the plan and does NOT attest COMSOL execution, validation, mesh convergence or readiness for learning. Record failure categories (including `UNKNOWN`) based on observed evidence, not guessed root causes. Retain per-observable convergence, conservation, mesh and scientific gates separately. Never promote reported success, planned parameters or inferred ranges to `VALIDATED` or an RSI learning sample based on these offline records.
 
 ## Adaptive scientific figure configuration routing (v0.7.2)
 
