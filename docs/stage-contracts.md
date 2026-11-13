@@ -69,3 +69,7 @@ Declare every inlet/outlet/source/storage term, integral expression, selection, 
 ## v0.7.4 optional diagnostic hypothesis gate (offline)
 
 Before repair, operator may use `physics_diagnostic_plan` to predeclare competing physical/numerical hypotheses, falsifiers and bounded tests; `physics_diagnostic_record` only scores externally reported numbers. This does not modify the existing controller or add execution authority. Case identity, scientific validity, evidence acquisition, authorization, revalidation and actual root-cause confirmation remain separate processes. See [physics diagnostic hypotheses](physics-diagnostic-hypotheses.md).
+
+## v0.7.5 optional GCH-style commissioning and recovery gate (offline)
+
+Before any real parameter calibration/recovery, predeclare and freeze a knowledge-guided contract. Inspect original model parameter readbacks and observable availability; this is reported evidence until independently acquired using approved MCP tools. Distinguish fixed paper parameters from genuine uncertain/calibratable parameters. Only after an eligible v0.7.4 reported diagnosis may the offline harness propose one calibratable parameter change. Require independent authorization for actual solver operations; use the original frozen observable definitions and per-observable numerical/physical gates for separate verification. No automatic solver/optimizer integration is present. See [knowledge-guided recovery](knowledge-guided-recovery.md).
