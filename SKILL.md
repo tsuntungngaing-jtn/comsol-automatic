@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.0"
+  version: "0.7.1"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Offline mesh-aware field diagnostics (v0.7.1)
+
+**No COMSOL session required.** For separately exported and reviewed two-dimensional triangular nodal mesh datasets, use `mesh_native_analyze` or `python -m server.mesh_native` for input validation and piecewise-linear cross-mesh scalar-field comparison. Read [mesh-native diagnostics](docs/mesh-native-diagnostics.md) for the strict schema, coordinate/unit and geometry/conditions identity gates, workspace confinement, coverage requirement, limits and non-conservative interpolation. This is a **deterministic diagnostic bridge inspired by mesh-native representation research**, **not** MNC neural tokenisation, trained surrogate learning, automatic mesh optimization, proof of mesh independence or scientific validation. No automatic COMSOL mesh/result export is implemented: coordinate, connectivity, field values and nodal mapping must be supplied consistently; never assume finite-element DOF order equals exported mesh node order.
+
+All computed differences are `DIAGNOSTIC_ONLY`; physical and mesh-independence checks remain `NOT_RUN`. Provenance hashes and run identifiers are retained. Do not use nodal residuals as an acceptance gate for conservation, convergence, or mesh independence. Comparison across different geometries or boundary/physics conditions is blocked rather than normalized away.
 
 ## Offline input reconstruction and admissibility review (v0.7.0)
 
