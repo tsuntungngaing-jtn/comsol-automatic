@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.7.1
+# COMSOL Automatic 6.4 English — 0.7.2
+
+Version **0.7.2** introduces an **offline, conservative figure-configuration selection tool** `paper_figure_route` for 2–6 pre-approved curve or field/colorbar extraction configurations. It executes the existing `paper_figure_analyze` methods, compares bounded quality proxies, records all source/candidate manifests and abstains if results are weak, ambiguous or inconsistent. Inspired by ART of PIV's agentic estimator selection, **not a trained neural selector, PIV optical flow or autonomous ROI discovery**. Real-paper accuracy benchmarking and real-COMSOL physical verification remain **NOT_RUN**. See [adaptive figure routing](docs/adaptive-figure-routing.md).
 
 Version **0.7.1** adds **offline mesh-aware diagnostics** for reviewer-supplied, 2D triangular meshes with nodal scalar values: input schema checks, piecewise-linear spatial comparisons with coverage and numeric error metrics, immutable hash-backed audit reports, and a read-only COMSOL MCP tool `mesh_native_analyze`. This is **not MNC ML**, COMSOL mesh export, automatic mesh repair or mesh independence certification. Tested with synthetic Python unit tests; real COMSOL integration and physical validation remain **NOT_RUN**. See [mesh-native diagnostics](docs/mesh-native-diagnostics.md).
 
