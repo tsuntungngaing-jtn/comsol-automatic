@@ -1,7 +1,7 @@
 [project]
-name = "comsol-automatic"
-version = "0.7.6"
-description = "Original author: Mengzhu Guohe (Douyin). MCP-only COMSOL automation with classic physics cases; uncertainty-aware RSI outer layer; no screen recognition."
+name = "paper2simu"
+version = "0.2.0"
+description = "Research paper-to-simulation workflow for COMSOL and Ansys Fluent, with isolated MCP routing, evidence review, and native scientific validation; derivative of COMSOL Automatic by Mengzhu Guohe (Douyin)."
 authors = [{name = "Mengzhu Guohe (Douyin)"}]
 maintainers = [{name = "tsuntungngaing-jtn"}]
 readme = "README.md"
@@ -14,6 +14,8 @@ pdf-search = ["pymupdf>=1.24", "chromadb>=0.4", "sentence-transformers>=2.2"]
 figure-analysis = ["pillow>=10", "numpy>=1.24", "pymupdf>=1.24", "pytesseract>=0.3"]
 
 [project.scripts]
+paper2simu = "server.main:main"
+paper2simu-comsol-mcp = "server.main:main"
 comsol-automatic = "server.main:main"
 comsol-skill-mcp = "server.main:main"
 
