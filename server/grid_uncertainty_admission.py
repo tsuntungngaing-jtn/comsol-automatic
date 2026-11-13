@@ -65,7 +65,7 @@ def review_grid_family(payload: dict) -> dict:
     if issues:
         return _result("GRID_SENSITIVITY_ONLY" if len(grids) >= 2 else "INSUFFICIENT_EVIDENCE", issues)
     return _result("CANDIDATE_FOR_FIT_NOT_VALIDATED", [], extra={
-        "next": "Implement and independently validate Appendix A/B weighted and unweighted fits; source-safety-factor discrepancy must be reviewed",
+        "next": "Implement and independently validate Appendix A/B weighted and unweighted fits; the Appendix A/B numerical implementation needs independent verification",
         "eligible_for_parameter_fitting": False,
     })
 
@@ -75,6 +75,6 @@ def _result(status, issues, extra=None):
         "schema": SCHEMA, "status": status, "issues": issues,
         "uncertainty_computed": False, "scientific_status": "NOT_RUN",
         "source": "Eca & Hoekstra 2014, JCP 262, 104-130, DOI 10.1016/j.jcp.2014.01.006",
-        "author_safety_factor_note": "Printed p.108: p<2.14; Appendix A p.125: p<2.1. Resolve before actual estimator.",
+        "author_safety_factor_note": "Printed p.108: p<2.1 followed by footnote 4; Appendix A p.125: p<2.1. No numeric discrepancy.",
         **(extra or {}),
     }
