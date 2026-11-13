@@ -1,3 +1,5 @@
+> Historical architecture document: the unified project is now **Paper2Simu v0.2.0**, not ComsoFlent. This file records the v0.1.0 preview's scope and limitations. Read [the primary Skill](../paper2simu/SKILL.md) and [native convergence](native-convergence-policy.md) for current instructions.
+
 # ComsoFlent 0.1.0 — MCP-first dual-solver preview
 
 This is a **new workflow/skill generation**, not an assertion that the legacy
