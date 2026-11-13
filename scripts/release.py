@@ -1,6 +1,6 @@
 """Build a self-contained skill ZIP from an explicit public-source allowlist.
 
-Run from any directory: python scripts/release.py --output ../Comsol-Automatic-v0.1.0.zip
+Run from any directory: python scripts/release.py --output ../Paper2Simu-v0.2.0.zip
 No network access, repository-wide glob upload, credentials, or model files.
 """
 from __future__ import annotations
@@ -13,7 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {'SKILL.md','README.md','LICENSE','NOTICE.md','.gitignore','pyproject.toml','setup.py','MANIFEST.in'}
-DIRECTORIES = {'server','vendor','examples','docs','scripts','tests','schemas','benchmarks','tutorials'}
+DIRECTORIES = {'server','vendor','examples','docs','scripts','tests','schemas','benchmarks','tutorials','paper2simu'}
 EXTENSIONS = {'.py','.md','.toml','.json','.cff','.ps1'}
 SKIP_PARTS = {'.git','.venv','__pycache__','.pytest_cache','runs','runtime','dist','build'}
 FORBIDDEN_EXTENSIONS = {'.csv','.png','.mph','.mphbin','.log','.pdf','.step','.stp','.pem','.key','.pfx','.zip','.pyc','.pyo'}
@@ -84,13 +84,13 @@ def build(output, root=ROOT):
     if output.is_relative_to(Path(root).resolve()):
         raise ValueError('Release ZIP must be outside the skill directory')
     files=public_files(root)
-    manifest={'format':1,'skill_name':'comsol-automatic-6-4-en','display_name':'Comsol-Automatic','author':'Mengzhu Guohe (Douyin)','files':[
+    manifest={'format':1,'skill_name':'paper2simu','display_name':'Paper2Simu','author':'Mengzhu Guohe (Douyin)','files':[
         {'path':name,'bytes':len(data),'sha256':digest(data)} for name,data in files]}
     files.append(('RELEASE_MANIFEST.json',(json.dumps(manifest,indent=2)+'\n').encode()))
     output.parent.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(output,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
         for name,data in files:
-            info=zipfile.ZipInfo('comsol-automatic-6-4-en/'+name, date_time=(2026,10,12,0,0,0))
+            info=zipfile.ZipInfo('paper2simu/'+name, date_time=(2026,10,12,0,0,0))
             info.compress_type=zipfile.ZIP_DEFLATED
             info.external_attr=0o644 << 16
             archive.writestr(info,data)
