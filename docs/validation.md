@@ -12,3 +12,7 @@ Read [the repair validation record](repair-validation.md) for executed tests. Ne
 ## v0.7.1 mesh-aware diagnostics
 
 The offline input validator and cross-mesh interpolation tests are synthetic only. Real COMSOL mesh export, nodal result alignment, genuine mesh convergence studies and physical validation are **NOT_RUN**. A `DIAGNOSTIC_ONLY` result must never be upgraded to Scientific PASS without independent physical evidence. See [mesh-native diagnostics](mesh-native-diagnostics.md).
+
+## v0.7.2 adaptive scientific figure analysis
+
+The adaptive configuration router applies deterministic uncalibrated coverage/match-fraction proxies to a fixed scientific figure and explicitly abstains on weak or near-tied scores. Its performance on real published figures, empirical accuracy calibration and downstream COMSOL physical correctness are **NOT_RUN**. Candidate selection is not independently validated paper evidence.
