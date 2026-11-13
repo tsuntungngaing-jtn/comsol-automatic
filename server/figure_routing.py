@@ -5,6 +5,7 @@ agent, PIV optical flow, automatic ROI discovery, or scientific certification.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import re
@@ -169,7 +170,7 @@ def route_figure(output_root, source_path, candidates, policy=None):
         report = {
             "version": "0.7.2", "operation": operation,
             "source_path": str(source),
-            "source_sha256": None, "policy": decision_policy,
+            "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(), "policy": decision_policy,
             "candidates": runs, "selected_candidate": chosen,
             "decision_reason": reason, "selection_rule": (
                 "curve: (traced_columns-ambiguous_columns)/ROI_width; "
@@ -184,12 +185,6 @@ def route_figure(output_root, source_path, candidates, policy=None):
                 "automatic ROI selection, PIV, or independent physical validation."
             ),
         }
-        # Reuse the reference acquisition manifest's hash, never hash an extracted
-        # or postprocessed artifact in place of its original source.
-        first_manifest = next((x["manifest"] for x in runs if x["manifest"]), None)
-        if first_manifest:
-            data = json.loads(Path(first_manifest).read_text(encoding="utf-8"))
-            report["source_sha256"] = data["source_sha256"]
         destination = inside(root, "figure-routing/" + uuid4().hex)
         destination.mkdir(parents=True, exist_ok=False)
         path = destination / "routing_manifest.json"
