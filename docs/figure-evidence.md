@@ -17,3 +17,7 @@ Image size capped at 25 million pixels, field ROI at 200000 pixels; all results 
 **Limitations:** pixel color is not uniquely recoverable to a physical field where the palette is non-injective; compression, anti-aliasing, transparency, sRGB color profiles, legends, overlaid vectors, and interpolation can distort inversion. Current matching uses Euclidean RGB, not CIE ΔE; numeric uncertainties are **not** certified confidence intervals. Coordinate and colorbar anchors are user/operator specified, not autonomously detected. For scientific comparisons predeclare acceptance thresholds and independently verify overlays, matched-fraction, physical units, masks, and a measured ground-truth sample. This version does not include Fiji/ImageJ or third-party WebPlotDigitizer code.
 
 Synthetic unit tests: `python -m unittest tests.test_figure_analysis`. Tests do not require COMSOL, but require Pillow and NumPy.
+
+## v0.7.2 adaptive configuration routing
+
+`paper_figure_route` selects among pre-reviewed curve or field/colorbar configurations using non-probabilistic, synthetic-untested-on-real-papers quality proxies. It is **not** automatic calibration, PIV, training, or scientific validation. See [adaptive figure routing](adaptive-figure-routing.md).
