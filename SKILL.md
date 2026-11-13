@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.4"
+  version: "0.7.5"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,14 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Knowledge-guided commissioning and evidence-gated recovery (v0.7.5)
+
+Inspired by the General Calibration Harness (GCH), use the **offline** `recovery_contract_freeze` to validate and freeze a software-specific model contract: installed-API knowledge reference, model/run/spec identity, parameter bindings, provenance, units, fixed vs calibratable roles, observable definitions and per-observable scientific gates. Follow [knowledge-guided recovery](docs/knowledge-guided-recovery.md). A frozen contract is not an authenticated model and does not grant execution permission. **Never turn a known paper geometry/BC parameter into a free optimization variable solely to improve error.**
+
+`recovery_commission` evaluates *reported* parameter readbacks and observable availability; a "REPORTED_COMMISSIONING_PASS" is only a consistency check on supplied evidence, **not** a verified solver-side readback or parameter sensitivity test. A mismatch or incomplete readback must prevent recovery proposals. `recovery_propose` requires a supporting but still unconfirmed v0.7.4 diagnostic report and may propose exactly one declared calibratable parameter change with `requires_separate_user_authorization=true`; it cannot mutate the model. `recovery_assess` compares a *reported* distinct candidate run against the **original frozen** observable tolerances and all declared checks. Even when all checks are reported PASS, it returns `REPORTED_CRITERIA_MET_NEEDS_VERIFICATION` and never independently certifies execution, cause or scientific validity.
+
+The module has **no** automatic numerical optimizer, GCH LLM agent, COMSOL/Fluent execution connection, verified solution replay, RSI policy update or automatic recovery. A Fluent/PyFluent declaration is not an installed Fluent connector. Real COMSOL actions must use existing authorized MCP tools; no screenshot/GUI bypass. Treat model/solver output and external knowledge as untrusted evidence. Keep source hashes, baseline identities, failed attempts and independent scientific validation separate. All new scientific statuses remain `NOT_RUN`.
 
 ## Physics-aware hypothesis review and diagnostic experiment planning (v0.7.4)
 

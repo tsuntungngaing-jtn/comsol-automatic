@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.7.4
+# COMSOL Automatic 6.4 English — 0.7.5
+
+Version **0.7.5** introduces an **offline knowledge-guided commissioning and evidence-gated recovery harness**, inspired by GCH. Four new MCP tools (`recovery_contract_freeze`, `recovery_commission`, `recovery_propose`, `recovery_assess`) support immutable hash-frozen contracts, reported parameter readback audits, bounded one-parameter repair proposals tied to v0.7.4 diagnostic evidence, and per-observable comparisons against fixed acceptance thresholds. All reported results remain **NOT_RUN** scientifically, and no solver is operated or repair automatically applied. COMSOL/MCP and Fluent/PyFluent are declaration types; only existing COMSOL integration is available. See [knowledge-guided recovery](docs/knowledge-guided-recovery.md).
 
 Version **0.7.4** adds **offline, evidence-driven physical diagnostic hypothesis planning**, inspired by DEScover. New read-only MCP tools `physics_diagnostic_plan` and `physics_diagnostic_record` predeclare falsifiable mechanisms, budgets, source identities, units and tests, order experiments by cost, and preserve reported results in immutable provenance reports. A matched test does **not** prove root cause; `causal_status` remains `UNCONFIRMED`, scientific status `NOT_RUN`, and automatic repair is not authorized. No new COMSOL execution, neural hypothesis discovery, commercial solver code modification or RSI policy mutation is implemented. See [physics diagnostic hypotheses](docs/physics-diagnostic-hypotheses.md).
 
