@@ -51,15 +51,15 @@ class ReleaseTests(unittest.TestCase):
             release.build(output,root)
             with zipfile.ZipFile(output) as archive:
                 names=archive.namelist()
-                self.assertIn('comsol-automatic-6-4-en/server/main.py',names)
-                self.assertIn('comsol-automatic-6-4-en/vendor/installed-mcp/LICENSE',names)
-                self.assertIn('comsol-automatic-6-4-en/SKILL.md',names)
+                self.assertIn('paper2simu/server/main.py',names)
+                self.assertIn('paper2simu/vendor/installed-mcp/LICENSE',names)
+                self.assertIn('paper2simu/SKILL.md',names)
                 self.assertFalse(any('/runs/' in name for name in names))
                 self.assertFalse(any('.mcp-token' in name for name in names))
                 self.assertFalse(any(local_token.encode() in archive.read(name) for name in names))
-                manifest=json.loads(archive.read('comsol-automatic-6-4-en/RELEASE_MANIFEST.json'))
+                manifest=json.loads(archive.read('paper2simu/RELEASE_MANIFEST.json'))
                 for record in manifest['files']:
-                    data=archive.read('comsol-automatic-6-4-en/'+record['path'])
+                    data=archive.read('paper2simu/'+record['path'])
                     self.assertEqual(release.digest(data),record['sha256'])
 
 

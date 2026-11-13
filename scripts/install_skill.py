@@ -1,6 +1,6 @@
 """Install public skill files for clients such as Codex that load a local directory.
 
-This copies audited source files only. It neither installs Python dependencies nor
+This copies audited Paper2Simu source files only. It neither installs Python dependencies nor
 changes existing MCP connectors, local tokens, running services, or client indexes.
 This is NOT an installer for Doubao's skill management list. Use Upload Skill there.
 """
@@ -15,7 +15,7 @@ from release import ROOT, public_files
 
 
 def install(skills_dir: Path, source: Path = ROOT) -> dict:
-    destination = skills_dir.expanduser().resolve() / "comsol-automatic-6-4-en"
+    destination = skills_dir.expanduser().resolve() / "paper2simu"
     if destination.exists():
         raise FileExistsError(
             f"Skill directory already exists: {destination}. No files were changed. "
