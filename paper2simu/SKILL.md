@@ -57,3 +57,8 @@ The commercial solver's *configured* and **observed** native termination reasons
 The preview routing tool **never connects or executes** a simulation. Its
 inventories are caller-supplied and may be stale. No cross-platform simulation
 is verified by this documentation alone.
+
+
+## Optional AI experiment design research branch
+
+A separate, **disabled-by-default research branch** `research/ai-experiment-design-v0.1.0` adds the pure, offline `research_design` package for designing legal experiment spaces and ranking proposed simulations under an explicit budget. It is not integrated with production solver MCP tools, and never authorizes a job, modifies a COMSOL/Fluent model, promotes optimized parameters into reported paper inputs, or claims physical validation. Read [research design roadmap](../docs/ai-experiment-design-research.md) before using it. Research design is distinct from paper replication and must have its own study ID and provenance.
