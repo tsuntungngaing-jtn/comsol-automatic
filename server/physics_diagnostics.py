@@ -204,7 +204,7 @@ def plan(spec):
                 row["status"] = "OVER_TEST_COUNT_BUDGET"
             else:
                 used += 1
-    return {"schema": SCHEMA, "case_id": spec["case_id"], "baseline": spec["baseline"],
+    return {"schema": SCHEMA, "case_id": spec["case_id"], "baseline": copy.deepcopy(spec["baseline"]),
             "review_status": "CONTRACT_REVIEWED_NOT_PHYSICALLY_VALIDATED",
             "status": "PROPOSED_ONLY", "scientific_status": "NOT_RUN",
             "root_cause_confirmed": False, "eligible_tests": used,
