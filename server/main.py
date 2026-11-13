@@ -75,6 +75,9 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
     for module, registration in registrations:
         getattr(importlib.import_module("src." + module), registration)(registrar)
 
+    from .source_precedence import register_source_precedence_tools
+    register_source_precedence_tools(mcp, runtime)
+
     from .recovery_harness import register_recovery_tools
     register_recovery_tools(mcp, runtime)
 
@@ -208,7 +211,7 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
         # Explicit allowlist; no arbitrary code, mutation, result export or resources.
         allowed = {'comsol_queue_status','comsol_job_status','study_get_progress',
                    'simulation_spec_validate','simulation_task_admit','validation_gate',
-                   'workflow_status', 'paper_figure_analyze', 'paper_figure_route', 'mesh_native_analyze', 'simulation_dataset_plan', 'simulation_dataset_record', 'physics_diagnostic_plan', 'physics_diagnostic_record', 'recovery_contract_freeze', 'recovery_commission', 'recovery_propose', 'recovery_assess'}
+                   'workflow_status', 'paper_figure_analyze', 'paper_figure_route', 'mesh_native_analyze', 'simulation_dataset_plan', 'simulation_dataset_record', 'physics_diagnostic_plan', 'physics_diagnostic_record', 'recovery_contract_freeze', 'recovery_commission', 'recovery_propose', 'recovery_assess', 'source_precedence_review'}
         for name in list(mcp._tool_manager._tools):
             if name not in allowed:
                 mcp.remove_tool(name)

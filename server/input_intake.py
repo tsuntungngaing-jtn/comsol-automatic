@@ -134,6 +134,53 @@ def _sha(path: Path):
     return h.hexdigest()
 
 
+def _direct_paper_entry(candidate):
+    """Default primary evidence: an explicitly located reviewed paper text/table value.
+
+    No visual semantics are inferred from an image; vague figures or unlocated
+    records cannot establish direct text/table precedence.
+    """
+    locator = candidate["source_location"].lower()
+    verified = candidate["verification_raw"]
+    textual = any(t in locator for t in ("table", "tab.", "正文", "paragraph", "段落", "末段", "段", "last para", "section", "sec."))
+    verified = any(t in verified for t in ("已核", "已回读", "verified", "reviewed", "已校"))
+    return (candidate["eligible_scalar"] and candidate["source_category"] == "paper"
+            and candidate["origin"] == "reported" and textual and verified)
+
+
+def _precedence_reviews(groups):
+    """Evaluate rank without ever selecting a numeric value automatically."""
+    reviews = []
+    guarded = {}
+    for key, rows in sorted(groups.items()):
+        direct = [r for r in rows if _direct_paper_entry(r)]
+        direct_ids = [r["candidate_id"] for r in direct]
+        lower = [r["candidate_id"] for r in rows if r["source_category"] in ("figure", "engineering_assumption")
+                 and r["eligible_scalar"]]
+        if direct:
+            guarded[key] = set(direct_ids)
+        if len(direct) >= 2 and any(
+            not math.isclose(direct[0]["value_in_base_units"],
+                             item["value_in_base_units"], rel_tol=1e-9, abs_tol=1e-12)
+            or direct[0]["base_dimension"] != item["base_dimension"]
+            for item in direct[1:]):
+            status = "DIRECT_PAPER_CONFLICT_REQUIRES_REVIEW"
+        elif direct and lower:
+            status = "DIRECT_PAPER_PRECEDENCE"
+        elif direct:
+            status = "DIRECT_PAPER_AVAILABLE"
+        else:
+            status = "NO_VERIFIED_DIRECT_TEXT_TABLE"
+        reviews.append({"key": key, "status": status, "direct_paper_candidate_ids": direct_ids,
+                        "lower_tier_candidate_ids": lower,
+                        "numeric_selection": "NEVER_AUTOMATIC",
+                        "note": ("Verified explicitly located text/table numbers outrank figure/pixel "
+                                 "estimates and engineering assumptions for the same reviewed quantity. "
+                                 "Original author supplements and external authoritative references "
+                                 "must be separately verified; they do not become author text.")})
+    return reviews, guarded
+
+
 def create_audit(rows: list[dict], aliases: dict | None = None, decisions: dict | None = None,
                  mode: str = "paper_faithful") -> dict:
     """Create an input plan; only explicit, reviewed selections can be admitted."""
@@ -195,6 +242,7 @@ def create_audit(rows: list[dict], aliases: dict | None = None, decisions: dict 
             conflicts.append({"key": key, "kind": "MIXED_OR_NONSCALAR_REPRESENTATIONS",
                               "candidate_ids": [v["candidate_id"] for v in items]})
     conflict_keys = {c["key"] for c in conflicts}
+    precedence_reviews, guarded = _precedence_reviews(groups)
     admitted, blocked = [], []
     for key, items in sorted(groups.items()):
         decision = decisions.get(key)
@@ -205,6 +253,12 @@ def create_audit(rows: list[dict], aliases: dict | None = None, decisions: dict 
         reason = _text(decision.get("reason"))
         if not chosen or not reason:
             blocked.append({"key": key, "reason": "INVALID_OR_UNEXPLAINED_SELECTION"})
+            continue
+        # Even explicit operator approval cannot silently promote a pixel/schematic
+        # or engineering estimate over confirmed original paper text/table data.
+        if key in guarded and chosen["source_category"] in ("figure", "engineering_assumption"):
+            blocked.append({"key": key, "reason": "LOWER_PRIORITY_CANNOT_OVERRIDE_VERIFIED_PAPER_TEXT_TABLE",
+                            "higher_priority_candidate_ids": sorted(guarded[key])})
             continue
         if not chosen["eligible_scalar"] or chosen["origin"] == "missing":
             blocked.append({"key": key, "reason": "MISSING_OR_UNSUPPORTED_NUMERIC_INPUT"})
@@ -228,6 +282,8 @@ def create_audit(rows: list[dict], aliases: dict | None = None, decisions: dict 
                     "potential_conflicts": len(conflicts), "admitted_drafts": len(admitted),
                     "blocked_groups": len(blocked)},
         "candidates": candidates, "potential_conflicts": conflicts,
+        "source_precedence_reviews": precedence_reviews,
+        "source_precedence_policy": "v0.7.6-direct-paper-text-table-before-pixel-schematic-assumption",
         "admitted_input_drafts": admitted, "blocked_input_groups": blocked,
     }
 

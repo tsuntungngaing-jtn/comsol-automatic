@@ -28,3 +28,7 @@ Implemented only a deterministic offline schema review, cost-tiered proposed exp
 ## v0.7.5 GCH-inspired commissioning and recovery contracts
 
 New offline recovery harness: frozen canonical contract hashes, caller-reported parameter readback checks, one-calibratable-parameter change proposals and frozen per-observable comparison reports. Development-copy synthetic unit tests passed; GitHub/installed-package end-to-end tests, trusted COMSOL/Fluent commissioning, physical solver runs, independent artifact verification, scientific repair validation and true GCH optimization are **NOT_RUN/NOT_IMPLEMENTED**. The harness never accepts a candidate or confirms root cause on reported claims alone. See [knowledge-guided recovery](knowledge-guided-recovery.md).
+
+## v0.7.6 paper-first evidence precedence and authoritative supplementation
+
+Implemented deterministic offline source ranking, original-author supplement distinction, operator-declared external-source metadata/applicability gates, and direct-paper-over-pixel/assumption blocking inside existing input intake. Synthetic software test cases were authored. Full repository suite and independent verification against actual DOI/author supplementary/source files, scientific result validation and COMSOL execution: **NOT_RUN**. No numeric evidence is automatically admitted and no authority claims are authenticated by the tool. See [authoritative source precedence](authoritative-source-precedence.md).

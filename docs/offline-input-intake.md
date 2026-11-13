@@ -57,3 +57,7 @@ This v0.7.0 module **does not** infer semantic aliasing, fully parse physical fo
 `python -m unittest tests.test_input_intake`
 
 Test cases cover manual admission, units, contradictory values, reviewed aliases, missing supplements, formulas, unknown units, engineering mode and ZIP ingestion. No benchmark in this release establishes true published-paper extraction accuracy or real-COMSOL reproducibility.
+
+## v0.7.6 source precedence addition
+
+`create_audit` now records `source_precedence_reviews`. If a grouped physical quantity contains an eligible scalar explicitly located in original paper text/table (verified location and positive review trace), engineering/pixel estimates cannot supersede that candidate, even with an engineering-mode approval. The rejected selection is logged `LOWER_PRIORITY_CANNOT_OVERRIDE_VERIFIED_PAPER_TEXT_TABLE`. This does **not** infer alias identity, reconcile conflicting direct paper numbers or silently select a winner. See [authoritative source precedence](authoritative-source-precedence.md).
