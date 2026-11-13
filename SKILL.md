@@ -1,16 +1,24 @@
 ---
-name: comsol-automatic-6-4-en
+name: paper2simu
 description: Build, inspect, solve, and validate COMSOL models through MCP, including paper-figure pixel/colorbar evidence extraction, paper reproduction, editable MPH delivery, and uncertainty-aware cross-task RSI. Use installed-version documentation and licensed local libraries. Do not use for literature summaries without modeling.
 license: MIT
 metadata:
-  display_name: COMSOL Automatic 6.4 English
+  display_name: Paper2Simu — COMSOL and Fluent scientific reproduction
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.6"
+  version: "0.2.0"
 ---
 
-# COMSOL Automatic 6.4 English
+# Paper2Simu — COMSOL and Ansys Fluent paper reproduction
 
 This is an independent derivative, not an official COMSOL product. Keep the complete package: the skill instructions alone do not install the MCP server. See [installation](docs/connectors.md) for setup and [repair scope](docs/validation.md) for evidence and limitations.
+
+## Unified project routing (Paper2Simu 0.2.0)
+
+The repository has evolved from COMSOL Automatic (v0.7.6) and the ComsoFlent (v0.1.0) preview. The **primary project and Skill name is Paper2Simu**; the COMSOL instructions below remain the applicable vendor-specific backend policy. Read the [unified research skill](paper2simu/SKILL.md) and [cross-solver connector policy](docs/comsoflent-v0.1.0.md) before any Ansys Fluent task. The user reported that ComsoFlent connected on a Fluent workstation; this is **user-reported connection verification**, not an independently audited Fluent solver run, paper reproduction, or demonstrated scientific PASS.
+
+**Selection rule:** LAB7/LAB8 use their authorized native Ansys Fluent/PyFluent MCP; LAB9/LAB10 use COMSOL MCP. The host must select exactly one solver route and must not load, launch, or mutate the other solver merely because this unified skill is available. COMSOL details below do NOT authorize COMSOL control in Fluent workflows. Fail closed on ambiguous tool namespaces; never mix a third-party Fluent Skill's legacy tool names with official `ansys/pyfluent-mcp`. User permission and native software documentation govern executable operations.
+
+**Scientific acceptance:** Favor vendor-native termination evidence over invented universal residual thresholds. Extra residual alarms are diagnosis-only unless separately sourced and approved. Preserve physics checking, provenance, conservation, mesh evidence and reopen tests; solver convergence is not independently validated reproduction. See [native convergence policy](docs/native-convergence-policy.md).
 
 ## Control and scope
 
@@ -21,6 +29,16 @@ This package is an **external agent harness**, not the Desktop **Chatbot** windo
 For mutate/solve steps, keep an on-disk audit under `COMSOL_OUTPUT_ROOT` (Java/Copy-as-Code sources that actually ran, MCP step logs, progress/KPI text)—see [agent audit trail](docs/agent-audit-trail.md). Chat-only descriptions are not an audit.
 
 Respect the user's authorized scope. A read-only inspection does not authorize solving, editing, saving over sources, publishing, or uploading research data. Preserve existing server models. Store models, plots, logs and evidence in the user's workspace, outside this skill and its release tree.
+
+## Runtime incident preflight (v0.7.7-rc1 candidate guidance)
+
+Before an expensive authorized solve, follow [operations reliability](docs/operations-reliability-v0.7.7-rc1.md). The new offline `server/reproduction_guard.py` screens **caller-reported**, not live-verified, effective source/boundary/material/study settings against paper-grounded expected conditions. Do not trust a study's title as the actual heating/cooling mode. Require threshold provenance, a documented RAM/DOF budget, and current run/model/parameter/mesh/study/solution/dataset identities. An unknown or stale job must be reconciled before resubmission; do not steal another process's task lease. The module provides a local-only single-writer/atomic state prototype, not a distributed lock or authenticated runtime connection.
+
+For expensive transient jobs, inspect accepted time steps, elapsed time and physical monitors. Stalled progress requires diagnosis, **not automatic termination**. Use the documented vendor API for cancellation if supported; never force-kill processes. Save a pre-solve native checkpoint and a post-solve checkpoint before costly derived-value extraction. Independently reopen before claiming persistence or scientific acceptance. Preserve actual reported source values and unit definitions; do not introduce undocumented micro-Kelvin acceptance thresholds or treat a diagnostic warning as a paper requirement. The LAB7/8 Fluent route is isolated from COMSOL MCP and LAB9/10's COMSOL route; do not change other active machines or jobs.
+
+## Grid uncertainty: original-paper verification gate
+
+Follow [Eça & Hoekstra (2014), original-PDF verification](docs/eca-hoekstra-2014-original-paper-review.md) before interpreting a mesh-refinement study. Use `server/grid_uncertainty_admission.py` **offline** to check whether a solver-provenance grid family is a candidate for later fitting; the checker never calculates a numerical uncertainty or claims scientific PASS. The paper recommends at least four geometrically comparable grids for noisy engineering CFD data, with iterative error negligible relative to discretization error. Two-grid changes are only grid sensitivity evidence, not a GCI or uncertainty interval. The apparent `2.14` in PDF text extraction is actually `2.1` followed by superscript footnote 4, confirmed visually on printed p.108; Appendix A also states `p<2.1`. Do not treat the footnote marker as a digit. Do not expand an expensive grid family without available RAM and task budget. Verification uncertainty and comparison against paper claims are separate quantities.
 
 ## Environment and version
 
