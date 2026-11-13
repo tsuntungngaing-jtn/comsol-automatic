@@ -1,4 +1,19 @@
-# COMSOL Automatic 6.4 English — 0.7.6
+# Paper2Simu — Paper-to-Simulation for COMSOL and Ansys Fluent
+
+**Project generation: v0.2.0 (unified codebase; solver-specific scientific validation ongoing).**
+
+Paper2Simu unifies the evidence-first COMSOL Automatic pipeline (up to v0.7.6) and the ComsoFlent v0.1.0 MCP-routing preview. The project is no longer named ComsoFlent. The repository URL may still display the old GitHub slug until the repository owner renames it in GitHub Settings. Legacy names in historical notes are attribution and compatibility references, not separate active products.
+
+**Execution scope:** The user reports an actual Fluent-workstation connection. This does not independently establish that all Ansys simulation tools, restart flows, or full CFD reproductions have been verified. COMSOL and Fluent use separate MCP providers, environments, model files and solver settings. The unified Skill orchestrates routing and scientific evidence; it does not silently load or operate a different solver.
+
+**Skill entry:** [paper2simu/SKILL.md](paper2simu/SKILL.md) or the compatibility [root SKILL.md](SKILL.md). Additional architecture: [legacy ComsoFlent migration design](docs/comsoflent-v0.1.0.md), [operations guard](docs/operations-reliability-v0.7.7-rc1.md), [vendor-native convergence](docs/native-convergence-policy.md).
+
+**Installation:** Python project `paper2simu==0.2.0` retains `comsol-automatic` and `comsol-skill-mcp` command aliases for existing COMSOL setups; new aliases: `paper2simu`, `paper2simu-comsol-mcp`. These aliases start the **COMSOL MCP service**, not a Fluent solver. Install official [Ansys PyFluent MCP](https://github.com/ansys/pyfluent-mcp) separately with its documented Python environment and register a distinct host server ID. Do not assume a single shared virtualenv can satisfy both products.
+
+**Release migration:** `python scripts/release.py --output ../Paper2Simu-v0.2.0.zip` and `python scripts/install_skill.py` produce the new package/install name without overwriting an existing directory. Keep the old install until a complete rollback-tested integration is accepted. Never transfer COMSOL tokens or private solver artifacts into the public Git repository.
+
+## Previous COMSOL Automatic capabilities (preserved)
+
 
 Version **0.7.6** adds **paper-first source precedence and authoritative supplementation review**. `input_intake` now exposes a direct-text/table preference audit and blocks reviewed figure/schematic/engineering inputs from overriding an explicitly located and reviewed original paper numeric input for the same approved physical quantity. A new offline reviewer-mode MCP tool `source_precedence_review` distinguishes original author supplements, institutional standards, relevant peer-reviewed research, quantitative figure digitization, schematic estimates, engineering assumptions and ML outputs. External sources require reviewer-declared provenance/version/physical applicability; "supplement not obtained" and ML imputation never become original evidence. The tool does not verify claims against the internet, select a value, run COMSOL or certify physics. See [authoritative source precedence](docs/authoritative-source-precedence.md).
 
