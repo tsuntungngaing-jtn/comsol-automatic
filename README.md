@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.7.2
+# COMSOL Automatic 6.4 English — 0.7.3
+
+Version **0.7.3** adds an **offline simulation dataset and Design of Experiments foundation** informed by high-fidelity transonic-wing dataset generation. It provides `simulation_dataset_plan` and `simulation_dataset_record` for evidence-tagged parameter ranges, seeded bounded randomized LHS, supported unit-consistent constraints, case-level train/validation/test labels, per-observable validation placeholders and immutable reported outcome/failure reviews. It does **not** run COMSOL, authenticate source claims, generate optimized LHS/OOD data, certify mesh independence, perform automatic repairs or produce training-ready scientific datasets. Synthetic Python unit tests cover the planning and report layer; COMSOL physical integration **NOT_RUN**. See [simulation dataset and DoE](docs/simulation-dataset-doe.md).
 
 Version **0.7.2** introduces an **offline, conservative figure-configuration selection tool** `paper_figure_route` for 2–6 pre-approved curve or field/colorbar extraction configurations. It executes the existing `paper_figure_analyze` methods, compares bounded quality proxies, records all source/candidate manifests and abstains if results are weak, ambiguous or inconsistent. Inspired by ART of PIV's agentic estimator selection, **not a trained neural selector, PIV optical flow or autonomous ROI discovery**. Real-paper accuracy benchmarking and real-COMSOL physical verification remain **NOT_RUN**. See [adaptive figure routing](docs/adaptive-figure-routing.md).
 
