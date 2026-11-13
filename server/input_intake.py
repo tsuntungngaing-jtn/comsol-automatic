@@ -142,7 +142,7 @@ def _direct_paper_entry(candidate):
     """
     locator = candidate["source_location"].lower()
     verified = candidate["verification_raw"]
-    textual = any(t in locator for t in ("table", "tab.", "正文", "paragraph", "段落", "末段", "last para", "section", "sec."))
+    textual = any(t in locator for t in ("table", "tab.", "正文", "paragraph", "段落", "末段", "段", "last para", "section", "sec."))
     verified = any(t in verified for t in ("已核", "已回读", "verified", "reviewed", "已校"))
     return (candidate["eligible_scalar"] and candidate["source_category"] == "paper"
             and candidate["origin"] == "reported" and textual and verified)
