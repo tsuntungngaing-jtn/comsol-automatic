@@ -15,6 +15,12 @@ Read [the migration and connector plan](docs/comsoflent-v0.1.0.md) and the
 original [COMSOL skill](SKILL.md). The existing COMSOL workflow and protection
 rules remain in force. Preserve the original author's attributions.
 
+## Reliability and incident response (candidate)
+
+Before any live COMSOL or Fluent solver call, apply the shared, **offline** [operations guard](docs/operations-reliability-v0.7.7-rc1.md) and `server/reproduction_guard.py`. Its evidence inventory is reported by the host, so matching does not mean it has independently inspected or connected to the solver. Compare the paper's requested *effective* heat input, boundary conditions, selections, material/coupling, initialization and time window with actual native API readbacks. Source and unit provenance are required for all hard acceptance thresholds; diagnostic alerts are not paper criteria. Reconcile stale or unknown solver jobs before resubmission; use a unique local task lease, not simultaneous control from multiple agents. Establish resource budgets from the same physics/host, examine accepted steps rather than elapsed wall-clock alone, and require save/reopen/identity verification before interpreting scientific results.
+
+LAB7/LAB8 remain on their authorized PyFluent route; LAB9/LAB10 remain on their designated COMSOL route. Do not start or connect the other solver merely because the unified Skill is loaded. Do not alter an ongoing job, automatically cancel, force-kill, retry, acquire another machine's task, or silently loosen targets. A user's intentional skip is SCOPE_CHANGED, never scientific PASS. The reported <15% all-main-paper-metrics rule is a **user-scoped** acceptance policy requiring a declared formula, reference, condition and source, not a default physical law.
+
 ## Sequence
 
 1. Extract original paper text/table numerical values before digitized figures,
