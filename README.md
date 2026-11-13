@@ -1,4 +1,6 @@
-# COMSOL Automatic 6.4 English — 0.7.0
+# COMSOL Automatic 6.4 English — 0.7.1
+
+Version **0.7.1** adds **offline mesh-aware diagnostics** for reviewer-supplied, 2D triangular meshes with nodal scalar values: input schema checks, piecewise-linear spatial comparisons with coverage and numeric error metrics, immutable hash-backed audit reports, and a read-only COMSOL MCP tool `mesh_native_analyze`. This is **not MNC ML**, COMSOL mesh export, automatic mesh repair or mesh independence certification. Tested with synthetic Python unit tests; real COMSOL integration and physical validation remain **NOT_RUN**. See [mesh-native diagnostics](docs/mesh-native-diagnostics.md).
 
 Version **0.7.0** adds **offline paper-to-input intake**, requiring no COMSOL machine or connection. A standard-library-only CLI ingests the 12-column Chinese source ledger in CSV/JSON/ZIP format, distinguishes paper/figure/supplement/assumption sources, highlights potential numeric conflicts and missing/unrecognized units, retains all candidates, and emits reviewed-only `INPUT_DRAFT_ONLY` records. No value is automatically approved and **no simulation is executed**. Usage, limits and test instructions: [offline input intake](docs/offline-input-intake.md).
 
