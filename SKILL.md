@@ -22,6 +22,12 @@ For mutate/solve steps, keep an on-disk audit under `COMSOL_OUTPUT_ROOT` (Java/C
 
 Respect the user's authorized scope. A read-only inspection does not authorize solving, editing, saving over sources, publishing, or uploading research data. Preserve existing server models. Store models, plots, logs and evidence in the user's workspace, outside this skill and its release tree.
 
+## Runtime incident preflight (v0.7.7-rc1 candidate guidance)
+
+Before an expensive authorized solve, follow [operations reliability](docs/operations-reliability-v0.7.7-rc1.md). The new offline `server/reproduction_guard.py` screens **caller-reported**, not live-verified, effective source/boundary/material/study settings against paper-grounded expected conditions. Do not trust a study's title as the actual heating/cooling mode. Require threshold provenance, a documented RAM/DOF budget, and current run/model/parameter/mesh/study/solution/dataset identities. An unknown or stale job must be reconciled before resubmission; do not steal another process's task lease. The module provides a local-only single-writer/atomic state prototype, not a distributed lock or authenticated runtime connection.
+
+For expensive transient jobs, inspect accepted time steps, elapsed time and physical monitors. Stalled progress requires diagnosis, **not automatic termination**. Use the documented vendor API for cancellation if supported; never force-kill processes. Save a pre-solve native checkpoint and a post-solve checkpoint before costly derived-value extraction. Independently reopen before claiming persistence or scientific acceptance. Preserve actual reported source values and unit definitions; do not introduce undocumented micro-Kelvin acceptance thresholds or treat a diagnostic warning as a paper requirement. The LAB7/8 Fluent route is isolated from COMSOL MCP and LAB9/10's COMSOL route; do not change other active machines or jobs.
+
 ## Environment and version
 
 1. Read `comsol_status` and `comsol_doctor`. Record standalone vs client–server, host, and port. Start a session only when model work requires it; preserve tracked models. Same-machine client+server works with any license type; cross-machine needs FNL ([connectors](docs/connectors.md)).
