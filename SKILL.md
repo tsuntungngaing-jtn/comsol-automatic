@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.1"
+  version: "0.7.2"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Adaptive scientific figure configuration routing (v0.7.2)
+
+For published scientific figures (not the COMSOL user interface), `paper_figure_route` evaluates 2–6 **pre-approved, comparable** curve-tracing or field/colorbar configurations offline and produces a hash-linked audit trail, quality-proxy scores and conservative selection/abstention decision. Read [adaptive figure routing](docs/adaptive-figure-routing.md) before invoking. This is **rule-based** and inspired by ART of PIV's estimator-selection principle; **no CNN training, PIV, autonomous discovery of ROIs, automatic calibration, ground-truth accuracy estimate or closed-loop control** has been implemented. In particular, curve candidates share the same ROI, axes and tolerances and differ in trace RGB; field candidates share the same field ROI, scale and tolerance and differ in colorbar ROI. Candidate choice must never be treated as independent scientific validation; do not use the measured paper figure to both tune and validate an inference.
+
+A selected candidate is `REVIEW_REQUIRED`, not measured ground truth, and abstention stays `ABSTAIN`. Quality proxies are uncalibrated, have failure modes and cannot stand in for accuracy. Retain all candidate manifests and scientific status `NOT_RUN`; never use a routing score to auto-promote claims or RSI agent versions. Existing `paper_figure_analyze` remains available unchanged.
 
 ## Offline mesh-aware field diagnostics (v0.7.1)
 
