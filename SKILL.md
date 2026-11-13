@@ -1,6 +1,6 @@
 ---
 name: paper2simu
-description: Build, inspect, solve, and validate COMSOL models through MCP, including paper-figure pixel/colorbar evidence extraction, paper reproduction, editable MPH delivery, and uncertainty-aware cross-task RSI. Use installed-version documentation and licensed local libraries. Do not use for literature summaries without modeling.
+description: Reproduce scientific papers in COMSOL or Ansys Fluent with solver-specific MCP routing, source-grounded model inputs, resource-aware execution, numerical and scientific validation, figure evidence extraction, and auditable results. COMSOL and Fluent require separate installed solver connectors.
 license: MIT
 metadata:
   display_name: Paper2Simu — COMSOL and Fluent scientific reproduction
