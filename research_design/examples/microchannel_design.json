@@ -1,0 +1,95 @@
+{
+  "schema": "paper2simu-design-space/0.1.0",
+  "study_id": "microchannel_discovery_example",
+  "research_question": "Under a fixed nominal CFD setup, which hypothetical microchannel geometries merit high-fidelity comparison?",
+  "source_refs": [
+    "User-authored exploratory example: ALL values illustrative; not sourced from any particular paper"
+  ],
+  "mode": "DISCOVERY",
+  "variables": [
+    {
+      "name": "channel_width_mm",
+      "type": "continuous",
+      "unit": "mm",
+      "bounds": [
+        0.25,
+        1.2
+      ],
+      "source_ref": "illustrative parameterization: not a measured geometry",
+      "origin": "USER_DEFINED_DESIGN"
+    },
+    {
+      "name": "channel_height_mm",
+      "type": "continuous",
+      "unit": "mm",
+      "bounds": [
+        0.4,
+        1.6
+      ],
+      "source_ref": "illustrative parameterization: not a measured geometry",
+      "origin": "USER_DEFINED_DESIGN"
+    },
+    {
+      "name": "channel_count",
+      "type": "integer",
+      "unit": "1",
+      "bounds": [
+        2,
+        12
+      ],
+      "source_ref": "illustrative manufacturing concept",
+      "origin": "USER_DEFINED_DESIGN"
+    },
+    {
+      "name": "layout",
+      "type": "categorical",
+      "unit": "category",
+      "choices": [
+        "parallel",
+        "serpentine"
+      ],
+      "source_ref": "illustrative discrete hardware alternatives",
+      "origin": "USER_DEFINED_DESIGN"
+    }
+  ],
+  "fixed_inputs": [
+    {
+      "name": "working_fluid",
+      "value": "water",
+      "unit": "fluid_label",
+      "source_ref": "illustrative assumption; verify fluid properties and operating temperature before a real run",
+      "origin": "USER_DEFINED_DESIGN"
+    }
+  ],
+  "constraints": [
+    {
+      "type": "less_equal",
+      "left": "channel_width_mm",
+      "right": "channel_height_mm",
+      "source_ref": "illustrative geometric screening constraint"
+    }
+  ],
+  "objectives": [
+    {
+      "name": "pressure_drop",
+      "direction": "minimize",
+      "unit": "Pa",
+      "source_ref": "hypothetical objective; requires verified inlet/outlet pressure definition"
+    },
+    {
+      "name": "heat_transfer_rate",
+      "direction": "maximize",
+      "unit": "W",
+      "source_ref": "hypothetical objective; requires fixed thermal input and measurement definition"
+    }
+  ],
+  "allowed_solvers": [
+    "COMSOL",
+    "Fluent"
+  ],
+  "budget": {
+    "max_jobs": 6,
+    "max_total_minutes": 300,
+    "max_ram_gib": 24
+  }
+}

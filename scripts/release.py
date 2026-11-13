@@ -13,7 +13,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {'SKILL.md','README.md','LICENSE','NOTICE.md','.gitignore','pyproject.toml','setup.py','MANIFEST.in'}
-DIRECTORIES = {'server','vendor','examples','docs','scripts','tests','schemas','benchmarks','tutorials','paper2simu'}
+DIRECTORIES = {'server','vendor','examples','docs','scripts','tests','schemas','benchmarks','tutorials','paper2simu','research_design'}
 EXTENSIONS = {'.py','.md','.toml','.json','.cff','.ps1'}
 SKIP_PARTS = {'.git','.venv','__pycache__','.pytest_cache','runs','runtime','dist','build'}
 FORBIDDEN_EXTENSIONS = {'.csv','.png','.mph','.mphbin','.log','.pdf','.step','.stp','.pem','.key','.pfx','.zip','.pyc','.pyo'}

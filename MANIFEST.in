@@ -11,3 +11,5 @@ recursive-include tutorials *.json *.md
 recursive-include docs *.md
 
 recursive-include paper2simu *.md
+
+recursive-include research_design *.py *.json *.md
