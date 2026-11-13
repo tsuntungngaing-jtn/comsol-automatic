@@ -8,3 +8,7 @@ Base commit: ef476da8c14cc73662b7c8aad7d091e9d641ba9c. The initial audit on COMS
 Real COMSOL tests must use MCP. Python tests and wheel protocol discovery cannot establish physical validity. The upstream general physics, chemistry, acoustics, structural, transient coupling and HPC paths are not comprehensively validated. Original heat_sink_3d is legacy teaching source with explicit constant aluminum properties, not a verified 6.4 turbulent conjugate-heat-transfer case.
 
 Read [the repair validation record](repair-validation.md) for executed tests. Never claim blanket scientific certification. Formal studies still require appropriate mesh/wall treatment, conservation, residual criteria, material ranges, boundary justification and independently reproduced observables.
+
+## v0.7.1 mesh-aware diagnostics
+
+The offline input validator and cross-mesh interpolation tests are synthetic only. Real COMSOL mesh export, nodal result alignment, genuine mesh convergence studies and physical validation are **NOT_RUN**. A `DIAGNOSTIC_ONLY` result must never be upgraded to Scientific PASS without independent physical evidence. See [mesh-native diagnostics](mesh-native-diagnostics.md).
