@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.5"
+  version: "0.7.6"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Paper-first source precedence and authoritative supplementation (v0.7.6)
+
+For paper reproduction, default to **explicit numbers in the original article's verified text and tables** before inferred figure/schematic dimensions or engineering assumptions for the *same* reviewed physical quantity. If the author has published an erratum or the sources describe different geometry entities, operating conditions or versions, reopen identity/consistency review rather than applying this ranking blindly. In the offline 12-column source ledger, `source_precedence_reviews` exposes direct-paper priority; even an explicit engineering-mode choice of lower-tier figure/schematic/assumption cannot silently override verified explicit paper text/table values. No numerical winner is automatically selected. See [authoritative source precedence](docs/authoritative-source-precedence.md).
+
+Use offline reviewer-mode `source_precedence_review` for structured multi-source evidence: distinguish original **author-published supplementary material**, institutional standards/curated databases, relevant peer-reviewed papers, quantitative figure digitization, schematic estimates, engineering assumptions and ML estimates. Unobtained original-author supplements remain unavailable; an outside thesis or high-profile paper is **not** the original author's supplement. External references require provenance identifier, version, institution/journal and explicit material/temperature/geometry/regime applicability review. Ranking is not proof: DOI/issuer claims and SHA labels supplied by the operator are **not authenticated** by the tool. Different conditions, units, same-rank numeric conflicts or absent trustworthy evidence must be reported; never invent missing parameters or use an ML virtual sensor as paper-reported truth. Outputs remain `REVIEW_REQUIRED` / `INSUFFICIENT_EVIDENCE` and scientific `NOT_RUN`.
 
 ## Knowledge-guided commissioning and evidence-gated recovery (v0.7.5)
 
