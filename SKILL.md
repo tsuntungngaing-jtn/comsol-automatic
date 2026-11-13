@@ -5,7 +5,7 @@ license: MIT
 metadata:
   display_name: COMSOL Automatic 6.4 English
   based_on: tsuntungngaing-jtn/comsol-automatic
-  version: "0.7.3"
+  version: "0.7.4"
 ---
 
 # COMSOL Automatic 6.4 English
@@ -51,6 +51,12 @@ Keep disabled nodes and raw types. Preserve `unknown`, `unavailable`, `unsupport
 - Save to a new explicit workspace path, reopen as a separately tracked model, and recompute the same metrics. Record run ID, file hash, version, modules, warnings and evaluation definitions. Label unperformed checks `NOT_RUN`.
 
 Use `FAIL` for rejected nodes, incompatible settings, unresolved warnings or failed conservation; `BLOCKED` for missing licenses/modules. Do not hide errors. A partially configured model is not a successful simulation.
+
+## Physics-aware hypothesis review and diagnostic experiment planning (v0.7.4)
+
+For a reported simulation discrepancy, `physics_diagnostic_plan` accepts an evidence-bound hypothesis contract and proposes inexpensive-to-expensive *tests* (static model readback → existing result analysis → approved controlled rerun → full revalidation), using declared physical mechanisms, falsifiers, observables, units, source SHA-256 strings and numerical decision rules. See [physics diagnostic hypotheses](docs/physics-diagnostic-hypotheses.md). This offline rule-based framework draws from DEScover's hypothesis/review/evaluate workflow; it is **not** an implemented LLM hypothesis generation agent, automated solver debugging, discovered turbulence formula, or physical causal certification.
+
+Use `physics_diagnostic_record` to evaluate only an eligible predeclared diagnostic test against reported external evidence. Even a matching observation is `REPORTED_TEST_SUPPORTS_PREDICTION` with `causal_status: UNCONFIRMED`, never `PASS` or confirmed root cause. The module cannot run COMSOL, alter solver settings, approve itself, silently revise thresholds, authenticate source hashes, authorize repair, or upgrade RSI retention. For tiers 2–3, obtain actual permission before any separate MCP solve; a reported `authorization_ref` is a record, **not** a permission grant. All scientific gates remain `NOT_RUN` until independently verified.
 
 ## Offline Design of Experiments and simulation dataset foundation (v0.7.3)
 

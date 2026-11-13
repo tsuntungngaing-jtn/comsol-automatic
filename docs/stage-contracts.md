@@ -65,3 +65,7 @@ Declare every inlet/outlet/source/storage term, integral expression, selection, 
 6. Loop/budget: count reopening separately; do not silently re-solve.
 7. Handoff: plot run/dataset, units, section, color limits and diagnostics-only labels.
 8. Acceptance: failed fields cannot become publication evidence; A/B uses common plot scales.
+
+## v0.7.4 optional diagnostic hypothesis gate (offline)
+
+Before repair, operator may use `physics_diagnostic_plan` to predeclare competing physical/numerical hypotheses, falsifiers and bounded tests; `physics_diagnostic_record` only scores externally reported numbers. This does not modify the existing controller or add execution authority. Case identity, scientific validity, evidence acquisition, authorization, revalidation and actual root-cause confirmation remain separate processes. See [physics diagnostic hypotheses](physics-diagnostic-hypotheses.md).
