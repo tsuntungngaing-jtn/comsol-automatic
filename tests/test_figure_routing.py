@@ -78,6 +78,31 @@ class RoutingTests(unittest.TestCase):
         b["id"] = "other"
         self.assertEqual(route_figure(self.root, self.path, [a, b])["status"], "BLOCKED")
 
+    def test_field_colorbar_selection(self):
+        im = Image.new("RGB", (60, 40), "white")
+        colors = [(255, 0, 0), (200, 0, 55), (128, 0, 128),
+                  (55, 0, 200), (0, 0, 255)]
+        for idx, color in enumerate(colors):
+            for x in range(45, 50):
+                im.putpixel((x, idx + 5), color)
+        for y in range(12, 17):
+            for x in range(5, 20):
+                im.putpixel((x, y), colors[2])
+        im.save(self.path)
+        common = {"field_roi": [5, 12, 20, 17], "top_value": 400,
+                  "bottom_value": 300, "rgb_distance_max": 0}
+        candidates = [
+            {"id": "correct", "operation": "field",
+             "spec": {**common, "colorbar_roi": [45, 5, 50, 10]}},
+            {"id": "wrong", "operation": "field",
+             "spec": {**common, "colorbar_roi": [54, 5, 59, 10]}},
+        ]
+        result = route_figure(self.root, self.path, candidates)
+        self.assertEqual(result["selected_candidate"], "correct")
+        self.assertEqual(result["candidates"][0]["score"], 1.0)
+        self.assertEqual(result["candidates"][1]["score"], 0.0)
+        self.assertEqual(result["scientific_status"], "NOT_RUN")
+
     def test_path_escape_blocks(self):
         result = route_figure(self.root, "../escape.png", [
             self._curve([255, 0, 0], "r"), self._curve([0, 0, 255], "b")
