@@ -80,7 +80,7 @@ def create_server(runtime: Runtime | None = None, host="127.0.0.1", port=8765, p
     async def native_convergence_review(record: dict) -> dict:
         """Read-only vendor-reported termination versus optional residual diagnostic; not scientific certification."""
         try:
-            return await runtime.call(review_native_convergence, record)
+            return review_native_convergence(record)
         except (TypeError, ValueError) as exc:
             return {"status": "INVALID_REQUEST", "error": str(exc), "scientific_status": "NOT_RUN"}
 
