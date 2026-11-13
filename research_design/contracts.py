@@ -211,5 +211,5 @@ def assess_design(space, proposed):
             if c["type"] == "forbid_pair" and values[c["left"]] == c["left_value"] and values[c["right"]] == c["right_value"]:
                 issues.append("Forbidden hardware combination")
     return {"status": "FEASIBLE_ON_DECLARED_CONSTRAINTS" if not issues else "INVALID_CANDIDATE",
-            "eligible": not issues, "issues": issues, "candidate_hash": fingerprint(values),
+            "eligible": not issues, "issues": issues, "candidate_hash": fingerprint(values) if not issues else None,
             "execution_performed": False, "scientific_status": "NOT_RUN"}
