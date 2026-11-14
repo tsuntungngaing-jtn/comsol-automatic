@@ -1,6 +1,7 @@
 """Offline regression for scientific-state precedence and evidence-trust boundary."""
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from server.scientific_validity import evaluate_scientific_validity
 from rsi.retention_gate import RetentionGate
@@ -66,14 +67,24 @@ class ScienceGateRegression(unittest.TestCase):
         self.assertEqual(g.evaluate(old_metrics=m, new_metrics={"performance": .9})["decision"], "REVIEW_REQUIRED")
         self.assertEqual(g.evaluate(old_metrics=m, new_metrics={**m,"performance":float("nan")})["decision"], "REVIEW_REQUIRED")
 
-    def test_user_gate_vs_final_validation_gate_are_distinct(self):
+    def test_final_validation_blocker_keeps_independent_work_without_auto_solve(self):
         with tempfile.TemporaryDirectory() as folder:
-            c = RSIController(folder)
-            # Direct decision output is tested here independently of inference,
-            # with no solver and no synthetic assumption that critical unknowns can be solved.
-            actions = ["BLOCK_FINAL_VALIDATION"]
-            self.assertFalse(any(a == "ASK_USER" for a in actions))
-            self.assertTrue(any(a == "BLOCK_FINAL_VALIDATION" for a in actions))
+            controller = RSIController(folder)
+            inference = {
+                "findings": [], "beliefs": [], "recommended_actions": ["BLOCK_FINAL_VALIDATION"],
+                "may_enter_closed_loop": False, "requires_user": False,
+                "final_validation_blocked": True, "nondependent_work_allowed": True,
+                "permitted_nonmutating_steps": ["source_retrieval", "geometry_preparation"],
+            }
+            calls = []
+            with patch.object(controller, "infer_task_parameters", return_value=inference):
+                result = controller.run_with_closed_loop(
+                    parameters=[], task_id="case", task_family="CHT",
+                    context={}, closed_loop_fn=lambda _: calls.append("attempted_solve"))
+            self.assertEqual(calls, [])
+            self.assertIsNone(result["closed_loop"])
+            self.assertTrue(result["inference"]["nondependent_work_allowed"])
+            self.assertTrue(result["inference"]["final_validation_blocked"])
 
 if __name__ == "__main__":
     unittest.main()
