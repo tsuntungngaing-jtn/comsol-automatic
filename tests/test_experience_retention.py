@@ -79,7 +79,7 @@ class TestExperienceRetention(unittest.TestCase):
         )
         self.assertEqual(result["decision"], "REJECT")
 
-    def test_case6_retain_when_cost_down_and_sci_ok(self):
+    def test_case6_good_unverified_metrics_require_review(self):
         gate = RetentionGate(false_pass_rate_threshold=0.05, regression_threshold=0.0)
         result = gate.evaluate(
             old_metrics={
@@ -97,7 +97,7 @@ class TestExperienceRetention(unittest.TestCase):
                 "cost": 6,
             },
         )
-        self.assertEqual(result["decision"], "RETAIN")
+        self.assertEqual(result["decision"], "REVIEW_REQUIRED")
 
 
 if __name__ == "__main__":
