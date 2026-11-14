@@ -57,3 +57,7 @@ The commercial solver's *configured* and **observed** native termination reasons
 The preview routing tool **never connects or executes** a simulation. Its
 inventories are caller-supplied and may be stale. No cross-platform simulation
 is verified by this documentation alone.
+
+## Conditional reconstruction and final-claim separation (v0.2.1 candidate)
+
+Read [the source-backed conditional-reconstruction and RSI audit](../docs/conditional-reconstruction-and-rsi-evidence-v0.2.1.md) before enforcing any inherited CHT or uncertainty gate. **Missing final verification does not prevent independent evidence retrieval, model preparation or other separately authorized well-posed conditional work.** It does prevent unqualified final scientific PASS. Explicit solver FAIL/BLOCKED/NOT_RUN have priority over inferred-parameter limitations; missing required checks never yield PASS. Respect vendor-native configured termination; diagnostic residuals do not create new universal solver requirements. Use the revised [CHT verification policy](../docs/cht-coupling-energy-gates.md) instead of old mandatory node/Inflow/10–20% rules. All successful but unverified RSI metrics are REVIEW_REQUIRED, not RETAIN. This is an offline candidate policy; COMSOL and Fluent tests are NOT_RUN.

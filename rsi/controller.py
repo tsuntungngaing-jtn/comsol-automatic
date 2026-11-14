@@ -71,7 +71,13 @@ class RSIController:
                 a in ("AUTO_ACCEPT", "RUN_SENSITIVITY") for a in actions
             )
             or not actions,
-            "requires_user": any(a in ("ASK_USER", "BLOCK_FINAL_VALIDATION") for a in actions),
+            "requires_user": any(a == "ASK_USER" for a in actions),
+            "final_validation_blocked": any(a in ("ASK_USER", "BLOCK_FINAL_VALIDATION") for a in actions),
+            "nondependent_work_allowed": True,
+            "permitted_nonmutating_steps": [
+                "source_retrieval", "geometry_preparation", "conditional_model_planning",
+                "bounded_sensitivity_planning", "provenance_disclosure",
+            ],
         }
 
     def endpoint_plan_for(self, belief_dict: dict[str, Any]) -> dict[str, Any]:
@@ -175,6 +181,12 @@ class RSIController:
         learning = self.experiences.list(for_learning=True)
         candidate = synthesize_candidate(self.versions, learning, reason=reason)
         gate = self.retention.evaluate(old_metrics=old_metrics, new_metrics=new_metrics)
+        if gate["decision"] == "REVIEW_REQUIRED":
+            # A candidate can exist without activating it; independent
+            # evaluation is outside this controller's trust boundary.
+            return {"candidate": candidate, "gate": gate,
+                    "result": {"status": "pending_independent_review",
+                               "active_version": self.versions.active_id()}}
         finalized = self.versions.finalize(
             candidate["version_id"],
             decision=gate["decision"],
@@ -212,7 +224,8 @@ class RSIController:
             dataset_split=dataset_split,
         )
         loop_result = None
-        if closed_loop_fn is not None and not inference["requires_user"]:
+        if (closed_loop_fn is not None and inference["may_enter_closed_loop"]
+                and not inference["requires_user"]):
             loop_result = closed_loop_fn({"inference": inference, "experience": exp})
         return {
             "inference": {k: v for k, v in inference.items() if k != "belief_objects"},

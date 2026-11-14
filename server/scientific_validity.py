@@ -1,22 +1,19 @@
-"""
-Scientific validity under inferred / uncertain inputs.
+"""Scientific status under uncertain inputs, separate from execution and modeling admission.
 
-Separate from execution success and numerical convergence.
-Does not mutate contracts.aggregate STATES used by existing layers.
+Fail-closed for *final scientific certification*: a solver's successful
+termination does not imply validated model physics or source agreement.
+This function never launches a solver and does not determine what preparatory
+work is authorized.
 """
 from __future__ import annotations
 
 from typing import Any
 
-
 SCIENTIFIC_STATUSES = (
-    "PASS",
-    "FAIL",
-    "BLOCKED",
-    "NOT_RUN",
-    "CONDITIONAL",
+    "PASS", "FAIL", "BLOCKED", "NOT_RUN", "CONDITIONAL",
     "INSUFFICIENT_EVIDENCE",
 )
+NUMERICAL_STATES = {"PASS", "FAIL", "BLOCKED", "NOT_RUN"}
 
 
 def evaluate_scientific_validity(
@@ -27,111 +24,86 @@ def evaluate_scientific_validity(
     required_checks_status: str | None = None,
     conclusion_stable: bool | None = None,
 ) -> dict[str, Any]:
-    """
-    Rules (V0.1):
-    - Solver / execution PASS ≠ scientific PASS
-    - INFERRED + decision_impact HIGH/CRITICAL → not PASS
-    - coverage insufficient → INSUFFICIENT_EVIDENCE (legal, not FAIL)
-    - conclusion unstable under endpoints → CONDITIONAL or block PASS
+    """Evaluate FINAL scientific claims without turning missing evidence into PASS.
+
+    Precedence: actual failure > blocked/not run > explicit required checks
+    > uncertainty restrictions > PASS. This is a final claim gate, NOT the
+    decision whether engineering preflight, diagnostic or sensitivity work
+    may continue.
     """
     beliefs = parameter_beliefs or []
     inferred_high = [
-        b
-        for b in beliefs
-        if (
-            b.get("status") == "inferred"
-            or "INFERRED" in (b.get("provenance") or [])
-        )
+        b for b in beliefs
+        if (b.get("status") == "inferred" or "INFERRED" in (b.get("provenance") or []))
         and b.get("decision_impact") in ("HIGH", "CRITICAL")
     ]
     insufficient = [
-        b for b in beliefs if b.get("coverage") == "insufficient" or b.get("reliability") == "INSUFFICIENT"
+        b for b in beliefs
+        if b.get("coverage") == "insufficient" or b.get("reliability") == "INSUFFICIENT"
     ]
-
     layers = {
         "execution": execution_status,
         "numerical": numerical_status,
-        "required_checks": required_checks_status or "NOT_RUN",
+        "required_checks": required_checks_status if required_checks_status is not None else "NOT_RUN",
     }
 
-    if insufficient and any(
-        b.get("decision_impact") in ("HIGH", "CRITICAL", None) for b in insufficient
-    ):
-        return {
-            "scientific_status": "INSUFFICIENT_EVIDENCE",
-            "execution_status": execution_status,
-            "numerical_status": numerical_status,
-            "reason": "Critical/high-impact parameter lacks sufficient evidence",
-            "inferred_high_impact": inferred_high,
-            "layers": layers,
-            "final_scientific_pass": False,
-        }
-
-    if inferred_high:
-        status = "CONDITIONAL"
-        if conclusion_stable is False:
-            status = "INSUFFICIENT_EVIDENCE"
+    def result(status: str, reason: str, **extra: Any) -> dict[str, Any]:
         return {
             "scientific_status": status,
             "execution_status": execution_status,
             "numerical_status": numerical_status,
-            "reason": (
-                "Inferred high/critical-impact parameter present; "
-                "solver convergence is not scientific certainty"
-            ),
+            "reason": reason,
+            "layers": layers,
             "inferred_high_impact": inferred_high,
-            "conclusion_stable": conclusion_stable,
-            "layers": layers,
-            "final_scientific_pass": False,
+            "final_scientific_pass": status == "PASS",
+            "scope": "final_scientific_claim_only",
+            **extra,
         }
 
-    if execution_status != "PASS" or numerical_status != "PASS":
-        return {
-            "scientific_status": "NOT_RUN"
-            if "NOT_RUN" in (execution_status, numerical_status)
-            else "FAIL",
-            "execution_status": execution_status,
-            "numerical_status": numerical_status,
-            "reason": "Execution/numerical prerequisites not PASS",
-            "layers": layers,
-            "final_scientific_pass": False,
-        }
+    # Resolve actual run failures before evaluating uncertain input assumptions.
+    if "FAIL" in (execution_status, numerical_status):
+        return result("FAIL", "Execution or numerical solver explicitly failed; cannot be masked by inferred inputs")
+    if "BLOCKED" in (execution_status, numerical_status):
+        return result("BLOCKED", "Execution or numerical computation is blocked; not an executed failure")
+    if "NOT_RUN" in (execution_status, numerical_status):
+        return result("NOT_RUN", "Execution or numerical computation has not run")
+    if execution_status not in NUMERICAL_STATES or numerical_status not in NUMERICAL_STATES:
+        return result("INSUFFICIENT_EVIDENCE", "Unrecognized execution/numerical status")
 
-    if required_checks_status not in (None, "PASS"):
-        return {
-            "scientific_status": required_checks_status
-            if required_checks_status in SCIENTIFIC_STATUSES
-            else "NOT_RUN",
-            "execution_status": execution_status,
-            "numerical_status": numerical_status,
-            "reason": "Required scientific checks not PASS",
-            "layers": layers,
-            "final_scientific_pass": False,
-        }
+    # Preserve proven check failures/blocks before parameter uncertainty.
+    if required_checks_status == "FAIL":
+        return result("FAIL", "Required scientific validation explicitly failed")
+    if required_checks_status == "BLOCKED":
+        return result("BLOCKED", "Required scientific checks blocked")
+    # A known critical lack of evidence is more informative than a generic
+    # NOT_RUN for absent required checks, while both prohibit final PASS.
+    if insufficient and any(b.get("decision_impact") in ("HIGH", "CRITICAL", None)
+                            for b in insufficient):
+        return result("INSUFFICIENT_EVIDENCE", "High-impact input lacks adequate provenance or plausible range")
+    # Required validation must be explicitly supplied, never silently default to PASS.
+    if required_checks_status is None or required_checks_status == "NOT_RUN":
+        return result("NOT_RUN", "Required scientific checks not provided or not run")
+    if required_checks_status == "INSUFFICIENT_EVIDENCE":
+        return result("INSUFFICIENT_EVIDENCE", "Required scientific check evidence insufficient")
+    if required_checks_status == "CONDITIONAL":
+        return result("CONDITIONAL", "Required scientific checks are conditional")
+    if required_checks_status != "PASS":
+        return result("INSUFFICIENT_EVIDENCE", "Unrecognized required-check status")
 
-    # Low-impact inferred may remain CONDITIONAL for honesty, or PASS if only LOW
-    low_inferred = [
-        b
-        for b in beliefs
-        if b.get("status") == "inferred" and b.get("decision_impact") == "LOW"
-    ]
+    if conclusion_stable is False:
+        return result("INSUFFICIENT_EVIDENCE", "Scientific conclusion changes under plausible parameter endpoints",
+                      conclusion_stable=False)
+
+
+    if inferred_high:
+        return result("CONDITIONAL", "High-impact inferred inputs remain disclosed and limit final claims",
+                      conclusion_stable=conclusion_stable,
+                      acceptable_for=["screening", "exploratory_simulation"])
+
+    low_inferred = [b for b in beliefs if b.get("status") == "inferred"
+                    and b.get("decision_impact") == "LOW"]
     if low_inferred:
-        return {
-            "scientific_status": "CONDITIONAL",
-            "execution_status": execution_status,
-            "numerical_status": numerical_status,
-            "reason": "Low-impact inferred inputs disclosed; acceptable for screening",
-            "inferred_high_impact": [],
-            "layers": layers,
-            "final_scientific_pass": False,
-            "acceptable_for": ["screening", "exploratory_simulation"],
-        }
+        return result("CONDITIONAL", "Low-impact inferred inputs: conditional use with disclosure",
+                      acceptable_for=["screening", "exploratory_simulation"])
 
-    return {
-        "scientific_status": "PASS",
-        "execution_status": execution_status,
-        "numerical_status": numerical_status,
-        "reason": "No high-impact inferred gaps; prerequisites PASS",
-        "layers": layers,
-        "final_scientific_pass": True,
-    }
+    return result("PASS", "Explicit required checks and execution/numerical prerequisites PASS")

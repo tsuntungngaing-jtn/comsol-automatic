@@ -1,228 +1,62 @@
-# CHT coupling and energy gates (COMSOL 6.4)
+# CHT coupling and energy verification — conditional, evidence-based guidance
 
-Status: **operator checklist** (not a new MCP tool). Applies before claiming conjugate-heat-transfer thermal metrics (wall temperature, effective heat-transfer coefficient, enthalpy balance).
+Status: supersedes previous universal CHT hard gates. COMSOL 6.4 implementation guidance, not a solver validation result. Do not change a running model merely to satisfy named nodes.
 
-This document states **reusable institutional rules** for turbulent / laminar CHT. It must not encode any single paper’s figure IDs, case matrix, wall-clock timings, entity tags, or workspace paths.
+## Modeling versus certification
 
-## Why this exists
+**Modeling admission** asks whether the actual selected PDEs, domain, materials, boundary conditions and source terms form a well-defined physical task. A bounded interpretation of incomplete paper information can proceed as a conditional engineering case.
 
-Models with separate `TurbulentFlowkeps` (or similar SPF) + `HeatTransfer` can **solve and look plausible** while fluid advection in HT is uncoupled. In that failure mode:
+**Scientific certification** separately asks whether native termination, physical consistency, conservation accounting, numerical uncertainty and main-paper comparisons support particular claims. Lack of final validation never automatically blocks unrelated source retrieval, geometry preparation or authorized bounded diagnostics.
 
-- `ht.ntflux` port residuals may look near-zero (**false energy PASS**)
-- Sensible enthalpy `Qsens = ṁ cp (Tout − Tin)` can be several× `Qapp`
-- Mesh ladders of Tw/heff are **scientifically invalid** until coupling is fixed
+Keep execution, numerical termination, physics verification, paper comparison and final scientific certification as independent statuses.
 
-## P0 — Admit / pre-solve contract (blocking)
+## Coupling checks, not mandatory node names
 
-Before `study_solve` on conjugate heat transfer (CHT):
+The COMSOL NonIsothermalFlow node is a documented, often convenient coupling implementation, especially for turbulent and temperature-dependent flow. It is not the only physically possible implementation.
 
-| # | Check | Fail action |
-|---|--------|-------------|
-| 1 | Multiphysics node exists with type **`NonIsothermalFlow`** | Create or abort; do not solve |
-| 2 | HT has a **fluid** domain feature (`FluidHeatTransferModel` or `Fluid`) on flowing-fluid selection | Add feature; abort if impossible |
-| 3 | SPF selection = **flowing fluid only** (still-fluid conduction islands **excluded**) | Fix selection |
-| 4 | HT covers fluid + solid (+ still-fluid islands if conduction-only) | Fix selection |
-| 5 | Named BCs nonempty: **inlet thermal**, heated flux/wall, outlet pressure | Fix |
-| 5b | Inlet thermal type recorded; if paper silent → **Inflow(`Tustr`)** per HT docs (`SOFTWARE_DOC_DEFAULT`), not silent Temperature | Fix or FAIL `GATE_INLET_BC` |
+Inspect effective velocity/heat coupling, thermophysical properties, turbulent heat conduction and wall treatment, appropriate solid/fluid domain selections, source terms and solver equations. Another coupling implementation needs a supported equivalence audit rather than an automatic ban. Manual velocity assignment alone is not proof of full turbulent coupling equivalence.
 
-### 6.4 API pattern (verify on the installed build)
+An apparent energy imbalance must not be automatically classified as coupling FAIL. Investigate actual energy terms, domains, normals, materials and boundary semantics first.
 
-```text
-# Preferred create (component multiphysics API + camel case)
-comp.multiphysics().create('nitf1', 'NonIsothermalFlow')
+## Inlet / outlet heat transport boundary conditions
 
-# Often FAILS (do not rely on):
-# model.multiphysics().create('nitf1', 'NonisothermalFlow', 'comp1')
-```
+A known inlet-plane temperature may support a Temperature condition; a known upstream temperature feeding a virtual unmodeled duct may support an Inflow condition. COMSOL describes an Inflow heat condition through a virtual domain; the upstream temperature need not be strictly imposed at the physical inlet when conduction and other effects matter.
 
-After create, confirm `comp.multiphysics().tags()` contains the node. Manual `fluid1.set('u','u')` is **not** equivalent to full turbulent NITF (stabilization / keff / wall functions).
+If a paper only reports Tin without boundary-feature semantics, register both reasonable interpretations as conditional, investigate installed-version documentation and downstream sensitivity, and justify a baseline choice. Neither boundary class is universally mandatory. ConvectiveOutflow is likewise an available option, not universally compulsory.
 
-### Study solve identity (tag ≠ label)
+## Control-volume energy accounting
 
-MPh / MCP `study_solve` / `study_solve_async` resolve **`study_name` by LABEL**, not Java tag.
+Withdraw prior global numerical hard gates based on Qapp = qw*A, Qsens = |m_dot|*cp*(Tout-Tin) and fixed 20% or 10% error thresholds.
 
-```text
-std = model.study().create('std1')
-std.create('stat', 'Stationary')
-std.label('Stationary')   # required: study_solve matches LABEL
-# Verify (tag, label) pairs before study_solve(..., study_name=<LABEL>)
-```
+For the selected physics and control volume, account where applicable for:
+- transient energy storage;
+- advective enthalpy, conductive/radiative heat flux and source terms;
+- pressure/viscous work, kinetic energy and other work/energy effects;
+- temperature-dependent enthalpy and material properties;
+- correctly selected inlet/outlet surfaces, mass integration, flux sign, units, normals and applied heat zones.
 
-| Failure mode | Typical message | Cause |
-|--------------|-----------------|-------|
-| Create without `label()` | `Study "Stationary" does not exist.` | Assumed label never set |
-| Pass **tag** on loaded MPH | `Study "<tag>" does not exist.` | Tag ≠ label on an existing study |
+The constant-cp formula remains a useful approximate steady-flow diagnostic only where assumptions justify it. A near-zero heat-transfer flux residual alone does not certify full energy balance. Report discrepancies as ENERGY_ACCOUNTING_REVIEW until the terms and physical cause have been examined. Quantitative acceptance tolerances must have source-backed definitions; do not invent universal 10%/20% thresholds.
 
-**Rule:** Enumerate `(tag, label)` pairs before every solve on an existing MPH. Pass the **label**. Instant `LookupError` on a tag string is an identity bug, not a physics/mesh failure. Chained `study().create(...).create(...)` without `label()` causes the same class of miss.
+## Practical, version-specific COMSOL evidence
 
-## P0 — Post-solve energy (blocking for THERMAL claims)
+- Enumerate study (tag, label) pairs before invoking the current wrapper by study_name: tag and label may differ.
+- Inspect nonempty fluid, solid, still-fluid and heat-transfer selections and actual velocity/temperature transport; conduction-only islands must not be accidentally treated as flowing fluid.
+- For geometry in mm, use explicit units where appropriate; verify work-plane shifts, boolean operations and topology through native model readback.
+- If coupling, governing equations or geometry changes, old thermal mesh studies are not automatically transferable; label incompatible evidence SUPERSEDED.
+- Segregated, FullyCoupled, continuation, damping and flow freezing are alternative numerical strategies, not required globally. Verify installed properties and log results. Change one controlled hypothesis per authorized attempt.
+- Record solver telemetry, accepted iterations/steps and native completion reason. A saved file or a timeout alone is not proof of convergence. Do not force-kill or resubmit an unknown active job.
 
-**Primary observable (required for CHT thermal PASS):**
+## Conditional cases
 
-```text
-Qapp  = qw · A_heated
-Qsens = |ṁ| · cp · (Tout − Tin)     # ṁ from SPF density·(u·n) at inlet
-err   = |Qsens − Qapp| / |Qapp|
-```
+With incomplete but reasonably bounded input, continue read-only evidence gathering, geometry preparation, and separately authorized bounded sensitivity / conditional simulations. Preserve all assumptions, plausible intervals and provenance. If an essential physical quantity has no supportable bound, block only tasks that depend on its absolute value; continue independent preparatory tasks.
 
-| Gate | Use |
-|------|-----|
-| `err < 0.20` | Minimum for reporting Tw/heff as coupled thermal metrics |
-| `err < 0.10` | Preferred for baseline-class thermal claims |
-| `ht.ntflux`-only residual | **Accounting check only** — never sole energy PASS |
+Neither tuning an alternative geometry nor successfully running an alternative BC proves the original paper's unknown geometry or BC. Reporting status must reflect scope: paper reproduction, conditional reconstruction, or new design.
 
-If Qsens ≫ Qapp with a finished solve → treat as **coupling FAIL**, not mesh FAIL. Invalidate prior thermal mesh studies.
+## Sources
 
-Keep **hydraulic** and **thermal** gates separate: ΔP / mass MATCH does not imply enthalpy PASS.
+- COMSOL 6.4 Heat Transfer, Inflow: https://doc.comsol.com/6.4/doc/com.comsol.help.heat/heat_ug_ht_features.09.070.html
+- COMSOL blog, Specifying the Temperature at a Flow Inlet: https://www.comsol.com/blogs/specifying-the-temperature-at-a-flow-inlet
+- NASA NPARC CFD Verification Assessment: https://www.grc.nasa.gov/www/wind/valid/tutorial/verassess.html
+- ASME V&V 20: https://www.asme.org/codes-standards/find-codes-standards/v-v-20-standard-verification-validation-computational-fluid-dynamics-heat-transfer
 
-## P1 — Still-fluid / conduction-island geometry contract
-
-When the paper defines a still-fluid region that is conduction-only:
-
-| # | Check | Fail action |
-|---|--------|-------------|
-| 1 | After boolean keep, domain count matches the declared topology (solid, flowing fluid, still-fluid) | Repair keep / boolean; do not proceed |
-| 2 | Named still-fluid selection nonempty; SPF does **not** include it | Fix selections |
-| 3 | Materials match the paper (still fluid vs solid metal) | Fix |
-| 4 | Geometry probe asserts the boolean keep + domain count — not sketch alone | Extend probe |
-
-### WorkPlane units (mm geom)
-
-Under `geom.lengthUnit('mm')`, prefer explicit unit strings in expressions that must stay in mm. Bare numeric offsets have caused empty islands / wrong placement; oversized boolean overlaps have caused mesh edge failures — prefer abutting or tiny intentional overlap and a documented mesh-size fallback ladder.
-
-### Mesh-study invalidation
-
-If NITF (or HT fluid feature / SPF domain) changes:
-
-- Mark prior Tw/heff mesh ladders **SUPERSEDED**
-- Do not cite uncoupled heff mesh sensitivity as thermal evidence
-- Re-run method-level ladders on the **coupled** parent when claiming mesh behavior
-
-## P2 — RSI / inference hooks (outer loop)
-
-Treat paper-silent thermal/geometric choices as scientifically relevant unknowns (disclosure + impact), for example:
-
-- Efficiency / figure-panel digitization assumptions when panels are under-specified
-- Channel-length or manifold interpretation when symbols are ambiguous
-- Still-fluid construction method (block / slice / WorkPlane curve)
-- Energy observable definition (enthalpy vs ntflux)
-
-HIGH impact + INFERRED → scientific ceiling **CONDITIONAL** / **INSUFFICIENT_EVIDENCE**; never silent VALIDATED. See [uncertainty-aware RSI](uncertainty-aware-rsi.md).
-
-## Institutional inlet / outlet thermal defaults (paper silent)
-
-If the paper gives **Tin** (or equivalent) but does **not** specify the inlet *feature class*:
-
-- Status: `[SOFTWARE_DOC_DEFAULT]` — **not** paper-reported.
-- Default for **open channel / manifold fluid inlets** in COMSOL HT/CHT: **`Inflow` with upstream `Tustr`** (Heat Transfer User’s Guide: open inlet fed by unmodeled upstream duct).
-- Do **not** default to bulk **Temperature** Dirichlet on the port (port heat sink/source risk; enthalpy gates fail).
-- Do **not** take the default from a counterpart / benchmark MPH during build; counterparts are post-solve compare only.
-- Build **Inflow from the start** when possible; Temperature→Inflow migration needs the playbook below.
-
-If the paper specifies a **pressure outlet** (or open discharge) but does **not** name the HT outlet feature class:
-
-- Status: `[SOFTWARE_DOC_DEFAULT]`.
-- Default for **open fluid outlets** in HT/CHT: **`ConvectiveOutflow`** on the outlet selection (pair with SPF `OutletBoundary`), not a silent omission of all HT outlet features.
-- Missing HT outlet feature is a **first-class BC gap** before blaming mesh or hardware. Builders create their own tags; never copy counterpart feature tags into the builder.
-
-### Pre-solve solver sequence (turbulent CHT)
-
-Before a long `Stationary` job on turbulent flow + NITF:
-
-1. Ensure a solution sequence exists (`sol.createAutoSequence(studyTag)` or equivalent).
-2. Probe that a **`Segregated`** node is present for the default turbulent Stationary path (typical product path; confirm `stol` order of magnitude from installed docs / sequence).
-3. Do **not** burn the full job timeout on an unspecified auto Fully Coupled first attempt when Segregated is the product default for this physics class.
-4. Counterpart solver *trees* remain compare-only — copy the **class** (Segregated / stol order), not node tags.
-
-## Inlet BC migration — convergence playbook (CHT + NITF)
-
-When changing inlet thermal BC **Temperature → Inflow(Tustr)** (or recovering from a wrong Temperature habit)
-on an already-meshed turbulent CHT model:
-
-### Hard rules
-
-1. Keep **NonIsothermalFlow (nitf)** **ON** for any claim that needs conjugate heat transfer.
-   Turning nitf off to force a numeric finish that yields **nonphysical T** (e.g. Tw ≪ Tin)
-   → status `BLOCKED_SOLVER` / `NONPHYSICAL`, never enthalpy PASS.
-2. Do **not** silently revert to Temperature to greenwash `GATE_ENTHALPY`.
-3. Solver failure after Inflow is **`BLOCKED_SOLVER`**, distinct from coupling FAIL / mesh FAIL.
-4. Export probe before/after: `inlet_ht_type`, nitf on/off, `ht.ntflux`@inlet, Tw sanity
-   (declare a physical band relative to Tin; else NONPHYSICAL).
-
-### Recommended attempt ladder (stop at first physical converge)
-
-| Step | Action | Pass if |
-|------|--------|---------|
-| S0 | Confirm Inflow + Tustr; **ConvectiveOutflow on outlet** (if paper-silent); nitf ON; heater not on inlet; **Segregated sequence present** | probe green |
-| S1 | Init from previous solution (flow+T if any); Stationary with **Segregated** (preferred), moderate timeout | completed + Tw physical + evaluate enthalpy |
-| S2 | **Continuation:** ramp `qw` 0→full (or heat-flux multiplier) with Inflow+nitf ON | same |
-| S3 | More Newton iterations / smaller initial damping / then try Fully Coupled only if Segregated failed honestly | same |
-| S4 | Optional: freeze **flow DOFs** only while keeping wall thermal coupling / nitf ON — if API allows without deactivating nitf | same |
-| S5 | If all fail within declared budget | `BLOCKED_SOLVER`; record matrix; escalate — **no Temperature revert** |
-
-### Anti-patterns
-
-| Do not | Why |
-|--------|-----|
-| Deactivate nitf to “get a number” | Yields nonphysical Tw / negative Qsens |
-| Blame mesh first when Inflow+nitf fails and a Temperature case already had ΔP MATCH | Prefer BC/solver ladder |
-| Copy counterpart MPH solver nodes / selections | Compare-only |
-| Idle-wait multi-hour identical qw ramp with no residual telemetry | Cap budget; escalate to next ladder step or BLOCKED |
-
-Prefer open-channel inlets as **Inflow(Tustr)** over bulk **Temperature**. Record `GATE_INLET_BC`.
-
-## Explicit non-claims
-
-Passing these gates does **not** imply paper-figure numerical reproduction. They only prevent known false thermal PASS modes for CHT coupling and BC class.
-
-For authorized post-build counterpart tables and method-level ceilings, see [paper-only vs oracle compare](paper-only-vs-oracle-compare.md).
-
-## Solver ladder API names (SegregatedStep)
-
-Use installed Programming Reference property names. Wrong names raise *Unknown property*.
-
-| Node | Properties | Notes |
-|------|------------|-------|
-| Stationary study | `useparam`, `pname`, `plistarr`, `pcontinuationmode`, `preusesol` | S2 continuation |
-| **SegregatedStep** | **`subdtech`**, **`maxsubiter`**, `subdamp`, `subinitsteph` | **Not** `dtech` / `maxiter` on SegStep |
-| FullyCoupled | `dtech`, `maxiter`, `initsteph` | FC node only |
-| Segregated | `maxsegiter` | default stationary often 100 |
-
-S3 preferred: `subdtech='hnlin'` + raise `maxsubiter`. Alternate: `subdtech='const'`, `subdamp=0.1`.
-
-### One class per job
-
-Change **one** ladder class per solve attempt: continuation **XOR** damping **XOR** freeze-flow **XOR** FullyCoupled swap. Do not mix S2+S3+mesh in one attempt.
-
-### Telemetry hygiene
-
-- Mid-solve `comsol_model_code` often returns empty under client lock — prefer tailing `~\.comsol\vXX\logs\mphserver*.log` and post-job / post-cancel `message` on sol features.
-- Classify: `SLOW_IMPROVING` | `NONCONV_FLAT` | `NONCONV_MAX_NEWTON` | `STALL_UNKNOWN`.
-- Do not extend wall-clock on identical settings without residual evidence.
-- If a counterpart clear+resolve finishes promptly on the same machine while the paper-only build stalls, blame **BC class / solver class / geometry family**, not hardware.
-
-### S4 freeze-flow note
-
-Thermal segment must keep **`activate(nitf, True)`**. Isothermal flow seed may turn ht/nitf off; thermal segment must not. After flow `completed`, still require ΔP eval; eval failure goes into the BLOCKED matrix.
-
-## BLOCKED_SOLVER matrix (ladder exhausted)
-
-When S0–S4 (or declared budget) is exhausted and Inflow+NITF still has no physical thermal solve, deliver:
-
-```yaml
-status: BLOCKED_SOLVER
-inlet_ht_type: Inflow|...
-outlet_ht_type: ConvectiveOutflow|missing|...
-nitf: on
-geometry_partition: A|B|AMBIGUOUS|NA
-ladder:
-  S2: timeout|failed|skipped + note
-  S3: ...
-  S4: failed_max_newton|timeout|...
-telemetry_class: NONCONV_MAX_NEWTON|STALL_UNKNOWN|...
-counterpart_control_wall_min: <number or NA>   # compare-only, optional
-bans_honored: [no_nitf_off, no_Temperature, no_entity_copy, no_mesh_first]
-escalation: reopen_decision_gate|change_research_question|optional_FC_one_shot
-```
-
-Forbidden: Temperature to force enthalpy PASS; turn nitf off for Tw; infinite identical Stationary; rewrite BLOCKED as mesh FAIL without mesh evidence.
+The original detailed numerical solver ladder is historical problem-specific guidance, not an authoritative algorithm for all COMSOL cases. Real COMSOL and Fluent execution for this revision: NOT_RUN.

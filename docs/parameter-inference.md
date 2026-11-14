@@ -24,3 +24,7 @@ Status: **implemented** detector + ParameterBelief + plausible-range engine + do
 ## Forbidden
 
 Silent COMSOL default fill for scientifically relevant unknowns without provenance markers.
+
+## v0.2.1 proposed clarification
+
+Final scientific certification, permitted conditional modeling and user approvals are independent. Missing paper inputs should first prompt bounded physics-consistent derivations, installed material/library research and scenario branches; unresolved essential unbounded inputs block only their dependent predictions. See [candidate audit](conditional-reconstruction-and-rsi-evidence-v0.2.1.md). No unapproved solver execution is implied.
