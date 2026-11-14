@@ -1,4 +1,4 @@
-# R&D summary — execution skill / acceptance prompt separation
+# R&D summary - execution skill / acceptance prompt separation
 
 Candidate worktree based on `0bf2143` (contains current `main` / `a110d79`). This change does not merge PR #8 and does not fold retrieval or RSI promotion into the split.
 
@@ -20,11 +20,11 @@ NOT_RUN. No authorized live COMSOL session was used to validate the separation o
 
 ## Retrieval Performance
 
-???. Retrieval/RSI ranking work was intentionally excluded from this change.
+Not measured. Retrieval/RSI ranking work was intentionally excluded from this change.
 
 ## RSI Reliability
 
-???. RSI promotion and policy learning remain separate opt-in development tasks and were not exercised here.
+Not measured. RSI promotion and policy learning remain separate opt-in development tasks and were not exercised here.
 
 ## Unresolved Issues
 
@@ -34,4 +34,4 @@ NOT_RUN. No authorized live COMSOL session was used to validate the separation o
 
 ## Merge Recommendation
 
-Ready for review as a candidate branch after local commit. Do not treat offline PASS as real-solver certification. Prefer merging only after a reviewer confirms skill/prompt boundary text and the controller contract tests; schedule separate real-COMSOL and real-Fluent smoke runs before any “reproduction verified” claim.
+Ready for review after CI is green. Do not treat offline PASS as real-solver certification. Prefer merging after a reviewer confirms skill/prompt boundary text and the controller contract tests; schedule separate real-COMSOL and real-Fluent smoke runs before any "reproduction verified" claim.
