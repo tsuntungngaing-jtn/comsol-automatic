@@ -70,13 +70,19 @@ def evaluate_scientific_validity(
     if execution_status not in NUMERICAL_STATES or numerical_status not in NUMERICAL_STATES:
         return result("INSUFFICIENT_EVIDENCE", "Unrecognized execution/numerical status")
 
-    # Required validation must be explicitly supplied, never silently default to PASS.
-    if required_checks_status is None or required_checks_status == "NOT_RUN":
-        return result("NOT_RUN", "Required scientific checks not provided or not run")
+    # Preserve proven check failures/blocks before parameter uncertainty.
     if required_checks_status == "FAIL":
         return result("FAIL", "Required scientific validation explicitly failed")
     if required_checks_status == "BLOCKED":
         return result("BLOCKED", "Required scientific checks blocked")
+    # A known critical lack of evidence is more informative than a generic
+    # NOT_RUN for absent required checks, while both prohibit final PASS.
+    if insufficient and any(b.get("decision_impact") in ("HIGH", "CRITICAL", None)
+                            for b in insufficient):
+        return result("INSUFFICIENT_EVIDENCE", "High-impact input lacks adequate provenance or plausible range")
+    # Required validation must be explicitly supplied, never silently default to PASS.
+    if required_checks_status is None or required_checks_status == "NOT_RUN":
+        return result("NOT_RUN", "Required scientific checks not provided or not run")
     if required_checks_status == "INSUFFICIENT_EVIDENCE":
         return result("INSUFFICIENT_EVIDENCE", "Required scientific check evidence insufficient")
     if required_checks_status == "CONDITIONAL":
@@ -87,9 +93,7 @@ def evaluate_scientific_validity(
     if conclusion_stable is False:
         return result("INSUFFICIENT_EVIDENCE", "Scientific conclusion changes under plausible parameter endpoints",
                       conclusion_stable=False)
-    if insufficient and any(b.get("decision_impact") in ("HIGH", "CRITICAL", None)
-                            for b in insufficient):
-        return result("INSUFFICIENT_EVIDENCE", "High-impact input lacks adequate provenance or plausible range")
+
 
     if inferred_high:
         return result("CONDITIONAL", "High-impact inferred inputs remain disclosed and limit final claims",
