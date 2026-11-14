@@ -4,7 +4,7 @@ description: Connect to COMSOL or Ansys Fluent through the configured MCP provid
 license: MIT
 metadata:
   display_name: Paper2Simu
-  version: "0.2.2-candidate"
+  version: "0.2.3"
   compatibility: "COMSOL MCP + official PyFluent MCP (separate installations)"
 ---
 
@@ -24,9 +24,10 @@ Older references describe optional validation/RSI workflows and historical polic
 
 - Inspect actual registered MCP providers and tool schemas. `solver_route_plan` consumes supplied inventory; it is not live discovery. Select exactly one authorized solver/session and record namespace and ownership. Preserve existing host assignments (LAB7/LAB8 Fluent, LAB9/LAB10 COMSOL when in scope). Do not launch the other solver merely because the skill is loaded.
 - COMSOL: use the configured COMSOL MCP, including MPh/Java calls exposed through it. Read `comsol_status` and `comsol_doctor`; record actual build, modules, MPh, JPype, Java and session identity. Multiphysics Server is distinct from COMSOL Server. Discovery alone is not a license test. See [connector setup](../docs/connectors.md).
-- Fluent: inspect the installed official `ansys/pyfluent-mcp` schemas before mutations. Installation and Python environment are separate. Do not substitute third-party tool names or combine inventories without provider identity.
-- If connection/license is unavailable, report the affected operation BLOCKED and preserve completed work. Do not silently bypass MCP with GUI automation or direct external API scripts. Do not alter another session or machine.
-- Honor authorization already supplied by the user. Read-only access does not authorize solves or source overwrites; authorized modeling/solve tasks do not need repeated permission for ordinary steps. Operator code still requires the environment's explicit opt-in.
+- Fluent: use only the installed official `ansys/pyfluent-mcp` (`ansys-fluent-mcp`) schemas before mutations. Installation, Python environment and Fluent install are separate from this skill package. Do not substitute third-party tool names or combine inventories without provider identity. See [Fluent licensing preflight](../docs/fluent-licensing-preflight.md).
+- Fluent preflight (before launch/connect retries): record actual process identity (for example CodexSandboxOnline vs Offline vs interactive), `APPDATA` / `LOCALAPPDATA` / `TEMP` / `TMP`, task ownership and existing Fluent/license-client jobs. Confirm the launch identity can write `%APPDATA%\Ansys` (dynamic `ansyscl.<HOST>.<acl-id>` port files) and can create logs under `%TEMP%\.ansys`. Official PyFluent-MCP session logs also default under `%APPDATA%\Ansys\...`; override with `FLUIDS_MCP_SESSION_LOG_DIR` or disable with `FLUIDS_MCP_DISABLE_SESSION_LOGS=1` when documenting alternatives. A listening ACL port that cannot be written is still a launch failure; do not treat that ephemeral port as a permanent `ansyslmd.ini` server value.
+- If connection/license is unavailable, report BLOCKED with log paths (`ansyscl*.log`, `licdebug*.out`), preserve completed work, and stop repeated launches. Do not silently bypass MCP with GUI automation or direct external API scripts. Do not alter another session or machine. License checkout tests consume seats; exit code 0 alone is not proof of checkout - read utility output and logs. Missing Chinese message catalogs that also appear on successful checkouts are not this failure mode's root cause.
+- Honor authorization already supplied by the user. Read-only access does not authorize solves or source overwrites; authorized modeling/solve tasks do not need repeated permission for ordinary steps. Operator code still requires the environment's explicit opt-in. Connection recovery is not paper-reproduction acceptance.
 
 ## Build and execute
 

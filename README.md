@@ -12,11 +12,15 @@ Paper2Simu unifies the evidence-first COMSOL Automatic pipeline (up to v0.7.6) a
 
 **Release migration:** `python scripts/release.py --output ../Paper2Simu-v0.2.0.zip` and `python scripts/install_skill.py` produce the new package/install name without overwriting an existing directory. Keep the old install until a complete rollback-tested integration is accepted. Never transfer COMSOL tokens or private solver artifacts into the public Git repository.
 
-## Execution/acceptance separation (candidate)
+## Execution/acceptance separation (v0.2.2+)
 
-The [canonical skill](paper2simu/SKILL.md) now handles solver connection, authorized execution and evidence delivery. Supply the [unified COMSOL/Fluent reproduction prompt](prompts/paper-reproduction-task.md) separately to define inference and acceptance; its configurable paper-metric default is strict <15%. A modeling task without acceptance criteria can still execute and deliver results without a reproduction PASS claim. See [migration/API notes](docs/execution-acceptance-separation.md) and [filled example](examples/paper-reproduction-task-example.md).
+The [canonical skill](paper2simu/SKILL.md) handles solver connection, authorized execution and evidence delivery. Supply the [unified COMSOL/Fluent reproduction prompt](prompts/paper-reproduction-task.md) separately to define inference and acceptance; its configurable paper-metric default is strict <15%. A modeling task without acceptance criteria can still execute and deliver results without a reproduction PASS claim. See [migration/API notes](docs/execution-acceptance-separation.md) and [filled example](examples/paper-reproduction-task-example.md).
 
 The controller reports execution, checks and paper comparisons separately. Failed/partial artifacts are deliverable. Optional legacy checks remain available, but historical policies below are not automatically activated by loading the skill. Live solver validation of this change remains NOT_RUN.
+
+## Fluent licensing preflight (v0.2.3)
+
+Skill version **0.2.3** adds Windows Fluent / Ansys licensing-client preflight for agent hosts: launch identity, `%APPDATA%\Ansys` write rights for dynamic `ansyscl` port files, log locations, and official PyFluent-MCP session-log notes. See [Fluent licensing preflight](docs/fluent-licensing-preflight.md) and the Fluent section in [connectors](docs/connectors.md). Connection recovery is not paper acceptance.
 
 ## Previous COMSOL Automatic capabilities (preserved)
 

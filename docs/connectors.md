@@ -12,3 +12,9 @@ After connect, resolve tracked model identity before edits. Connectivity smoke: 
 To install only skill discovery files, run `python scripts/install_skill.py --skills-dir <client-skills-directory>`. It refuses an existing destination. This does not install dependencies or configure a connector. Clients with an Upload Skill feature require that separate action; local copying does not prove visibility.
 
 For HTTP/SSE, use scripts/start-mcp.ps1 with the desired transport. Bind localhost unless external access is explicitly needed. The launcher preserves its local token and refuses conflicting credentials. Use an Authorization: Bearer header and an HTTPS reverse proxy for external transport. Never send tokens in chat. Skill upload, dependency installation, MCP connection, tool discovery and license availability are separate checks.
+
+## Fluent (official PyFluent MCP)
+
+Fluent is a separate MCP provider and Python environment from the COMSOL skill package. Install and register official `ansys-fluent-mcp` (`ansys/pyfluent-mcp`); this repository does not ship a Fluent connector binary. A licensed local Fluent installation is required for live `connect` / solve tools.
+
+Before launch retries on Windows agent hosts, confirm the **actual launch identity** can write `%APPDATA%\Ansys` (Ansys licensing client dynamic port files) and the configured session-log directory. CodexSandboxOnline write failures with `Unable to write port to ...\AppData\Roaming\Ansys\ansyscl...` are a documented LAB failure mode; listening on an ephemeral ACL port without a writable port file is still BLOCKED. See [Fluent licensing preflight](fluent-licensing-preflight.md). License smoke tests consume seats; read utility output and logs rather than trusting exit code 0 alone. Connection health is not paper-reproduction acceptance.
