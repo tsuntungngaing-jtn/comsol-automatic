@@ -61,3 +61,20 @@ is verified by this documentation alone.
 ## Conditional reconstruction and final-claim separation (v0.2.1 candidate)
 
 Read [the source-backed conditional-reconstruction and RSI audit](../docs/conditional-reconstruction-and-rsi-evidence-v0.2.1.md) before enforcing any inherited CHT or uncertainty gate. **Missing final verification does not prevent independent evidence retrieval, model preparation or other separately authorized well-posed conditional work.** It does prevent unqualified final scientific PASS. Explicit solver FAIL/BLOCKED/NOT_RUN have priority over inferred-parameter limitations; missing required checks never yield PASS. Respect vendor-native configured termination; diagnostic residuals do not create new universal solver requirements. Use the revised [CHT verification policy](../docs/cht-coupling-energy-gates.md) instead of old mandatory node/Inflow/10–20% rules. All successful but unverified RSI metrics are REVIEW_REQUIRED, not RETAIN. This is an offline candidate policy; COMSOL and Fluent tests are NOT_RUN.
+
+
+## Discovery Mode — surrogate-assisted CFD screening (v0.3.0 research branch)
+
+**Mode choice is explicit.** Default is REPRODUCTION for a user asking to recreate an existing paper. Enter DISCOVERY only for a separately authorized new design/search research question; assign a separate study ID and freeze original-paper inputs and scope. The existing conditional reconstruction, native convergence, coupled heat transfer, source-precedence, case identity, resource/lease and scientific verification rules continue unchanged.
+
+Read the [Discovery Mode workflow](../docs/discovery-surrogate-workflow-v0.3.0.md) and [original research roadmap](../docs/ai-experiment-design-research.md) before candidate selection.
+
+1. Declare variables, bounds, physical/manufacturing constraints, source refs, objective units, allowed solver and budget. Do not change paper-reported geometry or BCs merely to improve reported agreement.
+2. Import only properly source-tagged actual CFD outcome records (configuration/case/result hashes; solver; fidelity; metrics; native convergence/conservation/physics/mesh checks). The current code validates **caller declarations** but does not open files or independently authenticate a run.
+3. Use the lightweight IDW baseline with grouped leave-one-design-out objective-specific errors. At least four distinct design points are required. Do not treat a low temperature aggregate error as assurance for wall heat transfer, pressure drop, species transport or full-field reconstruction.
+4. Explicitly declare per-objective screening-error ceilings; when a required metric fails, request more data/review rather than forcing a model PASS. Reject unseen categorical settings and outside-observed-range surrogate predictions.
+5. Rank **proposals**, not solver commands, using transparent distance/desirability heuristics and caller-declared cost/risk. Scores are neither calibrated probabilities nor expected improvement. A selected ID is NOT a validated optimum, and no CFD calculation has happened.
+6. Any high-fidelity COMSOL or Fluent experiment requires fresh host authorization, native tool discovery and readbacks, task lease, real resource budget, valid numerical termination and saved/reopened auditable result. Never initiate solver jobs from the offline package.
+7. Separate discovery outputs from REPRODUCTION conclusions. Retain new agent policy only with independently verified held-out evidence, including erroneous PASS and unnecessary-blocking rates.
+
+The offline public APIs are research_design.validate_space, admit_observations, fit_idw_baseline, predict_idw and screen_and_rank. Tests: tests/test_research_design.py and tests/test_discovery_surrogate.py. This branch is a prototype: no neural-network training, Bayesian optimization, active solver control or real CFD performance evidence.
