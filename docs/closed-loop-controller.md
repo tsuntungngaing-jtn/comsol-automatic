@@ -16,6 +16,10 @@ Literature tags:
 | Exact state names, rollback table, MPH reopen | this repository | DESIGN_POLICY |
 | Thin orchestrator, not six agents | Shi & Zhang arXiv:2609.03718 | LITERATURE_SUPPORTED |
 
+## Current responsibility boundary
+
+The execution skill does not activate this historical validation pipeline automatically. See [execution/acceptance separation](execution-acceptance-separation.md) for optional `acceptance_spec`, registered task tools and status meanings. `workflow_deliver` is available for failed/partial work without transitioning to PASS. A missing final-validation input blocks only that dependent task. Supplied numerical/physical statuses remain unauthenticated reports.
+
 ## Architecture
 
 LLM: extract, propose, diagnose, choose existing MCP tools.  
@@ -28,7 +32,7 @@ COMSOL via existing MCP only.
 
 Also: `WAITING_FOR_USER`, `DIAGNOSIS`, `REPAIR_READY`, `REPAIRING`, `FAIL`, `BLOCKED`, `BUDGET_EXHAUSTED`, `CALIBRATED_NOT_INDEPENDENTLY_VALIDATED`.
 
-`WAITING_FOR_USER` cannot enter `SOLVING`. `FAIL` cannot enter `DELIVERY_READY`. State JSON is persisted under `{COMSOL_OUTPUT_ROOT}/workflow-cases/`, including `evidence_records` (origin/certainty) and `spec`. Restart reloads those records; it does not re-run COMSOL or mark recovered jobs verified.
+`WAITING_FOR_USER` cannot enter `SOLVING`. `FAIL` cannot enter the legacy successful `DELIVERY_READY` transition, but `workflow_deliver` delivers its artifacts while preserving FAIL. State JSON is persisted under `{COMSOL_OUTPUT_ROOT}/workflow-cases/`, including `evidence_records` (origin/certainty) and `spec`. Restart reloads those records; it does not re-run COMSOL or mark recovered jobs verified.
 
 ## Rollback (DESIGN_POLICY)
 
@@ -43,7 +47,7 @@ Also: `WAITING_FOR_USER`, `DIAGNOSIS`, `REPAIR_READY`, `REPAIRING`, `FAIL`, `BLO
 
 ## Repair
 
-Mechanical (tag/API/stale dataset): auto-admissible. Epistemic (geometry assumption, BC meaning, material source, constitutive model, fitting): `WAITING_FOR_USER`. Failed baseline immutable. Repair increments `model_revision` and invalidates dependent PASS.
+Mechanical (tag/API/stale dataset): auto-admissible. The opt-in legacy repair API sends epistemic changes to `WAITING_FOR_USER`. The execution agent follows the task prompt for authorized conditional modeling and bounded assumptions instead of making this legacy API mandatory. Failed baseline immutable. Repair increments `model_revision` and invalidates dependent PASS.
 
 ## Calibration
 

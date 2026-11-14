@@ -56,3 +56,38 @@ def register_controller_tools(mcp, runtime):
     async def repair_apply(repair_id: str, admitted: bool = False) -> dict:
         """Apply an admitted repair, creating a new model revision."""
         return repair.apply(repair_id, admitted=admitted)
+
+    @mcp.tool()
+    async def workflow_admit(case_id: str, task: str) -> dict:
+        """Check only dependencies of the requested task."""
+        return controller.admit(case_id, task)
+
+    @mcp.tool()
+    async def workflow_record_execution(case_id: str, run_id: str, status: str, details: dict | None = None) -> dict:
+        """Record caller-supplied execution outcome; does not certify reproduction."""
+        return controller.record_execution(case_id, run_id, status, details)
+
+    @mcp.tool()
+    async def workflow_submit_checks(case_id: str, layers: dict, run_id: str,
+                                     model_revision: int, spec_revision: int,
+                                     required: list[str] | None = None) -> dict:
+        """Record explicit diagnostic checks separately from paper acceptance."""
+        return controller.submit_validation(case_id, layers, required, run_id=run_id,
+                                            model_revision=model_revision, spec_revision=spec_revision)
+
+    @mcp.tool()
+    async def workflow_evaluate_acceptance(case_id: str, run_id: str, model_revision: int,
+                                           spec_revision: int, observations: dict) -> dict:
+        """Compare caller-supplied {id: {value, unit}} observations with spec.acceptance_spec.criteria.
+
+        Each criterion requires id, metric (relative_error|absolute_error), reference,
+        tolerance and unit. Relative tolerances use fractions: 0.15 means 15%.
+        No default tolerance; absent acceptance_spec returns NOT_CONFIGURED.
+        This comparison does not authenticate supplied data or certify general scientific validity.
+        """
+        return controller.evaluate_acceptance(case_id, run_id, model_revision, spec_revision, observations)
+
+    @mcp.tool()
+    async def workflow_deliver(case_id: str, artifacts: list[dict] | None = None) -> dict:
+        """Deliver model/log paths even after failure; separate execution/check/comparison statuses."""
+        return controller.deliver(case_id, artifacts)

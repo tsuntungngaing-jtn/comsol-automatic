@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+_tmp_test/
 *.egg-info/
 .env
 .env.*
