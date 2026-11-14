@@ -99,7 +99,7 @@ class DiscoverySurrogateTests(unittest.TestCase):
     def test_external_extrapolation_rejected(self):
         s = make_space()
         fit = fit_idw_baseline(s, admit_observations(s, dataset(s)))
-        self.assertEqual(predict_idw(s, fit, design(s, width=1., height=.9))["status"],
+        self.assertEqual(predict_idw(s, fit, design(s, width=.85, height=.9))["status"],
                          "OUTSIDE_OBSERVED_SUPPORT")
         self.assertEqual(predict_idw(s, fit, design(s, width=.55, height=.9, layout="serpentine"))["status"],
                          "OUTSIDE_OBSERVED_SUPPORT")
@@ -169,7 +169,7 @@ class DiscoverySurrogateTests(unittest.TestCase):
 
     def test_excluded_candidate_does_not_silently_extrapolate(self):
         s = make_space()
-        result = screen_and_rank(s, dataset(s), request(s, candidates=[.55, 1.0]))
+        result = screen_and_rank(s, dataset(s), request(s, candidates=[.55, .85]))
         self.assertEqual(result["status"], "SCREENED_FOR_HUMAN_REVIEW_NOT_SCHEDULED")
         self.assertEqual(len(result["excluded_candidates"]), 1)
         self.assertEqual(result["excluded_candidates"][0]["reason"], "OUTSIDE_OBSERVED_SUPPORT")
