@@ -11,3 +11,7 @@ recursive-include tutorials *.json *.md
 recursive-include docs *.md
 
 recursive-include paper2simu *.md
+
+include COMSOFLENT_SKILL.md
+recursive-include comsoflent *.md
+recursive-include prompts *.md

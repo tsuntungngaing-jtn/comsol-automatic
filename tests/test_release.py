@@ -38,6 +38,20 @@ class ReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'Forbidden file'):
                 release.public_files(root)
 
+    def test_execution_prompt_and_runtime_dependencies_ship_together(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.fixture(root)
+            expected = ['paper2simu/SKILL.md', 'comsoflent/SKILL.md',
+                        'COMSOFLENT_SKILL.md', 'prompts/paper-reproduction-task.md',
+                        'rsi/controller.py', 'uncertainty/inference.py']
+            for name in expected:
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text('public source', encoding='utf-8')
+            names = {name for name, _ in release.public_files(root)}
+            self.assertTrue(set(expected).issubset(names))
+
     def test_zip_is_self_contained_and_excludes_runtime(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)/'source'

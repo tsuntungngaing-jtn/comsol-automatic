@@ -14,14 +14,17 @@ class DecisionGate:
     def evaluate_missing(self, *, quantity_id: str, description: str, affects: list[str],
                          current_task: str, candidates: list[dict],
                          sensitivity: str | None = None) -> dict | None:
-        """Ask only when the missing item blocks the current task or a critical claim path."""
+        """Ask only when the missing item blocks the current task.
+
+        Critical tasks remain listed in CRITICAL_TASKS for callers, but a
+        claim-validation gap must not freeze unrelated solve/preparation work.
+        """
         sensitivity = sensitivity or 'unknown'
         if sensitivity != 'unknown' and not isinstance(sensitivity, dict):
             # Do not accept LLM-guessed scalars as measured sensitivity.
             sensitivity = 'unknown'
         blocks_current = current_task in affects
-        critical = bool(set(affects) & CRITICAL_TASKS)
-        if not blocks_current and not (critical and current_task in CRITICAL_TASKS):
+        if not blocks_current:
             return None
         return {
             'decision_id': 'dec-' + uuid.uuid4().hex[:12],

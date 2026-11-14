@@ -91,6 +91,20 @@ class WorkflowStore:
         current = case['workflow_state']
         if target not in TRANSITIONS.get(current, set()):
             raise INVALID(f'Cannot transition {current} -> {target}')
+        if target == 'PASS':
+            result = case.get('acceptance_result') or {}
+            if (not case.get('spec', {}).get('acceptance_spec') or result.get('status') != 'PASS'
+                    or result.get('run_id') != case.get('current_run_id')
+                    or result.get('model_revision') != case['model_revision']
+                    or result.get('spec_revision') != case['spec_revision']):
+                raise INVALID('PASS requires current explicit acceptance criteria and passing evidence')
+            required = case['spec']['acceptance_spec'].get('required_checks', [])
+            validation = case.get('last_validation') or {}
+            if required and (validation.get('run_id') != case.get('current_run_id')
+                    or validation.get('model_revision') != case['model_revision']
+                    or validation.get('spec_revision') != case['spec_revision']
+                    or any(validation.get('layers', {}).get(name) != 'PASS' for name in required)):
+                raise INVALID('PASS requires current passing checks declared by the task')
         case['workflow_state'] = target
         self._write(case)
         return dict(case)
