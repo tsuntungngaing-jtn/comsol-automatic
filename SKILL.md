@@ -214,3 +214,10 @@ For remote computing, read [HPC handoff](docs/hpc-execution.md); no cluster conn
 ## Conditional reconstruction and final-claim separation (v0.2.1 candidate)
 
 Read [the source-backed conditional-reconstruction and RSI audit](docs/conditional-reconstruction-and-rsi-evidence-v0.2.1.md) before enforcing any inherited CHT or uncertainty gate. **Missing final verification does not prevent independent evidence retrieval, model preparation or other separately authorized well-posed conditional work.** It does prevent unqualified final scientific PASS. Explicit solver FAIL/BLOCKED/NOT_RUN have priority over inferred-parameter limitations; missing required checks never yield PASS. Respect vendor-native configured termination; diagnostic residuals do not create new universal solver requirements. Use the revised [CHT verification policy](docs/cht-coupling-energy-gates.md) instead of old mandatory node/Inflow/10–20% rules. All successful but unverified RSI metrics are REVIEW_REQUIRED, not RETAIN. This is an offline candidate policy; COMSOL and Fluent tests are NOT_RUN.
+
+
+## Opt-in Discovery Mode (research v0.3.0; main reproduction remains unchanged)
+
+When asked to **replicate a paper**, default to REPRODUCTION and preserve the paper source hierarchy. Do not let any surrogate prediction overwrite a paper-reported value or convert a conditional reconstruction to a scientific PASS. When asked to **find a new design or reduce autonomous parameter-scan cost**, open a separate DISCOVERY study with source-tagged design bounds, native-run evidence and a frozen compute budget.
+
+Use [Discovery Mode instructions](docs/discovery-surrogate-workflow-v0.3.0.md) and [primary unified Skill](paper2simu/SKILL.md). The experimental research_design module provides offline dataset admissibility, grouped leave-one-design-out IDW baseline and budgeted candidate proposal ranking. No tool in this module starts a solver, authenticates case/data files or claims expected information gain. Validated physics, real solver authorization, native convergence and source preservation remain mandatory at actual execution. A selected design is for operator review, not a CFD result.

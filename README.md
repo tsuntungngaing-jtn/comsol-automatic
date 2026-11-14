@@ -2,11 +2,19 @@
 
 **Project generation: v0.2.0 (unified codebase; solver-specific scientific validation ongoing).**
 
-Paper2Simu unifies the evidence-first COMSOL Automatic pipeline (up to v0.7.6) and the ComsoFlent v0.1.0 MCP-routing preview. The project is no longer named ComsoFlent. The repository URL may still display the old GitHub slug until the repository owner renames it in GitHub Settings. Legacy names in historical notes are attribution and compatibility references, not separate active products.
+Paper2Simu unifies the evidence-first COMSOL Automatic pipeline (up to v0.7.6) and the ComsoFlent v0.1.0 MCP-routing preview. The project is no longer named ComsoFlent. The repository has been renamed to https://github.com/tsuntungngaing-jtn/paper2simu. Legacy names in historical notes are attribution and compatibility references, not separate active products.
 
 **Execution scope:** The user reports an actual Fluent-workstation connection. This does not independently establish that all Ansys simulation tools, restart flows, or full CFD reproductions have been verified. COMSOL and Fluent use separate MCP providers, environments, model files and solver settings. The unified Skill orchestrates routing and scientific evidence; it does not silently load or operate a different solver.
 
 **Skill entry:** [paper2simu/SKILL.md](paper2simu/SKILL.md) or the compatibility [root SKILL.md](SKILL.md). Additional architecture: [legacy ComsoFlent migration design](docs/comsoflent-v0.1.0.md), [operations guard](docs/operations-reliability-v0.7.7-rc1.md), [vendor-native convergence](docs/native-convergence-policy.md).
+
+
+
+## Opt-in Discovery Mode research (branch v0.3.0; NOT production main)
+
+Paper reproduction remains source-grounded and separate from new CFD geometry or operating-point optimization. The [Discovery Mode research branch](https://github.com/tsuntungngaing-jtn/paper2simu/tree/feature/discovery-surrogate-loop-v0.3.0) ports the prior experiment-design prototype and adds **offline** native-result evidence screening, a small-data IDW surrogate baseline with leave-one-design-out error per objective, and budget-conscious candidate selection. See the [workflow and limitations](docs/discovery-surrogate-workflow-v0.3.0.md).
+
+This is a **research scaffold**, not autonomous CFD: no COMSOL or Fluent MCP run, no actual native artifact authentication, no Gaussian Process/MLP training, and no demonstrated runtime savings. Surrogate predictions never replace paper measurements or high-fidelity CFD results. Review separately before enabling any solver job.
 
 **Installation:** Python project `paper2simu==0.2.0` retains `comsol-automatic` and `comsol-skill-mcp` command aliases for existing COMSOL setups; new aliases: `paper2simu`, `paper2simu-comsol-mcp`. These aliases start the **COMSOL MCP service**, not a Fluent solver. Install official [Ansys PyFluent MCP](https://github.com/ansys/pyfluent-mcp) separately with its documented Python environment and register a distinct host server ID. Do not assume a single shared virtualenv can satisfy both products.
 
